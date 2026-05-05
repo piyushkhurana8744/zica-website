@@ -1,0 +1,410 @@
+69:    <div className="min-h-screen w-full relative bg-[#030008] text-white flex flex-col font-sans selection:bg-red-600/30 overflow-x-hidden cursor-default">
+71:      <motion.div 
+82:      <motion.div 
+88:      <div className="absolute top-0 left-0 w-full h-[120px] z-[5] pointer-events-none bg-gradient-to-b from-black to-transparent" />
+89:      <div className="absolute top-0 left-0 w-full h-[100vh] z-0 overflow-hidden pointer-events-none">
+90:        <motion.div 
+94:          <Image 
+101:        </motion.div>
+104:        <motion.div 
+112:        <motion.div 
+120:      </div>
+123:      <section id="home" className="relative z-10 w-full px-6 lg:px-16 flex flex-col h-screen shrink-0">
+125:        <motion.nav 
+131:          <Link href="#home">
+132:            <Image src="/ZICA_Logo.png" alt="ZICA Logo" width={180} height={46} className="h-10 w-auto brightness-110" />
+133:          </Link>
+135:          <div className="hidden lg:flex items-center space-x-10 text-[13px] font-medium text-gray-300">
+144:              <Link key={item.label} href={item.href} className="hover:text-white transition-colors uppercase tracking-tight relative group">
+146:                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-red-600 transition-all group-hover:w-full" />
+147:              </Link>
+149:          </div>
+151:          <button className="bg-[#ff0000] hover:bg-red-700 text-white px-7 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-red-600/20 transition-all active:scale-95 btn-glow">
+153:          </button>
+154:        </motion.nav>
+157:        <main className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-12 py-4 min-h-0 relative">
+160:          <motion.div 
+166:            <div className="flex flex-col space-y-4">
+167:              <div className="flex items-center gap-4 group">
+168:                <div className="w-12 h-[2px] bg-[#ff0000]" />
+169:                <span className="text-sm lg:text-base font-bold text-gray-400 uppercase tracking-[0.4em] group-hover:text-white transition-colors">
+171:                </span>
+172:              </div>
+174:              <div className="relative h-[80px] lg:h-[110px] flex items-center min-w-0">
+175:                <AnimatePresence initial={false}>
+176:                  <motion.div
+184:                    <h1 className="flex flex-col text-[#ff0000] drop-shadow-[0_0_30px_rgba(255,0,0,0.5)] uppercase italic tracking-tighter leading-none py-2">
+185:                      <span className="text-[clamp(2rem,6vw,4.5rem)] font-black">
+187:                      </span>
+188:                      <span className="text-[10px] lg:text-xs font-black text-white not-italic tracking-[0.4em] mt-2 opacity-60">
+190:                      </span>
+191:                    </h1>
+192:                  </motion.div>
+193:                </AnimatePresence>
+194:              </div>
+195:            </div>
+198:            <p className="text-gray-200 text-sm lg:text-[17px] leading-relaxed max-w-2xl font-medium drop-shadow-md">
+200:            </p>
+203:            <div className="flex items-center gap-4 py-2">
+204:              <div className="flex -space-x-3">
+206:                  <div key={img} className="w-11 h-11 rounded-full border-2 border-black overflow-hidden relative shadow-lg">
+207:                    <Image src={`/Trusted by/${img}`} alt="Student" fill className="object-cover" />
+208:                  </div>
+210:              </div>
+211:              <div className="text-[13px]">
+212:                <p className="text-gray-400">Trusted by:</p>
+213:                <p className="font-bold">3k+ students</p>
+214:              </div>
+215:            </div>
+218:            <div className="space-y-4">
+219:              <p className="text-[13px] font-bold text-gray-200 uppercase tracking-widest">Recruiters Who Trust Us:</p>
+220:              <div className="w-full overflow-hidden relative">
+221:                <div className="flex gap-4 animate-logo-scroll hover:[animation-play-state:paused]">
+223:                    <motion.div 
+228:                      <Image 
+235:                    </motion.div>
+239:                    <div key={`dup-${idx}`} className="flex-shrink-0 bg-white rounded-lg p-3 h-16 w-36 flex items-center justify-center shadow-lg group mx-2 grayscale hover:grayscale-0 transition-all duration-500">
+240:                      <Image src={`/Recruiters/${img}.png`} alt="Recruiter" width={120} height={45} className="object-contain max-h-full" />
+241:                    </div>
+243:                </div>
+244:              </div>
+245:            </div>
+248:            <div className="flex items-center gap-5 pt-4">
+249:              <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-3.5 rounded-lg font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20">
+251:              </button>
+252:              <button className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-3.5 rounded-lg font-bold text-sm tracking-wide transition-all active:scale-95">
+254:              </button>
+255:            </div>
+256:          </motion.div>
+259:          <motion.div 
+265:            <div className="w-full max-w-[400px] bg-black/60 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 lg:p-10 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+266:              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ff0000] to-transparent opacity-50" />
+267:              <h2 className="text-2xl font-black text-center mb-8 tracking-tight text-white uppercase italic">Download Brochure</h2>
+268:              <form className="space-y-5">
+269:                <div className="space-y-1.5">
+270:                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Full Name</label>
+271:                  <input type="text" placeholder="Enter your name" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+272:                </div>
+273:                <div className="space-y-1.5">
+274:                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Phone Number</label>
+275:                  <input type="tel" placeholder="+91 00000 00000" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+276:                </div>
+277:                <div className="space-y-1.5">
+278:                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Your Email</label>
+279:                  <input type="email" placeholder="example@mail.com" className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+280:                </div>
+281:                <div className="space-y-1.5">
+282:                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Interested on...</label>
+283:                  <div className="relative">
+284:                    <select className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white appearance-none focus:outline-none focus:border-red-600 transition-all cursor-pointer">
+285:                      <option className="bg-black" value="Animation">Animation</option>
+286:                      <option className="bg-black" value="VFX">VFX Master</option>
+287:                      <option className="bg-black" value="Gaming">Game Design</option>
+288:                    </select>
+290:                  </div>
+291:                </div>
+292:                <button className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30">
+294:                </button>
+295:              </form>
+296:            </div>
+297:          </motion.div>
+298:        </main>
+299:      </section>
+302:      <section id="about" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-[#030008]">
+303:        <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
+304:          <div className="absolute w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.15),transparent_70%)]" />
+305:          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full" />
+306:        </div>
+308:        <div className="relative z-10">
+309:          <h2 className="text-4xl lg:text-5xl font-black text-center mb-20 leading-tight text-white">
+310:            Entertainment, the <span className="text-[#ff0000]">ZICA way—through</span> the eyes of our students.
+311:          </h2>
+313:          <div className="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
+314:            <div className="relative w-full max-w-[800px] aspect-[16/10] lg:aspect-[16/9] rounded-[40px] overflow-hidden border-4 border-white/10 shadow-2xl group">
+315:              <AnimatePresence mode="wait">
+316:                <motion.div
+324:                  <Image 
+330:                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+331:                </motion.div>
+332:              </AnimatePresence>
+335:              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20">
+337:                  <button
+343:              </div>
+344:            </div>
+346:            <div className="w-full lg:w-[400px] space-y-8">
+347:              <div className="space-y-4">
+348:                <p className="text-gray-300 text-sm lg:text-base leading-relaxed">
+350:                </p>
+351:                <p className="text-gray-400 text-sm leading-relaxed">
+352:                  Be amazed and inspired by the exceptional talent, imagination, and passion of our students as they bring ideas to life across diverse creative fields. From jaw-dropping <span className="text-white font-bold">VFX</span>, to immersive <span className="text-white font-bold">Gaming</span>, stylish <span className="text-white font-bold">Interior and Fashion Design</span>, impactful <span className="text-white font-bold">Digital Marketing</span>, and stunning <span className="text-white font-bold">Photography</span> — every project is a testament to their dedication and skill.
+353:                </p>
+354:                <p className="text-white font-bold italic">
+356:                </p>
+357:              </div>
+359:              <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
+361:              </button>
+362:            </div>
+363:          </div>
+364:        </div>
+365:      </section>
+368:      <section id="program" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black overflow-hidden border-t border-white/5">
+369:        <motion.div 
+375:          <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+376:            <div className="max-w-2xl">
+377:              <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tight leading-none mb-6 text-white text-glow">
+378:                Discover Our <span className="text-[#ff0000]">Programs</span>
+379:              </h2>
+380:              <p className="text-gray-400 text-lg leading-relaxed">
+382:              </p>
+383:            </div>
+384:            <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold transition-all shadow-lg shadow-red-600/20 active:scale-95 whitespace-nowrap btn-glow">
+386:            </button>
+387:          </div>
+389:          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+401:              <motion.div
+410:                <div className="aspect-video relative overflow-hidden flex-shrink-0">
+411:                  <Image src={`/Program/${course.image}`} alt={course.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+412:                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-500" />
+413:                </div>
+414:                <div className="p-8 lg:p-10 flex flex-col flex-1 bg-white">
+415:                  <h3 className="text-2xl lg:text-3xl font-black text-black leading-tight mb-4">
+417:                    <span className="text-[#ff0000]">{course.highlight}</span>
+418:                  </h3>
+419:                  <p className="text-gray-600 text-sm lg:text-base leading-relaxed flex-1">
+421:                  </p>
+422:                  <div className="flex items-center text-red-600 font-bold uppercase tracking-wider text-xs group-hover:translate-x-2 transition-transform mt-6">
+424:                  </div>
+425:                </div>
+426:              </motion.div>
+428:          </div>
+429:        </motion.div>
+430:      </section>
+433:      <section id="about" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black text-white overflow-hidden border-t border-white/5">
+435:        <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" 
+439:        <motion.div 
+451:            Why Should You Choose <span className="text-[#ff0000]">ZICA</span> Pitampura?
+454:          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+455:            <motion.div 
+462:              <Image src="/why_choose_zica_boy.png" alt="ZICA Student Animation" fill className="object-cover transition-transform duration-1000 group-hover:scale-110" />
+463:              <div className="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+464:            </motion.div>
+466:            <div className="w-full lg:w-[55%] space-y-10">
+467:              <motion.div 
+473:                <div className="w-24 h-24 lg:w-32 lg:h-32 flex-shrink-0 relative">
+474:                  <svg viewBox="0 0 100 100" className="w-full h-full text-red-600 animate-spin-slow">
+478:                  </svg>
+479:                </div>
+480:                <div className="space-y-4">
+481:                  <h3 className="text-3xl lg:text-4xl font-black leading-tight text-white">
+483:                  </h3>
+484:                  <p className="text-gray-400 text-lg">
+486:                  </p>
+487:                </div>
+488:              </motion.div>
+490:              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+496:                  <motion.div 
+504:                    <div className="w-3 h-3 bg-red-600 flex-shrink-0 group-hover:rotate-45 transition-transform duration-300" />
+505:                    <span className="font-bold text-gray-200 tracking-tight transition-colors group-hover:text-white">{feature}</span>
+506:                  </motion.div>
+508:              </div>
+517:            </div>
+518:          </div>
+519:        </motion.div>
+520:      </section>
+523:      <section id="testimonials" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black overflow-hidden">
+524:        <motion.div 
+530:          <div className="text-center space-y-4 mb-20">
+537:              Let's Hear It From <span className="text-[#ff0000]">Our</span> Students
+539:            <p className="text-gray-400 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
+541:            </p>
+542:          </div>
+544:          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12">
+560:              <motion.div
+569:                <div className="flex items-center gap-1.5 text-yellow-500">
+573:                </div>
+575:                  <p className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.2em]">
+577:                  </p>
+579:                <p className="text-gray-300 text-sm lg:text-[15px] leading-relaxed italic font-medium">
+581:                </p>
+582:                <div className="flex flex-col items-center gap-4 pt-4">
+583:                  <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full border-2 border-red-600/30 overflow-hidden relative shadow-xl group-hover:border-red-600 transition-colors">
+584:                    <Image src={`/Testimonial/${testi.img}`} alt={testi.name} fill className="object-cover" />
+585:                  </div>
+586:                  <h4 className="text-white font-black text-sm lg:text-base tracking-widest uppercase transition-colors group-hover:text-red-600">
+588:                  </h4>
+589:                </div>
+590:              </motion.div>
+592:          </div>
+593:        </motion.div>
+594:      </section>
+597:      <section id="goals" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black border-t border-white/5">
+598:        <motion.div 
+604:          <div className="text-center mb-24 space-y-4">
+605:            <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tight text-glow">
+606:              The Right Place to Achieve <span className="text-[#ff0000]">Your Goals</span>
+607:            </h2>
+608:            <p className="text-gray-500 text-sm lg:text-base max-w-3xl mx-auto">
+610:            </p>
+611:          </div>
+613:          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+677:              <motion.div 
+686:                <div className="flex-shrink-0 transition-transform group-hover:scale-110 duration-300">
+688:                </div>
+689:                <div className="space-y-4">
+690:                  <h3 className={`text-lg font-black uppercase tracking-tight leading-tight transition-colors ${goal.redTitle ? 'text-[#ff0000]' : 'text-white group-hover:text-red-600'}`}>
+692:                  </h3>
+693:                  <p className="text-gray-500 text-xs leading-relaxed">
+695:                  </p>
+696:                </div>
+697:              </motion.div>
+699:          </div>
+700:        </motion.div>
+701:      </section>
+704:      <section id="why-zica" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black border-t border-white/5">
+705:        <motion.div 
+717:            Our <span className="text-[#ff0000]">Impact</span>
+720:          <div className="bg-[#0a0a0a] border-4 border-[#2d1b4d] rounded-[40px] p-4 lg:p-6 shadow-[0_0_50px_rgba(45,27,77,0.3)]">
+721:            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+727:                <motion.div 
+736:                  <p className="text-5xl lg:text-6xl font-black text-white tracking-tighter group-hover:text-red-600 transition-colors duration-500">
+738:                  </p>
+739:                  <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">
+741:                  </p>
+742:                </motion.div>
+744:            </div>
+745:          </div>
+746:        </motion.div>
+747:      </section>
+750:      <section id="faqs" className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black">
+751:        <motion.div 
+758:          <div className="space-y-12">
+759:            <h2 className="text-6xl font-black text-white uppercase tracking-tight text-glow">FAQs</h2>
+760:            <div className="space-y-6">
+779:                <motion.div 
+787:                  <div 
+791:                    <p className="text-sm lg:text-base font-bold text-gray-200 group-hover:text-white transition-colors">{faq.q}</p>
+792:                    {expandedFaq === idx ? <div className="w-5 h-0.5 bg-red-600" /> : <div className="text-xl text-white group-hover:text-red-600 transition-colors">+</div>}
+793:                  </div>
+794:                  <AnimatePresence>
+796:                      <motion.div
+802:                        <div className="px-6 py-4 text-gray-400 text-sm leading-relaxed whitespace-pre-line border-l-2 border-red-600 ml-4">
+804:                        </div>
+805:                      </motion.div>
+807:                  </AnimatePresence>
+808:                </motion.div>
+810:            </div>
+811:          </div>
+814:          <motion.div 
+820:            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50" />
+821:            <h3 className="text-4xl font-black text-white text-center uppercase italic text-glow">Enquiry Now</h3>
+822:            <form className="space-y-6">
+823:              <div className="space-y-2">
+824:                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Full Name</label>
+825:                <input type="text" placeholder="John Doe" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+826:              </div>
+827:              <div className="space-y-2">
+828:                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Phone Number</label>
+829:                <input type="tel" placeholder="+91 00000 00000" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+830:              </div>
+831:              <div className="space-y-2">
+832:                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Your Email</label>
+833:                <input type="email" placeholder="john@example.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700" />
+834:              </div>
+835:              <div className="space-y-2">
+836:                <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">Interested on...</label>
+837:                <div className="relative">
+838:                  <select className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
+839:                    <option value="Animation">Animation</option>
+840:                    <option value="VFX">VFX</option>
+841:                    <option value="Gaming">Gaming</option>
+842:                  </select>
+844:                </div>
+845:              </div>
+853:            </form>
+854:          </motion.div>
+855:        </motion.div>
+856:      </section>
+859:      <footer className="relative z-10 w-full px-6 lg:px-16 pt-24 pb-12 bg-black border-t border-white/10">
+860:        <div className="max-w-[1440px] mx-auto">
+861:          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20">
+863:            <div className="space-y-8">
+864:              <div className="space-y-2">
+865:                <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+866:                <h4 className="text-white font-black uppercase tracking-widest text-lg">Powered by</h4>
+867:              </div>
+868:              <div className="relative w-48 h-20">
+869:                <Image src="/footer/ZLL_Logo.png" alt="Zee Learn Logo" fill className="object-contain" />
+870:              </div>
+871:              <p className="text-gray-400 text-sm leading-relaxed">
+873:              </p>
+874:              <div className="flex items-center gap-6">
+875:                <div className="text-white hover:text-red-600 cursor-pointer transition-colors">
+876:                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+877:                </div>
+878:                <div className="text-white hover:text-red-600 cursor-pointer transition-colors">
+879:                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+880:                </div>
+881:                <div className="text-white hover:text-red-600 cursor-pointer transition-colors">
+882:                  <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.981 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.351-.2 6.78-2.618 6.98-6.981.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+883:                </div>
+884:              </div>
+885:            </div>
+888:            <div className="space-y-8">
+889:              <div className="space-y-2">
+890:                <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+891:                <h4 className="text-white font-black uppercase tracking-widest text-lg">Placement Partner</h4>
+892:              </div>
+893:              <div className="relative w-48 h-20">
+894:                <Image src="/footer/Zee_Media_logo.png" alt="Zee Media Logo" fill className="object-contain" />
+895:              </div>
+896:            </div>
+899:            <div className="space-y-8">
+900:              <div className="space-y-2">
+901:                <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+902:                <h4 className="text-white font-black uppercase tracking-widest text-lg">Quick Links</h4>
+903:              </div>
+914:                    <Link href={link.href}>{link.label}</Link>
+918:            </div>
+921:            <div className="space-y-8">
+922:              <div className="space-y-2">
+923:                <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+924:                <h4 className="text-white font-black uppercase tracking-widest text-lg">Contact Info</h4>
+925:              </div>
+926:              <div className="space-y-6">
+927:                <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
+928:                  <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all">
+930:                  </div>
+931:                  <span className="text-sm font-bold tracking-wider">+91 7900400300</span>
+932:                </div>
+933:                <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
+934:                  <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all">
+936:                  </div>
+937:                  <span className="text-sm font-bold tracking-wider">info@Pitampura.com</span>
+938:                </div>
+939:                <div className="flex items-start gap-4 text-gray-400 hover:text-white transition-colors group">
+940:                  <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all flex-shrink-0">
+942:                  </div>
+943:                  <span className="text-sm font-bold tracking-wider leading-relaxed">
+945:                  </span>
+946:                </div>
+947:              </div>
+948:            </div>
+949:          </div>
+951:          <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+952:            <p className="text-gray-500 text-sm font-medium">
+954:            </p>
+955:            <div className="flex gap-8 text-gray-500 text-sm font-medium">
+956:              <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+957:              <span className="hover:text-white cursor-pointer transition-colors">Terms and Conditions</span>
+958:            </div>
+959:          </div>
+960:        </div>
+961:      </footer>
+964:      <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col z-50 overflow-hidden rounded-l-2xl border border-white/10 shadow-2xl">
+970:          <motion.div
+976:            <span className="absolute right-full mr-4 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+978:            </span>
+979:          </motion.div>
+981:      </div>
+982:      </motion.div>
+983:    </div>
