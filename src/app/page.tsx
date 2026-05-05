@@ -469,7 +469,7 @@ export default function Home() {
                   onClick={() => setZicaWayIndex((prev) => (prev + 1) % ZICA_WAY_IMAGES.length)}
                 >
                   <Image
-                    src={`/Zica way-carousel/${ZICA_WAY_IMAGES[(zicaWayIndex + 1) % ZICA_WAY_IMAGES.length]}`}
+                    src={`/Zica-way-carousel/${ZICA_WAY_IMAGES[(zicaWayIndex + 1) % ZICA_WAY_IMAGES.length]}`}
                     alt="Student Work Next"
                     fill
                     className="object-cover"
@@ -596,7 +596,7 @@ export default function Home() {
                 {
                   title: "3DS",
                   highlight: "Max",
-                  image: "3DS-Max.png",
+                  image: "3Ds-Max.png",
                   desc: "Explore the world of 3D modeling and rendering using Autodesk 3ds Max. Covers basic creation to advanced lighting and realistic rendering for architecture, products, and entertainment.",
                 },
                 {
