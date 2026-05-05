@@ -24,6 +24,8 @@ import {
   Globe,
   Users,
   MapPin,
+  Menu,
+  X,
 } from "lucide-react";
 import { div } from "framer-motion/client";
 
@@ -189,18 +191,19 @@ export default function Home() {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="flex items-center justify-between py-5 flex-shrink-0"
+            className="flex items-center justify-between py-5 flex-shrink-0 relative z-[100]"
           >
-            <Link href="#home">
+            <Link href="#home" className="relative z-[110]">
               <Image
                 src="/ZICA_Logo.png"
                 alt="ZICA Logo"
                 width={180}
                 height={46}
-                className="h-10 w-auto brightness-110"
+                className="h-8 lg:h-10 w-auto brightness-110"
               />
             </Link>
 
+            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-10 text-[13px] font-medium text-gray-300">
               {[
                 { label: "About Us", href: "#about" },
@@ -221,9 +224,57 @@ export default function Home() {
               ))}
             </div>
 
-            <button className="bg-[#ff0000] hover:bg-red-700 text-white px-7 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-red-600/20 transition-all active:scale-95 btn-glow">
-              Admission Enquiry
-            </button>
+            <div className="flex items-center gap-4 relative z-[110]">
+              <button className="hidden sm:block bg-[#ff0000] hover:bg-red-700 text-white px-5 lg:px-7 py-2 lg:py-2.5 rounded-lg text-[12px] lg:text-sm font-bold shadow-lg shadow-red-600/20 transition-all active:scale-95 btn-glow">
+                Admission Enquiry
+              </button>
+              
+              {/* Mobile Toggle */}
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="lg:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-all"
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="fixed inset-0 z-[100] bg-[#030008] flex flex-col items-center justify-center p-8 lg:hidden"
+                >
+                  <div className="flex flex-col items-center space-y-8">
+                    {[
+                      { label: "About Us", href: "#about" },
+                      { label: "Our Program", href: "#program" },
+                      { label: "Why ZICA", href: "#why-zica" },
+                      { label: "Goals", href: "#goals" },
+                      { label: "Testimonials", href: "#testimonials" },
+                      { label: "FAQs", href: "#faqs" },
+                    ].map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="text-2xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <button 
+                      onClick={() => setIsMenuOpen(false)}
+                      className="mt-8 bg-[#ff0000] text-white px-10 py-4 rounded-xl font-bold uppercase tracking-widest text-sm"
+                    >
+                      Admission Enquiry
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.nav>
 
           {/* Hero Main */}
@@ -353,9 +404,9 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full lg:w-[30%] flex justify-end"
+              className="w-full md:w-[80%] lg:w-[30%] flex justify-center lg:justify-end mx-auto lg:mx-0"
             >
-              <div className="w-full max-w-[400px] bg-[#0a0a0a] border border-white/20 rounded-[32px] p-8 lg:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden group">
+              <div className="w-full max-w-[400px] bg-[#0a0a0a] border border-white/20 rounded-[32px] p-6 sm:p-8 lg:p-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
 
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ff0000] to-transparent opacity-50 z-10" />
@@ -432,14 +483,14 @@ export default function Home() {
           </div>
 
           <div className="relative z-10">
-            <h2 className="text-4xl lg:text-5xl font-black text-center mb-20 leading-tight text-white">
+            <h2 className="text-3xl lg:text-5xl font-black text-center mb-12 lg:mb-20 leading-tight text-white">
               Entertainment, the{" "}
               <span className="text-[#ff0000]">ZICA way—through</span> the eyes
               of our students.
             </h2>
 
-            <div className="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
-              <div className="flex-1 min-h-[500px] lg:min-h-[600px] relative flex items-center justify-center gap-6 perspective-1000">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-24">
+              <div className="w-full md:flex-1 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] relative flex items-center justify-center perspective-1000">
                 {/* Current Image Tile */}
                 <motion.div
                   key={`current-${zicaWayIndex}`}
@@ -447,7 +498,7 @@ export default function Home() {
                   animate={{ opacity: 1, rotate: -8, x: 0, scale: 1 }}
                   exit={{ opacity: 0, rotate: -15, x: -100, scale: 0.8 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="relative w-[300px] lg:w-[400px] aspect-[4/5] rounded-[60px] overflow-hidden border border-white/10 shadow-2xl z-20"
+                  className="relative w-[55%] sm:w-[300px] lg:w-[400px] aspect-[4/5] rounded-[30px] sm:rounded-[40px] lg:rounded-[60px] overflow-hidden border border-white/10 shadow-2xl z-20"
                 >
                   <Image
                     src={`/Zica-way-carousel/${ZICA_WAY_IMAGES[zicaWayIndex]}`}
@@ -465,7 +516,7 @@ export default function Home() {
                   animate={{ opacity: 0.6, rotate: 8, x: 0, scale: 0.9 }}
                   exit={{ opacity: 0, rotate: 15, x: 100, scale: 0.7 }}
                   transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-                  className="relative w-[250px] lg:w-[350px] aspect-[4/5] rounded-[60px] overflow-hidden border border-white/10 shadow-xl z-10 -ml-20 lg:-ml-32 grayscale-[0.5] hover:grayscale-0 transition-all cursor-pointer"
+                  className="relative w-[45%] sm:w-[250px] lg:w-[350px] aspect-[4/5] rounded-[30px] sm:rounded-[40px] lg:rounded-[60px] overflow-hidden border border-white/10 shadow-xl z-10 -ml-12 sm:-ml-20 lg:-ml-32 grayscale-[0.5] hover:grayscale-0 transition-all cursor-pointer"
                   onClick={() => setZicaWayIndex((prev) => (prev + 1) % ZICA_WAY_IMAGES.length)}
                 >
                   <Image
@@ -478,7 +529,7 @@ export default function Home() {
                 </motion.div>
 
                 {/* Carousel Indicators (Minimalist) */}
-                <div className="absolute -bottom-16 left-0 flex items-center gap-2">
+                <div className="absolute bottom-4 md:-bottom-12 lg:-bottom-16 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 flex items-center gap-2 z-30">
                    <span className="text-xs font-bold text-gray-500 tabular-nums">0{zicaWayIndex + 1}</span>
                    <div className="w-20 h-[1px] bg-white/10 relative">
                       <motion.div 
@@ -490,7 +541,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-[400px] space-y-8">
+              <div className="w-full md:w-[45%] lg:w-[450px] space-y-8 text-center md:text-left mt-12 md:mt-0">
                 <div className="space-y-4">
                   <p className="text-gray-300 text-sm lg:text-base leading-relaxed">
                     Step Into a World of Limitless Creativity — Discover the
@@ -521,9 +572,11 @@ export default function Home() {
                   </p>
                 </div>
 
-                <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
-                  Download Brochure
-                </button>
+                <div className="flex justify-center md:justify-start">
+                  <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
+                    Download Brochure
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -542,7 +595,7 @@ export default function Home() {
           >
             <div className="text-center mb-20 space-y-8">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow">
+                <h2 className="text-4xl md:text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow">
                   Discover Our <span className="text-[#ff0000]">Programs</span>
                 </h2>
                 <p className="text-gray-400 text-xl lg:text-2xl leading-relaxed max-w-3xl mx-auto">
@@ -640,7 +693,7 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
                   </div>
-                  <div className="p-8 lg:p-10 flex flex-col flex-1 bg-white">
+                  <div className="p-6 lg:p-10 flex flex-col flex-1 bg-white">
                     <h3 className="text-2xl lg:text-3xl font-black text-black leading-tight mb-4 uppercase">
                       {course.title} <br />
                       <span className="text-[#ff0000]">{course.highlight}</span>
@@ -680,7 +733,7 @@ export default function Home() {
                 initial={{ opacity: 0, filter: "blur(20px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ duration: 2 }}
-                className="text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow"
+                className="text-4xl md:text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow"
               >
                 Why Should You Choose <br />
                 <span className="text-[#ff0000]">ZICA Pitampura?</span>
@@ -710,7 +763,7 @@ export default function Home() {
                   initial={{ x: 50, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   viewport={{ once: true }}
-                  className="flex items-start gap-8"
+                  className="flex flex-col sm:flex-row items-center sm:items-start gap-6 lg:gap-8 text-center sm:text-left"
                 >
                   <div className="w-24 h-24 lg:w-32 lg:h-32 flex-shrink-0 relative">
                     {mounted && (
@@ -749,7 +802,7 @@ export default function Home() {
                   </div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6">
                   {[
                     "Industry-Ready Curriculum",
                     "Modern Labs & Software",
@@ -774,13 +827,15 @@ export default function Home() {
                   ))}
                 </div>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow"
-                >
-                  Talk to Counsellor
-                </motion.button>
+                <div className="flex justify-center lg:justify-start">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow"
+                  >
+                    Talk to Counsellor
+                  </motion.button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -797,12 +852,12 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto relative z-10"
           >
-            <div className="text-center space-y-4 mb-20">
+            <div className="text-center space-y-4 mb-12 lg:mb-20">
               <motion.h2
                 initial={{ y: 20, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-4xl lg:text-6xl font-black leading-tight text-white text-glow"
+                className="text-3xl md:text-4xl lg:text-6xl font-black leading-tight text-white text-glow"
               >
                 Let's Hear It From <span className="text-[#ff0000]">Our</span>{" "}
                 Students
@@ -887,7 +942,7 @@ export default function Home() {
             className="max-w-[1440px] mx-auto"
           >
             <div className="text-center mb-24 space-y-4">
-              <h2 className="text-4xl lg:text-5xl font-black text-white uppercase tracking-tight text-glow">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight text-glow">
                 The Right Place to Achieve{" "}
                 <span className="text-[#ff0000]">Your Goals</span>
               </h2>
@@ -1013,7 +1068,7 @@ export default function Home() {
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
-              className="text-4xl lg:text-6xl font-black text-center mb-16 text-white text-glow"
+              className="text-3xl md:text-4xl lg:text-6xl font-black text-center mb-12 lg:mb-16 text-white text-glow"
             >
               Our <span className="text-[#ff0000]">Impact</span>
             </motion.h2>
