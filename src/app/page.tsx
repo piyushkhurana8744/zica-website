@@ -450,7 +450,7 @@ export default function Home() {
                   className="relative w-[300px] lg:w-[400px] aspect-[4/5] rounded-[60px] overflow-hidden border border-white/10 shadow-2xl z-20"
                 >
                   <Image
-                    src={`/Zica way-carousel/${ZICA_WAY_IMAGES[zicaWayIndex]}`}
+                    src={`/Zica-way-carousel/${ZICA_WAY_IMAGES[zicaWayIndex]}`}
                     alt="Student Work Current"
                     fill
                     className="object-cover"
