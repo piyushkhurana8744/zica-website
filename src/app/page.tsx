@@ -73,10 +73,15 @@ const ZICA_WAY_IMAGES = [
 ];
 
 const HERO_SLIDES = [
-  "/hero-slides/hero-1.png",
-  "/hero-slides/hero-2.png",
-  "/hero-slides/hero-3.png",
-  "/hero-slides/hero-4.png",
+  "/hero-slides/graphic-design.png",
+  "/hero-slides/2d-animation.png",
+  "/hero-slides/3d-animation.png",
+  "/hero-slides/motion-graphics.png",
+  "/hero-slides/3d-maya.png",
+  "/hero-slides/architectural-design.png",
+  "/hero-slides/vfx-master.png",
+  "/hero-slides/game-design.png",
+  "/hero-slides/video-editing.png",
 ];
 
 export default function Home() {
@@ -165,17 +170,14 @@ export default function Home() {
     window.addEventListener("mouseup", handleMouseUp);
     window.addEventListener("mouseover", handleMouseOver);
 
-    const courseInterval = setInterval(() => {
+    const syncInterval = setInterval(() => {
       setCurrentCourseIndex((prev) => (prev + 1) % COURSES.length);
-    }, 2800);
+      setHeroSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000);
 
     const carouselInterval = setInterval(() => {
       setZicaWayIndex((prev) => (prev + 1) % ZICA_WAY_IMAGES.length);
     }, 4000);
-
-    const heroSlideInterval = setInterval(() => {
-      setHeroSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 6000);
 
     // --- SMART POPUP TRIGGERS ---
     const triggerPopup = () => {
@@ -221,9 +223,8 @@ export default function Home() {
       window.removeEventListener("mouseover", handleMouseOver);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mouseleave", handleExitIntent);
-      clearInterval(courseInterval);
+      clearInterval(syncInterval);
       clearInterval(carouselInterval);
-      clearInterval(heroSlideInterval);
       clearTimeout(timer);
       clearTimeout(initTimeout);
     };
@@ -255,15 +256,15 @@ export default function Home() {
                 src={HERO_SLIDES[heroSlideIndex]}
                 alt="Hero Background"
                 fill
-                className="object-cover"
+                className="object-cover brightness-110 contrast-[1.02]"
                 priority
               />
             </motion.div>
           </AnimatePresence>
           
-          {/* Dark overlay to ensure content readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/50 z-[1]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030008] via-transparent to-black/60 z-[1]" />
+          {/* Enhanced overlay for better content readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent z-[1]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030008] via-transparent to-black/50 z-[1]" />
 
           {/* Animated Glow Layers */}
           <motion.div
@@ -299,28 +300,30 @@ export default function Home() {
             initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-between py-4 flex-shrink-0 relative z-[100]"
+            className="flex items-center justify-between py-8 lg:py-10 flex-shrink-0 relative z-[100]"
           >
-            {/* Logo */}
-            <Link href="#home" className="relative z-[110] group">
-              <motion.div 
-                whileHover={{ scale: 1.1 }} 
-                whileTap={{ scale: 0.95 }}
-                className="relative flex items-center justify-center"
-              >
-                <div className="absolute inset-0 bg-red-600/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150" />
-                <Image
-                  src="/ZICA_Logo.png"
-                  alt="ZICA Logo"
-                  width={220}
-                  height={56}
-                  className="h-10 lg:h-14 w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
-                />
-              </motion.div>
-            </Link>
+            {/* Left: Logo */}
+            <div className="flex-1 flex justify-start">
+              <Link href="#home" className="relative z-[110] group">
+                <motion.div 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.95 }}
+                  className="relative flex items-center justify-center"
+                >
+                  <div className="absolute inset-0 bg-red-600/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150" />
+                  <Image
+                    src="/ZICA-LOGO-PNG.png"
+                    alt="ZICA Logo"
+                    width={220}
+                    height={56}
+                    className="h-10 lg:h-14 w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
+                  />
+                </motion.div>
+              </Link>
+            </div>
 
-            {/* Desktop Navigation — Glassmorphism Pill */}
-            <div className="hidden lg:flex items-center relative">
+            {/* Center: Navigation — Glassmorphism Pill */}
+            <div className="hidden lg:flex flex-none items-center justify-center relative">
               <div className="flex items-center gap-1 bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-full px-2 py-1.5 relative overflow-hidden">
                 {/* Animated gradient border glow */}
                 <div className="absolute inset-0 rounded-full opacity-40 pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,0,0,0.1), rgba(168,85,247,0.1), transparent)', backgroundSize: '200% 100%', animation: 'gradient-shift 4s linear infinite' }} />
@@ -341,34 +344,20 @@ export default function Home() {
                   >
                     <Link
                       href={item.href}
-                      className="relative px-4 py-2 text-[12px] font-semibold text-gray-400 uppercase tracking-[0.12em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.06] group/link"
+                      className="relative px-5 py-2.5 text-[13px] font-black text-gray-300 uppercase tracking-[0.15em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.08] group/link"
                     >
                       {item.label}
-                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 rounded-full transition-all duration-500 group-hover/link:w-[60%]" />
+                      <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-600 rounded-full transition-all duration-500 group-hover/link:w-[50%]" />
                     </Link>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* CTA + Mobile Toggle */}
-            <div className="flex items-center gap-3 relative z-[110]">
-              <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="hidden sm:flex items-center gap-2 bg-[#ff0000] hover:bg-red-600 text-white px-5 lg:px-6 py-2.5 rounded-full text-[11px] lg:text-[12px] font-bold shadow-lg shadow-red-600/20 transition-all btn-glow uppercase tracking-[0.15em]"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-                </span>
-                Enquire Now
-              </motion.button>
-              
-              {/* Mobile Toggle */}
+            {/* Right: CTA + Mobile Toggle */}
+            <div className="flex-1 flex justify-end">
+              <div className="flex items-center gap-3 relative z-[110]">
+                {/* Mobile Toggle */}
               <motion.button 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -379,8 +368,9 @@ export default function Home() {
                 {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </motion.button>
             </div>
+          </div>
 
-            {/* Mobile Menu Overlay */}
+          {/* Mobile Menu Overlay */}
             <AnimatePresence>
               {isMenuOpen && (
                 <motion.div
@@ -592,7 +582,7 @@ export default function Home() {
                         name="fullName"
                         type="text"
                         required
-                        placeholder="Enter your name"
+                        placeholder="Enter name"
                         className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
                       />
                     </div>
@@ -607,7 +597,9 @@ export default function Home() {
                         name="phone"
                         type="tel"
                         required
-                        placeholder="+91 00000 00000"
+                        pattern="[0-9]{10}"
+                        title="Please enter a 10-digit mobile number"
+                        placeholder="Enter mobile number"
                         className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
                       />
                     </div>
@@ -622,7 +614,7 @@ export default function Home() {
                         name="email"
                         type="email"
                         required
-                        placeholder="example@mail.com"
+                        placeholder="Enter email address"
                         className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
                       />
                     </div>
@@ -1393,7 +1385,7 @@ export default function Home() {
                       name="fullName"
                       type="text"
                       required
-                      placeholder="John Doe"
+                      placeholder="Enter name"
                       className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                     />
                   </div>
@@ -1408,7 +1400,9 @@ export default function Home() {
                       name="phone"
                       type="tel"
                       required
-                      placeholder="+91 00000 00000"
+                      pattern="[0-9]{10}"
+                      title="Please enter a 10-digit mobile number"
+                      placeholder="Enter mobile number"
                       className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                     />
                   </div>
@@ -1423,7 +1417,7 @@ export default function Home() {
                       name="email"
                       type="email"
                       required
-                      placeholder="john@example.com"
+                      placeholder="Enter email address"
                       className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                     />
                   </div>
@@ -1604,42 +1598,7 @@ export default function Home() {
           </div>
         </footer>
 
-        {/* --- PREMIUM RESPONSIVE CONTACT DOCK --- */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 lg:left-auto lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0 flex lg:flex-col z-[100] items-center">
-          <div className="flex lg:flex-col bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl lg:rounded-l-2xl lg:rounded-r-none overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-            {[
-              {
-                icon: <Phone className="w-5 h-5" />,
-                bg: "bg-[#e4405f]",
-                label: "Call Us",
-                mobile: true,
-              },
-              {
-                icon: <MessageCircle className="w-5 h-5" />,
-                bg: "bg-[#25d366]",
-                label: "WhatsApp",
-                mobile: true,
-              },
-              {
-                icon: <ChevronRight className="w-5 h-5" />,
-                bg: "bg-black",
-                label: "Open",
-                mobile: false,
-              },
-            ].map((btn, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ scale: 1.1, x: -5 }}
-                className={`w-14 h-14 lg:w-12 lg:h-14 ${btn.bg} flex items-center justify-center cursor-pointer transition-all border-r lg:border-r-0 lg:border-b border-white/10 last:border-0 group relative ${!btn.mobile ? "hidden lg:flex" : "flex"}`}
-              >
-                {btn.icon}
-                <span className="absolute bottom-full lg:bottom-auto lg:right-full mb-4 lg:mb-0 lg:mr-4 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  {btn.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+
       </motion.div>
       {/* --- SMART CINEMATIC POPUP --- */}
       <AnimatePresence>
@@ -1704,7 +1663,7 @@ export default function Home() {
                           name="fullName"
                           type="text" 
                           required
-                          placeholder="John Doe" 
+                          placeholder="Enter name" 
                           className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
                         />
                       </div>
@@ -1717,7 +1676,9 @@ export default function Home() {
                           name="phone"
                           type="tel" 
                           required
-                          placeholder="+91 00000 00000" 
+                          pattern="[0-9]{10}"
+                          title="Please enter a 10-digit mobile number"
+                          placeholder="Enter mobile number" 
                           className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
                         />
                       </div>
@@ -1730,7 +1691,7 @@ export default function Home() {
                           name="email"
                           type="email" 
                           required
-                          placeholder="example@mail.com" 
+                          placeholder="Enter email address" 
                           className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
                         />
                       </div>
@@ -1780,6 +1741,42 @@ export default function Home() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* --- CINEMATIC STICKY QUICK ACCESS BAR --- */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[150] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden rounded-l-3xl border-l border-y border-white/10 group/sidebar">
+        {/* Call Button */}
+        <motion.a
+          href="tel:+917900400300"
+          whileHover={{ x: -10 }}
+          className="w-14 h-16 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
+        >
+          <Phone className="w-6 h-6" />
+          {/* Label that slides out on hover */}
+          <span className="absolute right-full mr-4 bg-[#ff4d5a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">Call Us</span>
+        </motion.a>
+
+        {/* WhatsApp Button */}
+        <motion.a
+          href="https://wa.me/917900400300"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ x: -10 }}
+          className="w-14 h-16 bg-[#25d366] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
+        >
+          <MessageCircle className="w-6 h-6 fill-white/10" />
+          <span className="absolute right-full mr-4 bg-[#25d366] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">WhatsApp</span>
+        </motion.a>
+
+        {/* Inquiry / Popup Button */}
+        <motion.button
+          onClick={() => setIsPopupOpen(true)}
+          whileHover={{ x: -10 }}
+          className="w-14 h-16 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
+        >
+          <ChevronRight className="w-6 h-6 text-red-600 animate-pulse" />
+          <span className="absolute right-full mr-4 bg-[#0a0a0a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enquire Now</span>
+        </motion.button>
+      </div>
     </div>
   );
 }

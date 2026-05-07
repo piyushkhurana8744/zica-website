@@ -52,7 +52,7 @@ export default function ThankYou() {
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Call Us Now</p>
-              <p className="text-sm font-bold">+91 00000 00000</p>
+              <p className="text-sm font-bold">+91 79004 00300</p>
             </div>
           </motion.div>
 
@@ -90,7 +90,7 @@ export default function ThankYou() {
         transition={{ delay: 1 }}
         className="absolute bottom-10"
       >
-        <Image src="/ZICA_Logo.png" alt="ZICA" width={100} height={26} className="grayscale opacity-50" />
+        <Image src="/ZICA_Logo.png" alt="ZICA" width={100} height={26} />
       </motion.div>
     </div>
   );
