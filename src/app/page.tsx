@@ -356,19 +356,34 @@ export default function Home() {
 
             {/* Right: CTA + Mobile Toggle */}
             <div className="flex-1 flex justify-end">
-              <div className="flex items-center gap-3 relative z-[110]">
+                {/* Enroll Now Button */}
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1.2, duration: 0.5 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsPopupOpen(true)}
+                  className="hidden sm:flex items-center gap-2 bg-[#ff0000] hover:bg-red-600 text-white px-5 lg:px-7 py-2.5 rounded-full text-[12px] font-black shadow-lg shadow-red-600/20 transition-all btn-glow uppercase tracking-[0.2em]"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                  </span>
+                  Enroll Now
+                </motion.button>
+
                 {/* Mobile Toggle */}
-              <motion.button 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:bg-white/10 hover:border-red-600/30 transition-all"
-              >
-                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </motion.button>
-            </div>
-          </div>
+                <motion.button 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1 }}
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  className="lg:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:bg-white/10 hover:border-red-600/30 transition-all"
+                >
+                  {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </motion.button>
+              </div>
 
           {/* Mobile Menu Overlay */}
             <AnimatePresence>
