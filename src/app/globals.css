@@ -14,7 +14,7 @@ body {
 /* --- CUSTOM KEYFRAMES --- */
 @keyframes logo-scroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-144px * 4)); }
+  100% { transform: translateX(calc(-144px * 12)); }
 }
 
 .animate-logo-scroll {
@@ -57,6 +57,11 @@ body {
   text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
 }
 
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 .btn-glow:hover {
   box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
 }
@@ -93,4 +98,31 @@ body {
   z-index: 1;
   transform: translate(-50%, -50%);
   transition: opacity 0.3s ease;
+}
+
+/* --- PREMIUM INPUT & AUTOFILL FIXES --- */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0a0a0a inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  font-family: inherit !important;
+}
+
+/* Force dark mode behavior for inputs */
+input, select, textarea {
+  color-scheme: dark;
+}
+
+/* Ensure valid/filled inputs maintain their look */
+input:not(:placeholder-shown) {
+  border-color: rgba(255, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.06);
 }

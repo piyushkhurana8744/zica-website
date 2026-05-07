@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
@@ -71,7 +72,15 @@ const ZICA_WAY_IMAGES = [
   "robot_work_2.png",
 ];
 
+const HERO_SLIDES = [
+  "/hero-slides/hero-1.png",
+  "/hero-slides/hero-2.png",
+  "/hero-slides/hero-3.png",
+  "/hero-slides/hero-4.png",
+];
+
 export default function Home() {
+  const router = useRouter();
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(2);
   const [zicaWayIndex, setZicaWayIndex] = useState(0);
@@ -80,6 +89,48 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [hasSeenPopup, setHasSeenPopup] = useState(false);
+  const [showExitIntent, setShowExitIntent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>, formType: string) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('fullName'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      course: formData.get('course'),
+      formType: formType
+    };
+
+    try {
+      const res = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await res.json();
+      
+      if (result.success) {
+        router.push("/thank-you");
+        (e.target as HTMLFormElement).reset();
+        if (formType === 'Popup') setIsPopupOpen(false);
+      } else {
+        alert(`Error: ${result.error || "Something went wrong"}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to connect to the server. Please check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -122,15 +173,61 @@ export default function Home() {
       setZicaWayIndex((prev) => (prev + 1) % ZICA_WAY_IMAGES.length);
     }, 4000);
 
+    const heroSlideInterval = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 6000);
+
+    // --- SMART POPUP TRIGGERS ---
+    const triggerPopup = () => {
+      console.log("Popup Triggered!");
+      // alert("Popup Triggered!"); // Uncomment if console is not visible
+      setIsPopupOpen(true);
+    };
+
+    // 1. Time Delay (30 Seconds)
+    const timer = setTimeout(triggerPopup, 30000);
+
+    // 2. Scroll Trigger (20% or 600px)
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = totalHeight > 0 ? scrolled / totalHeight : 0;
+      
+      if (scrollPercentage > 0.2 || scrolled > 600) {
+        console.log("Scroll threshold met, showing popup");
+        triggerPopup();
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+
+    // 3. Exit Intent (Mouse leaves top)
+    const handleExitIntent = (e: MouseEvent) => {
+      if (e.clientY <= 0) {
+        triggerPopup();
+        window.removeEventListener("mouseleave", handleExitIntent);
+      }
+    };
+
+    // Initialize listeners with a small delay to ensure DOM is ready
+    const initTimeout = setTimeout(() => {
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("mouseleave", handleExitIntent);
+    }, 200);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mouseleave", handleExitIntent);
       clearInterval(courseInterval);
       clearInterval(carouselInterval);
+      clearInterval(heroSlideInterval);
+      clearTimeout(timer);
+      clearTimeout(initTimeout);
     };
-  }, [ZICA_WAY_IMAGES.length]);
+  }, []);
 
   return (
     <div className="min-h-screen w-full relative bg-[#030008] text-white flex flex-col font-sans selection:bg-red-600/30 overflow-x-hidden cursor-default">
@@ -144,18 +241,29 @@ export default function Home() {
         {/* --- CINEMATIC TECH BACKGROUND (Fixed for Hero) --- */}
         <div className="absolute top-0 left-0 w-full h-[120px] z-[5] pointer-events-none bg-gradient-to-b from-black to-transparent" />
         <div className="absolute top-0 left-0 w-full h-[100vh] z-0 overflow-hidden pointer-events-none">
-          <motion.div
-            style={{ y: mousePos.y / 50 }}
-            className="absolute inset-0 w-full h-full"
-          >
-          <Image 
-            src="/bg.png" 
-            alt="Global Background" 
-            fill 
-            className="object-cover opacity-20 contrast-110 brightness-50 transition-transform duration-1000 fixed" 
-            priority
-          />
-          </motion.div>
+          {/* Hero Background Slideshow */}
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={heroSlideIndex}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={HERO_SLIDES[heroSlideIndex]}
+                alt="Hero Background"
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+          </AnimatePresence>
+          
+          {/* Dark overlay to ensure content readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/50 z-[1]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030008] via-transparent to-black/60 z-[1]" />
 
           {/* Animated Glow Layers */}
           <motion.div
@@ -164,7 +272,7 @@ export default function Home() {
               scale: [1, 1.1, 1],
             }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-600/20 blur-[120px] rounded-full z-1"
+            className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-600/20 blur-[120px] rounded-full z-[2]"
           />
           <motion.div
             animate={{
@@ -177,100 +285,160 @@ export default function Home() {
               ease: "easeInOut",
               delay: 2,
             }}
-            className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-600/10 blur-[100px] rounded-full z-1"
+            className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-600/10 blur-[100px] rounded-full z-[2]"
           />
         </div>
 
         {/* --- HERO SECTION --- */}
         <section
           id="home"
-          className="relative z-10 w-full px-6 lg:px-16 flex flex-col h-screen shrink-0"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] flex flex-col min-h-screen shrink-0 pb-6 lg:pb-0"
         >
           {/* Navigation */}
           <motion.nav
-            initial={{ y: -20, opacity: 0 }}
+            initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="flex items-center justify-between py-5 flex-shrink-0 relative z-[100]"
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center justify-between py-4 flex-shrink-0 relative z-[100]"
           >
-            <Link href="#home" className="relative z-[110]">
-              <Image
-                src="/ZICA_Logo.png"
-                alt="ZICA Logo"
-                width={180}
-                height={46}
-                className="h-8 lg:h-10 w-auto brightness-110"
-              />
+            {/* Logo */}
+            <Link href="#home" className="relative z-[110] group">
+              <motion.div 
+                whileHover={{ scale: 1.1 }} 
+                whileTap={{ scale: 0.95 }}
+                className="relative flex items-center justify-center"
+              >
+                <div className="absolute inset-0 bg-red-600/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150" />
+                <Image
+                  src="/ZICA_Logo.png"
+                  alt="ZICA Logo"
+                  width={220}
+                  height={56}
+                  className="h-10 lg:h-14 w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
+                />
+              </motion.div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-10 text-[13px] font-medium text-gray-300">
-              {[
-                { label: "About Us", href: "#about" },
-                { label: "Our Program", href: "#program" },
-                { label: "Why ZICA", href: "#why-zica" },
-                { label: "Goals", href: "#goals" },
-                { label: "Testimonials", href: "#testimonials" },
-                { label: "FAQs", href: "#faqs" },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className="hover:text-white transition-colors uppercase tracking-tight relative group"
-                >
-                  {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-red-600 transition-all group-hover:w-full" />
-                </Link>
-              ))}
+            {/* Desktop Navigation — Glassmorphism Pill */}
+            <div className="hidden lg:flex items-center relative">
+              <div className="flex items-center gap-1 bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-full px-2 py-1.5 relative overflow-hidden">
+                {/* Animated gradient border glow */}
+                <div className="absolute inset-0 rounded-full opacity-40 pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,0,0,0.1), rgba(168,85,247,0.1), transparent)', backgroundSize: '200% 100%', animation: 'gradient-shift 4s linear infinite' }} />
+                
+                {[
+                  { label: "About", href: "#about" },
+                  { label: "Programs", href: "#program" },
+                  { label: "Why ZICA", href: "#why-zica" },
+                  { label: "Goals", href: "#goals" },
+                  { label: "Reviews", href: "#testimonials" },
+                  { label: "FAQs", href: "#faqs" },
+                ].map((item, idx) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + idx * 0.08, duration: 0.5 }}
+                  >
+                    <Link
+                      href={item.href}
+                      className="relative px-4 py-2 text-[12px] font-semibold text-gray-400 uppercase tracking-[0.12em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.06] group/link"
+                    >
+                      {item.label}
+                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 rounded-full transition-all duration-500 group-hover/link:w-[60%]" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
-            <div className="flex items-center gap-4 relative z-[110]">
-              <button className="hidden sm:block bg-[#ff0000] hover:bg-red-700 text-white px-5 lg:px-7 py-2 lg:py-2.5 rounded-lg text-[12px] lg:text-sm font-bold shadow-lg shadow-red-600/20 transition-all active:scale-95 btn-glow">
-                Admission Enquiry
-              </button>
+            {/* CTA + Mobile Toggle */}
+            <div className="flex items-center gap-3 relative z-[110]">
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="hidden sm:flex items-center gap-2 bg-[#ff0000] hover:bg-red-600 text-white px-5 lg:px-6 py-2.5 rounded-full text-[11px] lg:text-[12px] font-bold shadow-lg shadow-red-600/20 transition-all btn-glow uppercase tracking-[0.15em]"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                Enquire Now
+              </motion.button>
               
               {/* Mobile Toggle */}
-              <button 
+              <motion.button 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-all"
+                className="lg:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:bg-white/10 hover:border-red-600/30 transition-all"
               >
-                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
+                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </motion.button>
             </div>
 
             {/* Mobile Menu Overlay */}
             <AnimatePresence>
               {isMenuOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="fixed inset-0 z-[100] bg-[#030008] flex flex-col items-center justify-center p-8 lg:hidden"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="fixed inset-0 z-[100] bg-[#030008]/95 backdrop-blur-xl flex flex-col items-center justify-center p-8 lg:hidden"
                 >
-                  <div className="flex flex-col items-center space-y-8">
+                  {/* Close button */}
+                  <motion.button
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    transition={{ delay: 0.2 }}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center text-white bg-white/5 rounded-full border border-white/10 hover:bg-red-600/20 hover:border-red-600/40 transition-all"
+                  >
+                    <X className="w-6 h-6" />
+                  </motion.button>
+
+                  {/* Decorative glow */}
+                  <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
+
+                  <div className="flex flex-col items-center space-y-6">
                     {[
                       { label: "About Us", href: "#about" },
-                      { label: "Our Program", href: "#program" },
+                      { label: "Programs", href: "#program" },
                       { label: "Why ZICA", href: "#why-zica" },
                       { label: "Goals", href: "#goals" },
-                      { label: "Testimonials", href: "#testimonials" },
+                      { label: "Reviews", href: "#testimonials" },
                       { label: "FAQs", href: "#faqs" },
-                    ].map((item) => (
-                      <Link
+                    ].map((item, idx) => (
+                      <motion.div
                         key={item.label}
-                        href={item.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-2xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors"
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 30 }}
+                        transition={{ delay: 0.1 + idx * 0.07, duration: 0.4 }}
                       >
-                        {item.label}
-                      </Link>
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="text-3xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors relative group"
+                        >
+                          {item.label}
+                          <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 transition-all duration-300 group-hover:w-full" />
+                        </Link>
+                      </motion.div>
                     ))}
-                    <button 
+                    <motion.button 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
                       onClick={() => setIsMenuOpen(false)}
-                      className="mt-8 bg-[#ff0000] text-white px-10 py-4 rounded-xl font-bold uppercase tracking-widest text-sm"
+                      className="mt-6 bg-[#ff0000] text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl shadow-red-600/30 hover:bg-red-600 transition-all"
                     >
-                      Admission Enquiry
-                    </button>
+                      Enquire Now
+                    </motion.button>
                   </div>
                 </motion.div>
               )}
@@ -278,7 +446,7 @@ export default function Home() {
           </motion.nav>
 
           {/* Hero Main */}
-          <main className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-12 py-4 min-h-0 relative">
+          <main className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-12 py-10 lg:py-4 min-h-0 relative">
             {/* LEFT CONTENT */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -305,10 +473,10 @@ export default function Home() {
                       className="absolute left-0 w-full"
                     >
                       <h1 className="flex flex-col text-[#ff0000] drop-shadow-[0_0_30px_rgba(255,0,0,0.5)] uppercase italic tracking-tighter leading-none py-2">
-                        <span className="text-[clamp(2rem,5vw,3.5rem)] font-black leading-none">
+                        <span className="text-[clamp(2rem,7vw,4.5rem)] font-black leading-[0.9] tracking-tighter">
                           {COURSES[currentCourseIndex] || "Animation & VFX"}
                         </span>
-                        <span className="text-[10px] lg:text-xs font-black text-white not-italic tracking-[0.4em] mt-2 opacity-60">
+                        <span className="text-[10px] lg:text-xs font-black text-white not-italic tracking-[0.4em] mt-4 opacity-60">
                           OFFICIAL TRAINING COURSE
                         </span>
                       </h1>
@@ -317,7 +485,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <p className="text-gray-200 text-sm lg:text-[17px] leading-relaxed max-w-2xl font-medium drop-shadow-md">
+              <p className="text-gray-200 text-[clamp(0.85rem,1.2vw,0.95rem)] leading-relaxed max-w-2xl font-medium drop-shadow-md">
                 Join ZICA Pitampura to master animation, VFX, gaming, and
                 graphic design. Our expert instructors and state-of-the-art
                 facilities provide hands-on experience with the latest
@@ -389,11 +557,11 @@ export default function Home() {
               </div>
 
               {/* CTAs */}
-              <div className="flex items-center gap-5 pt-4">
-                <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-3.5 rounded-lg font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 pt-4">
+                <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow">
                   Apply Now
                 </button>
-                <button className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-3.5 rounded-lg font-bold text-sm tracking-wide transition-all active:scale-95">
+                <button className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95">
                   Explore Our Courses
                 </button>
               </div>
@@ -413,58 +581,76 @@ export default function Home() {
                 <h2 className="text-2xl font-black text-center mb-8 tracking-tight text-white uppercase italic">
                   Download Brochure
                 </h2>
-                <form className="space-y-5">
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                <form className="space-y-5" onSubmit={(e) => handleFormSubmit(e, "Hero Brochure Form")}>
+                  <div className="space-y-1.5 group/input">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                       Full Name
                     </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your name"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
+                    <div className="relative">
+                      <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                      <input
+                        name="fullName"
+                        type="text"
+                        required
+                        placeholder="Enter your name"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                  <div className="space-y-1.5 group/input">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                       Phone Number
                     </label>
-                    <input
-                      type="tel"
-                      placeholder="+91 00000 00000"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
+                    <div className="relative">
+                      <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                      <input
+                        name="phone"
+                        type="tel"
+                        required
+                        placeholder="+91 00000 00000"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                  <div className="space-y-1.5 group/input">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                       Your Email
                     </label>
-                    <input
-                      type="email"
-                      placeholder="example@mail.com"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
+                    <div className="relative">
+                      <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                      <input
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="example@mail.com"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all placeholder:text-gray-700"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                  <div className="space-y-1.5 group/input">
+                    <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                       Interested on...
                     </label>
                     <div className="relative">
-                      <select className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white appearance-none focus:outline-none focus:border-red-600 transition-all cursor-pointer">
-                        <option className="bg-black" value="Animation">
-                          Animation
-                        </option>
-                        <option className="bg-black" value="VFX">
-                          VFX Master
-                        </option>
-                        <option className="bg-black" value="Gaming">
-                          Game Design
-                        </option>
+                      <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                      <select name="course" defaultValue="Animation" className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm text-white appearance-none focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all cursor-pointer">
+                        <option className="bg-black" value="Animation">Animation</option>
+                        <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
+                        <option className="bg-black" value="Gaming">Gaming</option>
+                        <option className="bg-black" value="Graphic Design">Graphic Design</option>
+                        <option className="bg-black" value="Motion Graphics">Motion Graphics</option>
+                        <option className="bg-black" value="Video Editing">Video Editing</option>
+                        <option className="bg-black" value="Unreal Engine">Unreal Engine</option>
+                        <option className="bg-black" value="Blender Mastery">Blender Mastery</option>
                       </select>
                       <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                     </div>
                   </div>
-                  <button className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30">
-                    Submit Now
+                  <button 
+                    disabled={isSubmitting}
+                    className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Sending..." : "Submit Now"}
                   </button>
                 </form>
               </div>
@@ -475,7 +661,7 @@ export default function Home() {
         {/* --- ZICA WAY SECTION --- */}
         <section
           id="about"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-[#030008]/60"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2rem,4vw,3.5rem)] bg-[#030008]/60 border-t border-white/5"
         >
           <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
             <div className="absolute w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.15),transparent_70%)]" />
@@ -483,9 +669,9 @@ export default function Home() {
           </div>
 
           <div className="relative z-10">
-            <h2 className="text-3xl lg:text-5xl font-black text-center mb-12 lg:mb-20 leading-tight text-white">
+            <h2 className="text-[clamp(1.5rem,4.5vw,2.8rem)] font-black text-center mb-8 lg:mb-12 leading-[1] uppercase tracking-tighter text-white text-glow max-w-4xl mx-auto">
               Entertainment, the{" "}
-              <span className="text-[#ff0000]">ZICA way—through</span> the eyes
+              <span className="text-[#ff0000]">ZICA Way—through</span> the eyes
               of our students.
             </h2>
 
@@ -585,7 +771,7 @@ export default function Home() {
         {/* --- PROGRAMS SECTION --- */}
         <section
           id="program"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black/60 overflow-hidden border-t border-white/5"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black/60 overflow-hidden border-t border-white/5"
         >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -593,12 +779,12 @@ export default function Home() {
             viewport={{ once: true, margin: "-100px" }}
             className="max-w-[1600px] mx-auto w-full"
           >
-            <div className="text-center mb-20 space-y-8">
+            <div className="text-center mb-12 space-y-6">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-4xl md:text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow">
+                <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black uppercase tracking-tighter leading-[0.9] text-white text-glow mb-6">
                   Discover Our <span className="text-[#ff0000]">Programs</span>
                 </h2>
-                <p className="text-gray-400 text-xl lg:text-2xl leading-relaxed max-w-3xl mx-auto">
+                <p className="text-gray-400 text-[clamp(0.85rem,1.2vw,0.95rem)] leading-relaxed font-medium max-w-3xl mx-auto">
                   Unlock your potential with our industry-vetted creative
                   courses. From 3D Animation to Architectural Design, we provide
                   the tools to turn your imagination into a professional career.
@@ -608,109 +794,128 @@ export default function Home() {
                 Enquire Now
               </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
               {[
                 {
                   title: "Graphic",
                   highlight: "Designing",
                   image: "Graphic-Designing-1.png",
-                  desc: "Master visual communication, branding, and typography using industry-standard tools like Adobe Photoshop, Illustrator, and InDesign. Learn to create impactful designs for print media, digital platforms, and corporate identity.",
+                  desc: "Master visual communication, branding, and typography using industry-standard tools like Adobe Photoshop, Illustrator, and InDesign.",
+                  featured: true,
                 },
                 {
                   title: "2D",
                   highlight: "Animation",
                   image: "2D-Animation.png",
-                  desc: "Learn the art of traditional and digital frame-by-frame animation. This course focuses on character development, storyboarding, and the 12 principles of animation. Bring characters and narratives to life using professional software like Toon Boom.",
+                  desc: "Learn the art of traditional and digital frame-by-frame animation with character development, storyboarding, and the 12 principles of animation.",
+                  featured: true,
                 },
                 {
                   title: "3D",
                   highlight: "Animation",
                   image: "3D-Animation.png",
-                  desc: "Dive into character modeling, texturing, rigging, and performance-driven animation in a three-dimensional space. Create cinematic sequences and realistic movement for films, commercials, and digital content.",
+                  desc: "Dive into character modeling, texturing, rigging, and performance-driven animation in a three-dimensional space.",
                 },
                 {
                   title: "Motion",
                   highlight: "Graphics",
                   image: "Motion-Graphics.png",
-                  desc: "Combine graphic design with animation principles to create dynamic, moving visuals. Focus on kinetic typography, logo reveals, and broadcast package design for television and web advertising using After Effects.",
+                  desc: "Combine graphic design with animation principles to create dynamic, moving visuals for broadcast and web.",
                 },
                 {
                   title: "Visual",
                   highlight: "Effects (VFX)",
                   image: "Visual-Effects.png",
-                  desc: "Acquire the skills to create movie magic. Master compositing, green-screen removal, 3D tracking, and dynamic simulation. Integrate CGI with live-action footage using Nuke and industry-leading software.",
+                  desc: "Master compositing, green-screen removal, 3D tracking, and dynamic simulation with Nuke and industry tools.",
                 },
                 {
                   title: "Game",
                   highlight: "Design",
                   image: "Game-Design.png",
-                  desc: "Build interactive worlds and learn gameplay mechanics for modern consoles. Master Unity and Unreal Engine to create immersive gaming experiences, focusing on character interaction and storytelling.",
+                  desc: "Build interactive worlds and learn gameplay mechanics. Master Unity and Unreal Engine to create immersive gaming experiences.",
+                  featured: true,
                 },
                 {
                   title: "3DS",
                   highlight: "Max",
                   image: "3Ds-Max.png",
-                  desc: "Explore the world of 3D modeling and rendering using Autodesk 3ds Max. Covers basic creation to advanced lighting and realistic rendering for architecture, products, and entertainment.",
+                  desc: "Explore 3D modeling and rendering using Autodesk 3ds Max for architecture, products, and entertainment.",
+                  featured: true,
                 },
                 {
                   title: "3D",
                   highlight: "Maya",
                   image: "3D-Maya.png",
-                  desc: "A comprehensive course in Maya for professional film and game production. Focus on advanced rigging, creature modeling, and simulation effects demanded by top global studios.",
+                  desc: "A comprehensive course in Maya for professional film and game production with advanced rigging and simulation.",
                 },
                 {
                   title: "Architectural",
                   highlight: "Design",
                   image: "Architectural-Design.png",
-                  desc: "Learn the technical skills to design functional spaces. Focus on site analysis, drafting, and space planning. Use AutoCAD and Revit to produce industry-standard drawings and presentations.",
+                  desc: "Learn space planning, drafting, and design using AutoCAD and Revit to produce industry-standard presentations.",
                 },
                 {
                   title: "Video",
                   highlight: "Editing",
                   image: "video-Editing.png",
-                  desc: "Master post-production storytelling. Learn professional cutting techniques, color correction, and sound mixing using Premiere Pro and DaVinci Resolve. Transform raw footage into polished final content.",
+                  desc: "Master post-production with professional cutting, color correction, and sound mixing using Premiere Pro and DaVinci Resolve.",
                 },
-              ].map((course, idx) => (
+              ].map((course, idx) => {
+                const isFeatured = !!(course as any).featured;
+                return (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -10 }}
+                  whileHover={{ y: -8 }}
                   transition={{ 
                     duration: 0.6,
-                    delay: idx * 0.05,
+                    delay: idx * 0.04,
                     ease: [0.215, 0.61, 0.355, 1]
                   }}
                   viewport={{ once: true }}
-                  className="group bg-white rounded-[40px] overflow-hidden flex flex-col shadow-2xl hover:shadow-red-600/10 transition-all cursor-pointer h-full border border-transparent hover:border-red-600/20"
+                  className={`group bg-[#0a0a0a] rounded-[24px] overflow-hidden shadow-2xl hover:shadow-red-600/10 transition-all cursor-pointer border border-white/10 hover:border-red-600/30 ${
+                    isFeatured
+                      ? 'lg:col-span-3 flex flex-col lg:flex-row'
+                      : 'lg:col-span-2 flex flex-col'
+                  }`}
                 >
-                  <div className="aspect-[4/3] relative overflow-hidden flex-shrink-0">
+                  <div className={`relative overflow-hidden flex-shrink-0 ${
+                    isFeatured
+                      ? 'aspect-[4/3] lg:aspect-auto lg:w-[45%]'
+                      : 'aspect-[16/10]'
+                  }`}>
                     <Image
                       src={`/Program/${course.image}`}
                       alt={course.title}
                       fill
                       className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   </div>
-                  <div className="p-6 lg:p-10 flex flex-col flex-1 bg-white">
-                    <h3 className="text-2xl lg:text-3xl font-black text-black leading-tight mb-4 uppercase">
-                      {course.title} <br />
+                  <div className={`flex flex-col flex-1 justify-center ${
+                    isFeatured ? 'p-6 lg:p-8' : 'p-5 lg:p-6'
+                  }`}>
+                    <h3 className={`font-black text-white leading-tight uppercase mb-3 ${
+                      isFeatured ? 'text-xl lg:text-2xl' : 'text-lg'
+                    }`}>
+                      {course.title}{" "}
                       <span className="text-[#ff0000]">{course.highlight}</span>
                     </h3>
-                    <p className="text-gray-600 text-sm lg:text-base leading-relaxed flex-1">
+                    <p className="text-gray-500 text-xs lg:text-sm leading-relaxed flex-1 mb-4">
                       {course.desc}
                     </p>
-                    <div className="mt-8 flex items-center text-red-600 font-bold uppercase tracking-[0.2em] text-[10px] lg:text-xs">
-                      <div className="relative h-5 overflow-hidden group/btn">
+                    <div className="flex items-center text-red-600 font-bold uppercase tracking-[0.15em] text-[10px]">
+                      <div className="relative h-4 overflow-hidden group/btn">
                         <span className="block transition-transform duration-700 ease-in-out group-hover/btn:-translate-y-full">Explore Program</span>
-                        <span className="block absolute top-0 left-0 transition-transform duration-700 ease-in-out translate-y-full group-hover/btn:translate-y-0 text-red-500">Enroll Today Now</span>
+                        <span className="block absolute top-0 left-0 transition-transform duration-700 ease-in-out translate-y-full group-hover/btn:translate-y-0 text-red-500">Enroll Now →</span>
                       </div>
-                      <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-500 group-hover:translate-x-2" />
+                      <ChevronRight className="w-3.5 h-3.5 ml-1.5 transition-transform duration-500 group-hover:translate-x-2" />
                     </div>
                   </div>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </motion.div>
         </section>
@@ -718,26 +923,21 @@ export default function Home() {
         {/* --- WHY CHOOSE ZICA SECTION (DARK RE-DESIGN) --- */}
         <section
           id="about"
-          className="relative z-10 w-full px-6 lg:px-16 py-40 bg-black overflow-hidden border-t border-white/5"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black overflow-hidden border-t border-white/5"
         >
 
           <motion.div
-            initial={{ opacity: 0, y: 100 }}
+            initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto relative z-10"
           >
-            <div className="text-center mb-32">
-              <motion.h2
-                initial={{ opacity: 0, filter: "blur(20px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 2 }}
-                className="text-4xl md:text-5xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-8 text-white text-glow"
-              >
-                Why Should You Choose <br />
+            <div className="text-center mb-10">
+              <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-6 text-white text-glow">
+                Why Should You Choose <br className="hidden lg:block" />
                 <span className="text-[#ff0000]">ZICA Pitampura?</span>
-              </motion.h2>
+              </h2>
               <div className="w-24 h-1 bg-[#ff0000] mx-auto" />
             </div>
 
@@ -844,7 +1044,7 @@ export default function Home() {
         {/* --- TESTIMONIALS SECTION --- */}
         <section
           id="testimonials"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black/60 overflow-hidden"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black/60 overflow-hidden border-t border-white/5"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -852,17 +1052,11 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto relative z-10"
           >
-            <div className="text-center space-y-4 mb-12 lg:mb-20">
-              <motion.h2
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-3xl md:text-4xl lg:text-6xl font-black leading-tight text-white text-glow"
-              >
-                Let's Hear It From <span className="text-[#ff0000]">Our</span>{" "}
-                Students
-              </motion.h2>
-              <p className="text-gray-400 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
+            <div className="text-center space-y-4 mb-8 lg:mb-10">
+              <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black leading-[0.9] text-white text-glow uppercase tracking-tighter mb-4">
+                Hear From <span className="text-[#ff0000]">Our</span> Students
+              </h2>
+              <p className="text-gray-400 text-[clamp(0.85rem,1.5vw,1rem)] leading-relaxed font-medium max-w-2xl mx-auto">
                 Hear How ZICA's Industry-Focused Training and Supportive
                 Environment Helped Students Achieve Their Dreams.
               </p>
@@ -893,7 +1087,7 @@ export default function Home() {
                   whileHover={{ y: -10, scale: 1.02 }}
                   transition={{ delay: idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-[#0a0a0a] border border-white/10 rounded-[24px] p-8 lg:p-12 flex flex-col items-center text-center space-y-6 relative group hover:border-red-600/30 transition-all shadow-2xl"
+                  className="bg-[#0a0a0a] border border-white/10 rounded-[24px] p-6 lg:p-10 flex flex-col items-center text-center space-y-6 relative group hover:border-red-600/30 transition-all shadow-2xl"
                 >
                   <div className="flex items-center gap-1.5 text-yellow-500">
                     {[...Array(5)].map((_, i) => (
@@ -933,7 +1127,7 @@ export default function Home() {
         {/* --- GOALS SECTION --- */}
         <section
           id="goals"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black/60 border-t border-white/5"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black/60 border-t border-white/5"
         >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -941,12 +1135,12 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto"
           >
-            <div className="text-center mb-24 space-y-4">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight text-glow">
-                The Right Place to Achieve{" "}
-                <span className="text-[#ff0000]">Your Goals</span>
+            <div className="text-center mb-8 lg:mb-10 space-y-4">
+              <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-white uppercase tracking-tighter leading-[0.9] text-glow mb-4">
+                The Right Place <br className="hidden lg:block" />
+                <span className="text-[#ff0000]">Achieve Your Goals</span>
               </h2>
-              <p className="text-gray-500 text-sm lg:text-base max-w-3xl mx-auto">
+              <p className="text-gray-400 text-[clamp(0.85rem,1.5vw,1rem)] leading-relaxed font-medium max-w-3xl mx-auto">
                 India's premier institute offering comprehensive training in
                 both traditional and digital animation, nurturing the next
                 generation of creative professionals.
@@ -1032,7 +1226,7 @@ export default function Home() {
                   whileHover={{ y: -5, scale: 1.02 }}
                   transition={{ delay: idx * 0.05 }}
                   viewport={{ once: true }}
-                  className="bg-black border border-white/10 rounded-[20px] p-8 space-y-6 flex flex-col hover:border-red-600/30 transition-all group"
+                  className="bg-black border border-white/10 rounded-[20px] p-6 lg:p-8 space-y-5 flex flex-col hover:border-red-600/30 transition-all group"
                 >
                   <div className="flex-shrink-0 transition-transform group-hover:scale-110 duration-300">
                     {goal.icon}
@@ -1056,7 +1250,7 @@ export default function Home() {
         {/* --- IMPACT SECTION --- */}
         <section
           id="why-zica"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black/60 border-t border-white/5"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(1.5rem,3vw,2.5rem)] bg-black/60 border-t border-white/5"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -1064,14 +1258,9 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto"
           >
-            <motion.h2
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-3xl md:text-4xl lg:text-6xl font-black text-center mb-12 lg:mb-16 text-white text-glow"
-            >
+            <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-center mb-6 lg:mb-8 text-white text-glow uppercase tracking-tighter leading-[0.9]">
               Our <span className="text-[#ff0000]">Impact</span>
-            </motion.h2>
+            </h2>
 
             <div className="bg-[#0a0a0a] border-4 border-[#2d1b4d] rounded-[40px] p-4 lg:p-6 shadow-[0_0_50px_rgba(45,27,77,0.3)]">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1087,9 +1276,9 @@ export default function Home() {
                     whileHover={{ scale: 1.05, y: -5 }}
                     transition={{ delay: idx * 0.1, duration: 1 }}
                     viewport={{ once: true }}
-                    className="bg-black border border-white/20 rounded-[24px] py-16 text-center space-y-4 hover:border-red-600/40 transition-all group cursor-default"
+                    className="bg-black border border-white/20 rounded-[24px] py-8 text-center space-y-3 hover:border-red-600/40 transition-all group cursor-default"
                   >
-                    <p className="text-5xl lg:text-6xl font-black text-white tracking-tighter group-hover:text-red-600 transition-colors duration-500">
+                    <p className="text-4xl lg:text-5xl font-black text-white tracking-tighter group-hover:text-red-600 transition-colors duration-500">
                       {stat.val}
                     </p>
                     <p className="text-gray-400 font-bold uppercase tracking-widest text-sm">
@@ -1105,7 +1294,7 @@ export default function Home() {
         {/* --- FAQS & CONTACT SECTION --- */}
         <section
           id="faqs"
-          className="relative z-10 w-full px-6 lg:px-16 py-32 bg-black/60"
+          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(3.5rem,8vw,6rem)] bg-black/60 border-t border-white/5"
         >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -1115,8 +1304,9 @@ export default function Home() {
           >
             {/* FAQ Column */}
             <div className="space-y-12">
-              <h2 className="text-6xl font-black text-white uppercase tracking-tight text-glow">
-                FAQs
+              <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-white uppercase tracking-tighter leading-[0.9] text-glow">
+
+                Got <span className="text-[#ff0000]">Questions?</span>
               </h2>
               <div className="space-y-6">
                 {[
@@ -1192,46 +1382,67 @@ export default function Home() {
               <h3 className="text-4xl font-black text-white text-center uppercase italic text-glow">
                 Enquiry Now
               </h3>
-              <form className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+              <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, "Footer Enquiry Form")}>
+                <div className="space-y-2 group/input">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                     Full Name
                   </label>
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                  />
+                  <div className="relative">
+                    <Users className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                    <input
+                      name="fullName"
+                      type="text"
+                      required
+                      placeholder="John Doe"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                <div className="space-y-2 group/input">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                     Phone Number
                   </label>
-                  <input
-                    type="tel"
-                    placeholder="+91 00000 00000"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                  />
+                  <div className="relative">
+                    <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                    <input
+                      name="phone"
+                      type="tel"
+                      required
+                      placeholder="+91 00000 00000"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                <div className="space-y-2 group/input">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                     Your Email
                   </label>
-                  <input
-                    type="email"
-                    placeholder="john@example.com"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="john@example.com"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1">
+                <div className="space-y-2 group/input">
+                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                     Interested on...
                   </label>
                   <div className="relative">
-                    <select className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
-                      <option value="Animation">Animation</option>
-                      <option value="VFX">VFX</option>
-                      <option value="Gaming">Gaming</option>
+                    <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                    <select name="course" defaultValue="Animation" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
+                      <option className="bg-black" value="Animation">Animation</option>
+                      <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
+                      <option className="bg-black" value="Gaming">Gaming</option>
+                      <option className="bg-black" value="Graphic Design">Graphic Design</option>
+                      <option className="bg-black" value="Motion Graphics">Motion Graphics</option>
+                      <option className="bg-black" value="Video Editing">Video Editing</option>
+                      <option className="bg-black" value="Unreal Engine">Unreal Engine</option>
+                      <option className="bg-black" value="Blender Mastery">Blender Mastery</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                   </div>
@@ -1239,9 +1450,10 @@ export default function Home() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow"
+                  disabled={isSubmitting}
+                  className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
                 >
-                  Submit
+                  {isSubmitting ? "Sending..." : "Submit"}
                 </motion.button>
               </form>
             </motion.div>
@@ -1249,13 +1461,13 @@ export default function Home() {
         </section>
 
         {/* --- FOOTER --- */}
-        <footer className="relative z-10 w-full px-6 lg:px-16 pt-24 pb-12 bg-black border-t border-white/10">
+        <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-24 pb-12 bg-black border-t border-white/10">
           <div className="max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20 text-center md:text-left">
               {/* Powered By */}
-              <div className="space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
-                  <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+                  <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h4 className="text-white font-black uppercase tracking-widest text-lg">
                     Powered by
                   </h4>
@@ -1268,12 +1480,12 @@ export default function Home() {
                     className="object-contain"
                   />
                 </div>
-                <p className="text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
                   Reflect on your creative journey, evaluate your performance,
                   seek constructive feedback, and continuously enhance your
                   artistic and technical skills with us.
                 </p>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6 justify-center md:justify-start">
                   <div className="text-white hover:text-red-600 cursor-pointer transition-colors">
                     <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -1293,9 +1505,9 @@ export default function Home() {
               </div>
 
               {/* Placement Partner */}
-              <div className="space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
-                  <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+                  <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h4 className="text-white font-black uppercase tracking-widest text-lg">
                     Placement Partner
                   </h4>
@@ -1311,9 +1523,9 @@ export default function Home() {
               </div>
 
               {/* Quick Links */}
-              <div className="space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
-                  <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+                  <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h4 className="text-white font-black uppercase tracking-widest text-lg">
                     Quick Links
                   </h4>
@@ -1338,14 +1550,14 @@ export default function Home() {
               </div>
 
               {/* Contact Info */}
-              <div className="space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
-                  <div className="w-10 h-1 bg-[#ff0000] mb-4" />
+                  <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h4 className="text-white font-black uppercase tracking-widest text-lg">
                     Contact Info
                   </h4>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-6 flex flex-col items-center md:items-start">
                   <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all">
                       <Phone className="w-5 h-5" />
@@ -1366,7 +1578,7 @@ export default function Home() {
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all flex-shrink-0">
                       <MapPin className="w-5 h-5" />
                     </div>
-                    <span className="text-sm font-bold tracking-wider leading-relaxed">
+                    <span className="text-sm font-bold tracking-wider leading-relaxed text-center md:text-left">
                       1st floor, 150, Kapil Vihar,
                       <br />
                       Pitampura, Delhi 110034
@@ -1376,11 +1588,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
               <p className="text-gray-500 text-sm font-medium">
                 © 2025 ZICA Pitampura. All rights reserved.
               </p>
-              <div className="flex gap-8 text-gray-500 text-sm font-medium">
+              <div className="flex gap-8 text-gray-500 text-sm font-medium justify-center">
                 <span className="hover:text-white cursor-pointer transition-colors">
                   Privacy Policy
                 </span>
@@ -1392,38 +1604,182 @@ export default function Home() {
           </div>
         </footer>
 
-        {/* --- CLASSY VERTICAL RIGHT DOCK --- */}
-        <div className="fixed right-0 top-1/2 -translate-y-1/2 flex flex-col z-50 overflow-hidden rounded-l-2xl border border-white/10 shadow-2xl">
-          {[
-            {
-              icon: <ChevronRight className="w-5 h-5" />,
-              bg: "bg-black",
-              label: "Open",
-            },
-            {
-              icon: <Phone className="w-5 h-5" />,
-              bg: "bg-[#e4405f]",
-              label: "Call Us",
-            },
-            {
-              icon: <MessageCircle className="w-5 h-5" />,
-              bg: "bg-[#25d366]",
-              label: "WhatsApp",
-            },
-          ].map((btn, idx) => (
-            <motion.div
-              key={idx}
-              whileHover={{ x: -10 }}
-              className={`w-12 h-14 ${btn.bg} flex items-center justify-center cursor-pointer transition-all border-b border-white/10 last:border-b-0 group relative`}
-            >
-              {btn.icon}
-              <span className="absolute right-full mr-4 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                {btn.label}
-              </span>
-            </motion.div>
-          ))}
+        {/* --- PREMIUM RESPONSIVE CONTACT DOCK --- */}
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 lg:left-auto lg:right-0 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-0 flex lg:flex-col z-[100] items-center">
+          <div className="flex lg:flex-col bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl lg:rounded-l-2xl lg:rounded-r-none overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            {[
+              {
+                icon: <Phone className="w-5 h-5" />,
+                bg: "bg-[#e4405f]",
+                label: "Call Us",
+                mobile: true,
+              },
+              {
+                icon: <MessageCircle className="w-5 h-5" />,
+                bg: "bg-[#25d366]",
+                label: "WhatsApp",
+                mobile: true,
+              },
+              {
+                icon: <ChevronRight className="w-5 h-5" />,
+                bg: "bg-black",
+                label: "Open",
+                mobile: false,
+              },
+            ].map((btn, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.1, x: -5 }}
+                className={`w-14 h-14 lg:w-12 lg:h-14 ${btn.bg} flex items-center justify-center cursor-pointer transition-all border-r lg:border-r-0 lg:border-b border-white/10 last:border-0 group relative ${!btn.mobile ? "hidden lg:flex" : "flex"}`}
+              >
+                {btn.icon}
+                <span className="absolute bottom-full lg:bottom-auto lg:right-full mb-4 lg:mb-0 lg:mr-4 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  {btn.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
+      {/* --- SMART CINEMATIC POPUP --- */}
+      <AnimatePresence>
+        {isPopupOpen && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+            {/* Backdrop with extreme blur */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsPopupOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
+
+            {/* Popup Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 40 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(255,0,0,0.15)] flex flex-col"
+            >
+              {/* Top Banner / Image */}
+              <div className="relative h-32 w-full">
+                <Image 
+                  src="/Program/Visual-Effects.png" 
+                  alt="VFX Masterclass" 
+                  fill 
+                  className="object-cover brightness-75"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent" />
+                <button 
+                  onClick={() => setIsPopupOpen(false)}
+                  className="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors z-10"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-6 left-8">
+                  <span className="bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-2 inline-block">
+                    Limited Time Offer
+                  </span>
+                  <h2 className="text-3xl font-black text-white leading-none uppercase">
+                    Free Career <br />
+                    <span className="text-red-600 text-glow">Guidance</span>
+                  </h2>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              <div className="p-8 lg:p-10 space-y-6">
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Confused about your creative future? Get a free 1-on-1 session with our industry experts and discover the best path in <span className="text-white font-bold">VFX, Animation & Gaming.</span>
+                </p>
+
+                <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, "Popup Form")}>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="space-y-1.5 group/input">
+                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Full Name</label>
+                      <div className="relative">
+                        <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <input 
+                          name="fullName"
+                          type="text" 
+                          required
+                          placeholder="John Doe" 
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5 group/input">
+                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Phone Number</label>
+                      <div className="relative">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <input 
+                          name="phone"
+                          type="tel" 
+                          required
+                          placeholder="+91 00000 00000" 
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5 group/input">
+                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Your Email</label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <input 
+                          name="email"
+                          type="email" 
+                          required
+                          placeholder="example@mail.com" 
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5 group/input">
+                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Interested In</label>
+                      <div className="relative">
+                        <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <select 
+                          name="course"
+                          defaultValue=""
+                          className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl pl-11 pr-10 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all text-gray-300 appearance-none cursor-pointer"
+                        >
+                          <option value="" disabled>Select Course</option>
+                          <option value="Animation">Animation</option>
+                          <option value="VFX - Visual Effects">VFX - Visual Effects</option>
+                          <option value="Gaming">Gaming</option>
+                          <option value="Graphic Design">Graphic Design</option>
+                          <option value="Motion Graphics">Motion Graphics</option>
+                          <option value="Video Editing">Video Editing</option>
+                          <option value="Unreal Engine">Unreal Engine</option>
+                          <option value="Blender Mastery">Blender Mastery</option>
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    disabled={isSubmitting}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-4 rounded-xl text-sm shadow-xl shadow-red-600/20 transition-all btn-glow mt-2 disabled:opacity-50"
+                  >
+                    {isSubmitting ? "Processing..." : "Book Free Session"}
+                  </motion.button>
+
+                  <p className="text-[10px] text-gray-600 text-center uppercase tracking-widest">
+                    No credit card required • Industry vetted experts
+                  </p>
+                </form>
+              </div>
+
+              {/* Decorative side glow */}
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-red-600/10 blur-[50px] rounded-full pointer-events-none" />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
