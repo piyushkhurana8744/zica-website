@@ -186,9 +186,6 @@ export default function Home() {
       setIsPopupOpen(true);
     };
 
-    // 1. Time Delay (30 Seconds)
-    const timer = setTimeout(triggerPopup, 30000);
-
     // 2. Scroll Trigger (20% or 600px)
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -225,7 +222,6 @@ export default function Home() {
       window.removeEventListener("mouseleave", handleExitIntent);
       clearInterval(syncInterval);
       clearInterval(carouselInterval);
-      clearTimeout(timer);
       clearTimeout(initTimeout);
     };
   }, []);
@@ -439,7 +435,7 @@ export default function Home() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => { setIsMenuOpen(false); setIsPopupOpen(true); }}
                       className="mt-6 bg-[#ff0000] text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl shadow-red-600/30 hover:bg-red-600 transition-all"
                     >
                       Enquire Now
@@ -563,12 +559,12 @@ export default function Home() {
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 pt-4">
-                <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow">
+                <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow">
                   Apply Now
                 </button>
-                <button className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95">
+                <Link href="#program" className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 text-center">
                   Explore Our Courses
-                </button>
+                </Link>
               </div>
             </motion.div>
 
@@ -766,7 +762,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center md:justify-start">
-                  <button className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
+                  <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
                     Download Brochure
                   </button>
                 </div>
@@ -797,7 +793,7 @@ export default function Home() {
                   the tools to turn your imagination into a professional career.
                 </p>
               </div>
-              <button className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow">
+              <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow">
                 Enquire Now
               </button>
             </div>
@@ -1036,6 +1032,7 @@ export default function Home() {
 
                 <div className="flex justify-center lg:justify-start">
                   <motion.button
+                    onClick={() => setIsPopupOpen(true)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow"
@@ -1634,120 +1631,185 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 40 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-md bg-[#0a0a0a] border border-white/10 rounded-[32px] overflow-hidden shadow-[0_0_50px_rgba(255,0,0,0.15)] flex flex-col"
+              className="relative w-full max-w-5xl bg-[#0a0a0a] border border-white/10 rounded-[40px] overflow-hidden shadow-[0_0_80px_rgba(255,0,0,0.4)] flex flex-col lg:flex-row group"
             >
-              {/* Top Banner / Image */}
-              <div className="relative h-32 w-full">
+              {/* LEFT SIDE: BRANDING & GRAPHICS (Desktop Only) */}
+              <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden border-r border-white/5">
                 <Image 
                   src="/Program/Visual-Effects.png" 
-                  alt="VFX Masterclass" 
+                  alt="ZICA Visuals" 
                   fill 
-                  className="object-cover brightness-75"
+                  className="object-cover brightness-[0.6] group-hover:scale-105 transition-transform duration-[3s] ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/20 to-transparent" />
-                <button 
-                  onClick={() => setIsPopupOpen(false)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-colors z-10"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-                <div className="absolute bottom-6 left-8">
-                  <span className="bg-red-600 text-white text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-2 inline-block">
-                    Limited Time Offer
-                  </span>
-                  <h2 className="text-3xl font-black text-white leading-none uppercase">
-                    Free Career <br />
-                    <span className="text-red-600 text-glow">Guidance</span>
-                  </h2>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                
+                {/* Content Overlay */}
+                <div className="relative z-10 p-12 flex flex-col justify-between h-full">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-[2px] bg-[#ff0000]" />
+                      <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em]">ZICA Pitampura</span>
+                    </div>
+                    <h2 className="text-5xl font-black text-white uppercase italic leading-[0.9] tracking-tighter">
+                      Transform <br />
+                      <span className="text-[#ff0000] text-glow">Your Ideas</span> <br />
+                      Into Reality
+                    </h2>
+                    <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+                      Join India's premier institute for Animation, VFX, and Design. Master the tools that build the future.
+                    </p>
+                  </div>
+
+                  <div className="space-y-8">
+                    {/* Trust Avatars */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex -space-x-3">
+                        {TRUSTED_AVATARS.slice(0, 4).map((img) => (
+                          <div key={img} className="w-10 h-10 rounded-full border-2 border-black overflow-hidden relative shadow-lg">
+                            <Image src={`/Trusted by/${img}`} alt="Student" fill className="object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="text-[11px] leading-tight">
+                        <p className="text-gray-500 uppercase tracking-widest font-bold">Trusted by</p>
+                        <p className="text-white font-black">3000+ STUDENTS</p>
+                      </div>
+                    </div>
+
+                    {/* Recruiter strip (mini) */}
+                    <div className="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                      {RECRUITERS.slice(0, 3).map((img, idx) => (
+                        <div key={idx} className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 h-10 w-20 flex items-center justify-center">
+                          <Image src={`/Recruiters/${img}.png`} alt="Recruiter" width={60} height={20} className="object-contain" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Form Content */}
-              <div className="p-8 lg:p-10 space-y-6">
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  Confused about your creative future? Get a free 1-on-1 session with our industry experts and discover the best path in <span className="text-white font-bold">VFX, Animation & Gaming.</span>
-                </p>
+              {/* RIGHT SIDE: FORM */}
+              <div className="w-full lg:w-[55%] relative flex flex-col">
+                {/* Premium Background Graphics */}
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                  <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(255,0,0,0.08),transparent_70%)]" />
+                  <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full animate-pulse" />
+                  <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+                </div>
 
-                <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, "Popup Form")}>
-                  <div className="grid grid-cols-1 gap-4">
+                {/* Close Button */}
+                <button 
+                  onClick={() => setIsPopupOpen(false)}
+                  className="absolute top-6 right-6 w-10 h-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all z-50 hover:scale-110 active:scale-90"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col justify-center min-h-full">
+                  <div className="mb-10 lg:hidden">
+                     <h2 className="text-4xl font-black text-white uppercase italic leading-none tracking-tighter mb-4">
+                      Download <br />
+                      <span className="text-[#ff0000]">Brochure</span>
+                    </h2>
+                    <div className="w-12 h-1 bg-[#ff0000]" />
+                  </div>
+
+                  <div className="hidden lg:block mb-10">
+                     <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">
+                      Ready to Start?
+                    </h3>
+                    <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Submit your enquiry below</p>
+                  </div>
+
+                  <form className="space-y-5" onSubmit={(e) => handleFormSubmit(e, "Popup Enquiry Form")}>
                     <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Full Name</label>
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Full Name</label>
                       <div className="relative">
-                        <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
                         <input 
                           name="fullName"
                           type="text" 
                           required
-                          placeholder="Enter name" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
+                          placeholder="Your Name" 
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
                         />
                       </div>
                     </div>
-                    <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Phone Number</label>
-                      <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                        <input 
-                          name="phone"
-                          type="tel" 
-                          required
-                          pattern="[0-9]{10}"
-                          title="Please enter a 10-digit mobile number"
-                          placeholder="Enter mobile number" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
-                        />
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-1.5 group/input">
+                        <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Phone</label>
+                        <div className="relative">
+                          <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                          <input 
+                            name="phone"
+                            type="tel" 
+                            required
+                            pattern="[0-9]{10}"
+                            placeholder="Phone Number" 
+                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1.5 group/input">
+                        <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Program</label>
+                        <div className="relative">
+                          <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                          <select 
+                            name="course"
+                            defaultValue=""
+                            className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all text-gray-300 appearance-none cursor-pointer"
+                          >
+                            <option value="" disabled>Select Course</option>
+                            <option value="Animation">Animation</option>
+                            <option value="VFX">VFX</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Graphics">Graphics</option>
+                          </select>
+                          <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                        </div>
                       </div>
                     </div>
+
                     <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Your Email</label>
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Email Address</label>
                       <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
+                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
                         <input 
                           name="email"
                           type="email" 
                           required
-                          placeholder="Enter email address" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all placeholder:text-gray-700"
+                          placeholder="Your email address" 
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
                         />
                       </div>
                     </div>
-                    <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-widest text-gray-500 font-bold ml-1 group-focus-within/input:text-red-600 transition-colors">Interested In</label>
-                      <div className="relative">
-                        <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                        <select 
-                          name="course"
-                          defaultValue=""
-                          className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl pl-11 pr-10 py-3.5 text-sm focus:border-red-600/50 outline-none transition-all text-gray-300 appearance-none cursor-pointer"
-                        >
-                          <option value="" disabled>Select Course</option>
-                          <option value="Animation">Animation</option>
-                          <option value="VFX - Visual Effects">VFX - Visual Effects</option>
-                          <option value="Gaming">Gaming</option>
-                          <option value="Graphic Design">Graphic Design</option>
-                          <option value="Motion Graphics">Motion Graphics</option>
-                          <option value="Video Editing">Video Editing</option>
-                          <option value="Unreal Engine">Unreal Engine</option>
-                          <option value="Blender Mastery">Blender Mastery</option>
-                        </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                      </div>
+
+                    <motion.button
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      disabled={isSubmitting}
+                      className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-5 rounded-2xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
+                    >
+                      {isSubmitting ? "Processing..." : "Enquire Now"}
+                    </motion.button>
+                  </form>
+
+                  <div className="mt-8 flex flex-col items-center gap-4">
+                    <p className="text-[10px] text-gray-600 uppercase tracking-widest font-black">⚡ Limited Seats Available for Next Batch</p>
+                    <div className="flex items-center gap-6 text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                       <a href="tel:+917900400300" className="flex items-center gap-2 hover:text-white transition-colors">
+                        <Phone className="w-3 h-3 text-[#ff0000]" />
+                        Call Us
+                      </a>
+                      <a href="https://wa.me/917900400300" target="_blank" className="flex items-center gap-2 hover:text-white transition-colors">
+                        <MessageCircle className="w-3 h-3 text-[#25d366]" />
+                        WhatsApp
+                      </a>
                     </div>
                   </div>
-
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    disabled={isSubmitting}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-4 rounded-xl text-sm shadow-xl shadow-red-600/20 transition-all btn-glow mt-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? "Processing..." : "Call Me"}
-                  </motion.button>
-                </form>
+                </div>
               </div>
-
-              {/* Decorative side glow */}
-              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-red-600/10 blur-[50px] rounded-full pointer-events-none" />
             </motion.div>
           </div>
         )}
