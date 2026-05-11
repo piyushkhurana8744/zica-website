@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
@@ -30,70 +31,22 @@ import {
 } from "lucide-react";
 import { div } from "framer-motion/client";
 
-const COURSES = [
-  "Graphic Designing",
-  "2D Animation",
-  "3D Animation",
-  "Motion Graphics",
-  "3D Maya",
-  "Architectural Design",
-  "VFX Master",
-  "Game Design",
-  "Video Editing",
-];
+import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES } from "./constants";
 
-const RECRUITERS = [
-  "1st",
-  "2st",
-  "3rd",
-  "4th",
-  "1st",
-  "2st",
-  "3rd",
-  "4th",
-  "1st",
-  "2st",
-  "3rd",
-  "4th",
-];
+const LeadPopup = dynamic(() => import("@/components/LeadPopup"), {
+  ssr: false,
+});
 
-const TRUSTED_AVATARS = [
-  "1707305810351testimonial_img01.jpg",
-  "1707305818392testimonial_img02.jpg",
-  "1707305826339testimonial_img03.jpg",
-];
-
-const ZICA_WAY_IMAGES = [
-  "img-carousel-about-us1.webp",
-  "img-carousel-about-us2.webp",
-  "project-img3-420x520-1.webp",
-  "project-img9-420x520-2.webp",
-  "robot_work_1.png",
-  "robot_work_2.png",
-];
-
-const HERO_SLIDES = [
-  "/hero-slides/graphic-design.png",
-  "/hero-slides/2d-animation.png",
-  "/hero-slides/3d-animation.png",
-  "/hero-slides/motion-graphics.png",
-  "/hero-slides/3d-maya.png",
-  "/hero-slides/architectural-design.png",
-  "/hero-slides/vfx-master.png",
-  "/hero-slides/game-design.png",
-  "/hero-slides/video-editing.png",
-];
+const FAQSection = dynamic(() => import("@/components/FAQSection"), {
+  ssr: false,
+});
 
 export default function Home() {
   const router = useRouter();
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(2);
   const [zicaWayIndex, setZicaWayIndex] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [cursorVariant, setCursorVariant] = useState("default");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hasSeenPopup, setHasSeenPopup] = useState(false);
@@ -139,36 +92,6 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-
-    const handleMouseDown = () => setIsClicked(true);
-    const handleMouseUp = () => setIsClicked(false);
-
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isPointer = target.closest('button') || 
-                       target.closest('a') || 
-                       target.closest('input') || 
-                       target.closest('select') ||
-                       target.getAttribute('role') === 'button';
-      
-      const isMedia = target.closest('img') || target.closest('video');
-
-      if (isPointer) {
-        setCursorVariant("pointer");
-      } else if (isMedia) {
-        setCursorVariant("media");
-      } else {
-        setCursorVariant("default");
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mouseover", handleMouseOver);
 
     const syncInterval = setInterval(() => {
       setCurrentCourseIndex((prev) => (prev + 1) % COURSES.length);
@@ -187,15 +110,21 @@ export default function Home() {
     };
 
     // 2. Scroll Trigger (20% or 600px)
+    let totalHeight = 0;
+    const updateDimensions = () => {
+      totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    };
+
     const handleScroll = () => {
+      if (totalHeight === 0) updateDimensions();
       const scrolled = window.scrollY;
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercentage = totalHeight > 0 ? scrolled / totalHeight : 0;
       
       if (scrollPercentage > 0.2 || scrolled > 600) {
         console.log("Scroll threshold met, showing popup");
         triggerPopup();
         window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", updateDimensions);
       }
     };
 
@@ -210,15 +139,13 @@ export default function Home() {
     // Initialize listeners with a small delay to ensure DOM is ready
     const initTimeout = setTimeout(() => {
       window.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", updateDimensions);
       window.addEventListener("mouseleave", handleExitIntent);
     }, 200);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("mouseover", handleMouseOver);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateDimensions);
       window.removeEventListener("mouseleave", handleExitIntent);
       clearInterval(syncInterval);
       clearInterval(carouselInterval);
@@ -254,6 +181,8 @@ export default function Home() {
                 fill
                 className="object-cover brightness-110 contrast-[1.02]"
                 priority
+                sizes="100vw"
+                quality={90}
               />
             </motion.div>
           </AnimatePresence>
@@ -313,6 +242,7 @@ export default function Home() {
                     width={220}
                     height={56}
                     className="h-10 lg:h-14 w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
+                    priority
                   />
                 </motion.div>
               </Link>
@@ -506,6 +436,8 @@ export default function Home() {
                         alt="Student"
                         fill
                         className="object-cover"
+                        priority
+                        sizes="44px"
                       />
                     </div>
                   ))}
@@ -535,6 +467,7 @@ export default function Home() {
                           width={120}
                           height={45}
                           className="object-contain max-h-full transition-all"
+                          priority
                         />
                       </motion.div>
                     ))}
@@ -550,6 +483,7 @@ export default function Home() {
                           width={120}
                           height={45}
                           className="object-contain max-h-full"
+                          priority
                         />
                       </div>
                     ))}
@@ -694,6 +628,7 @@ export default function Home() {
                     alt="Student Work Current"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 55vw, (max-width: 1200px) 300px, 400px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </motion.div>
@@ -713,6 +648,7 @@ export default function Home() {
                     alt="Student Work Next"
                     fill
                     className="object-cover"
+                    sizes="(max-width: 768px) 45vw, (max-width: 1200px) 250px, 350px"
                   />
                   <div className="absolute inset-0 bg-black/20" />
                 </motion.div>
@@ -893,6 +829,7 @@ export default function Home() {
                       alt={course.title}
                       fill
                       className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   </div>
@@ -957,6 +894,7 @@ export default function Home() {
                   alt="ZICA Student Animation"
                   fill
                   className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                  sizes="(max-width: 1024px) 100vw, 45vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-red-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
@@ -1116,11 +1054,12 @@ export default function Home() {
                         alt={testi.name}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 1024px) 64px, 80px"
                       />
                     </div>
-                    <h4 className="text-white font-black text-sm lg:text-base tracking-widest uppercase transition-colors group-hover:text-red-600">
+                    <h3 className="text-white font-black text-sm lg:text-base tracking-widest uppercase transition-colors group-hover:text-red-600">
                       {testi.name}
-                    </h4>
+                    </h3>
                   </div>
                 </motion.div>
               ))}
@@ -1295,176 +1234,10 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* --- FAQS & CONTACT SECTION --- */}
-        <section
-          id="faqs"
-          className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(3.5rem,8vw,6rem)] bg-black/60 border-t border-white/5"
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24"
-          >
-            {/* FAQ Column */}
-            <div className="space-y-12">
-              <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-white uppercase tracking-tighter leading-[0.9] text-glow">
-
-                Got <span className="text-[#ff0000]">Questions?</span>
-              </h2>
-              <div className="space-y-6">
-                {[
-                  {
-                    q: "Are drawing skills compulsory for doing the animation Program?",
-                    a: "For 2D animation, drawing skills are a must. If you’re more interested in 3D animation, you can manage without drawing.",
-                  },
-                  {
-                    q: "Which course I should prefer after Grade 12th?",
-                    a: "After 12th you should opt for a career-oriented program. The duration of the program should be 2 years or more.",
-                  },
-                  {
-                    q: "What type of Courses available at ZICA? What is the difference between 1 Year & 2 Year Program?",
-                    a: "ZICA has programs from 2D animation course, 3D animation course, Visual Effects Course, Graphic design course, Web design course, Interior design course, Fashion Design Course etc. The duration of the program varies from 3 months to 3 years. \n\nTwo-to-three-year programs are career oriented and comprehensive programs for 10th or 12th pass students. One year programs are very focused industry standard programs for the students who are studying or completed Graduation or Post-Graduation.",
-                  },
-                  {
-                    q: "Is your faculty from Industry?",
-                    a: "YYes. We hire faculties with a minimum of 2 years of production and 2 years of training experience.",
-                  },
-                ].map((faq, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    viewport={{ once: true }}
-                    className="space-y-4"
-                  >
-                    <div
-                      onClick={() =>
-                        setExpandedFaq(expandedFaq === idx ? null : idx)
-                      }
-                      className="border border-white/20 rounded-xl px-6 py-5 flex items-center justify-between cursor-pointer hover:border-red-600/40 transition-all bg-black/50 backdrop-blur-sm group"
-                    >
-                      <p className="text-sm lg:text-base font-bold text-gray-200 group-hover:text-white transition-colors">
-                        {faq.q}
-                      </p>
-                      {expandedFaq === idx ? (
-                        <div className="w-5 h-0.5 bg-red-600" />
-                      ) : (
-                        <div className="text-xl text-white group-hover:text-red-600 transition-colors">
-                          +
-                        </div>
-                      )}
-                    </div>
-                    <AnimatePresence>
-                      {expandedFaq === idx && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 py-4 text-gray-400 text-sm leading-relaxed whitespace-pre-line border-l-2 border-red-600 ml-4">
-                            {faq.a}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Enquiry Form Column */}
-            <motion.div
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-[40px] p-10 lg:p-16 space-y-10 relative h-fit group"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50" />
-              <h3 className="text-4xl font-black text-white text-center uppercase italic text-glow">
-                Enquiry Now
-              </h3>
-              <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, "Footer Enquiry Form")}>
-                <div className="space-y-2 group/input">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
-                    Full Name
-                  </label>
-                  <div className="relative">
-                    <Users className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                    <input
-                      name="fullName"
-                      type="text"
-                      required
-                      placeholder="Enter name"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2 group/input">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
-                    Phone Number
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                    <input
-                      name="phone"
-                      type="tel"
-                      required
-                      pattern="[0-9]{10}"
-                      title="Please enter a 10-digit mobile number"
-                      placeholder="Enter mobile number"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2 group/input">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
-                    Your Email
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                    <input
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="Enter email address"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2 group/input">
-                  <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
-                    Interested on...
-                  </label>
-                  <div className="relative">
-                    <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                    <select name="course" defaultValue="Animation" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
-                      <option className="bg-black" value="Animation">Animation</option>
-                      <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
-                      <option className="bg-black" value="Gaming">Gaming</option>
-                      <option className="bg-black" value="Graphic Design">Graphic Design</option>
-                      <option className="bg-black" value="Motion Graphics">Motion Graphics</option>
-                      <option className="bg-black" value="Video Editing">Video Editing</option>
-                      <option className="bg-black" value="Unreal Engine">Unreal Engine</option>
-                      <option className="bg-black" value="Blender Mastery">Blender Mastery</option>
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                  </div>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  disabled={isSubmitting}
-                  className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
-                >
-                  {isSubmitting ? "Sending..." : "Submit"}
-                </motion.button>
-              </form>
-            </motion.div>
-          </motion.div>
-        </section>
+        <FAQSection 
+          handleFormSubmit={handleFormSubmit}
+          isSubmitting={isSubmitting}
+        />
 
         {/* --- FOOTER --- */}
         <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-24 pb-12 bg-black border-t border-white/10">
@@ -1474,9 +1247,9 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h4 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
                     Powered by
-                  </h4>
+                  </h3>
                 </div>
                 <div className="relative w-48 h-20">
                   <Image
@@ -1484,6 +1257,7 @@ export default function Home() {
                     alt="Zee Learn Logo"
                     fill
                     className="object-contain"
+                    sizes="192px"
                   />
                 </div>
                 <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
@@ -1514,9 +1288,9 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h4 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
                     Placement Partner
-                  </h4>
+                  </h3>
                 </div>
                 <div className="relative w-48 h-20">
                   <Image
@@ -1524,6 +1298,7 @@ export default function Home() {
                     alt="Zee Media Logo"
                     fill
                     className="object-contain"
+                    sizes="192px"
                   />
                 </div>
               </div>
@@ -1532,9 +1307,9 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h4 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
                     Quick Links
-                  </h4>
+                  </h3>
                 </div>
                 <ul className="space-y-4 text-gray-400 font-medium">
                   {[
@@ -1559,9 +1334,9 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h4 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
                     Contact Info
-                  </h4>
+                  </h3>
                 </div>
                 <div className="space-y-6 flex flex-col items-center md:items-start">
                   <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
@@ -1612,208 +1387,12 @@ export default function Home() {
 
 
       </motion.div>
-      {/* --- SMART CINEMATIC POPUP --- */}
-      <AnimatePresence>
-        {isPopupOpen && (
-          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-            {/* Backdrop with extreme blur */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsPopupOpen(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            />
-
-            {/* Popup Container */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 40 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 40 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-5xl bg-[#0a0a0a] border border-white/10 rounded-[40px] overflow-hidden shadow-[0_0_80px_rgba(255,0,0,0.4)] flex flex-col lg:flex-row group"
-            >
-              {/* LEFT SIDE: BRANDING & GRAPHICS (Desktop Only) */}
-              <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden border-r border-white/5">
-                <Image 
-                  src="/Program/Visual-Effects.png" 
-                  alt="ZICA Visuals" 
-                  fill 
-                  className="object-cover brightness-[0.6] group-hover:scale-105 transition-transform duration-[3s] ease-out"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-                
-                {/* Content Overlay */}
-                <div className="relative z-10 p-12 flex flex-col justify-between h-full">
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-[2px] bg-[#ff0000]" />
-                      <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em]">ZICA Pitampura</span>
-                    </div>
-                    <h2 className="text-5xl font-black text-white uppercase italic leading-[0.9] tracking-tighter">
-                      Transform <br />
-                      <span className="text-[#ff0000] text-glow">Your Ideas</span> <br />
-                      Into Reality
-                    </h2>
-                    <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-                      Join India's premier institute for Animation, VFX, and Design. Master the tools that build the future.
-                    </p>
-                  </div>
-
-                  <div className="space-y-8">
-                    {/* Trust Avatars */}
-                    <div className="flex items-center gap-4">
-                      <div className="flex -space-x-3">
-                        {TRUSTED_AVATARS.slice(0, 4).map((img) => (
-                          <div key={img} className="w-10 h-10 rounded-full border-2 border-black overflow-hidden relative shadow-lg">
-                            <Image src={`/Trusted by/${img}`} alt="Student" fill className="object-cover" />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="text-[11px] leading-tight">
-                        <p className="text-gray-500 uppercase tracking-widest font-bold">Trusted by</p>
-                        <p className="text-white font-black">3000+ STUDENTS</p>
-                      </div>
-                    </div>
-
-                    {/* Recruiter strip (mini) */}
-                    <div className="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                      {RECRUITERS.slice(0, 3).map((img, idx) => (
-                        <div key={idx} className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 h-10 w-20 flex items-center justify-center">
-                          <Image src={`/Recruiters/${img}.png`} alt="Recruiter" width={60} height={20} className="object-contain" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* RIGHT SIDE: FORM */}
-              <div className="w-full lg:w-[55%] relative flex flex-col">
-                {/* Premium Background Graphics */}
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                  <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(255,0,0,0.08),transparent_70%)]" />
-                  <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-red-600/10 blur-[80px] rounded-full animate-pulse" />
-                  <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-                </div>
-
-                {/* Close Button */}
-                <button 
-                  onClick={() => setIsPopupOpen(false)}
-                  className="absolute top-6 right-6 w-10 h-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all z-50 hover:scale-110 active:scale-90"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-
-                <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col justify-center min-h-full">
-                  <div className="mb-10 lg:hidden">
-                     <h2 className="text-4xl font-black text-white uppercase italic leading-none tracking-tighter mb-4">
-                      Download <br />
-                      <span className="text-[#ff0000]">Brochure</span>
-                    </h2>
-                    <div className="w-12 h-1 bg-[#ff0000]" />
-                  </div>
-
-                  <div className="hidden lg:block mb-10">
-                     <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">
-                      Ready to Start?
-                    </h3>
-                    <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Submit your enquiry below</p>
-                  </div>
-
-                  <form className="space-y-5" onSubmit={(e) => handleFormSubmit(e, "Popup Enquiry Form")}>
-                    <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Full Name</label>
-                      <div className="relative">
-                        <Users className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                        <input 
-                          name="fullName"
-                          type="text" 
-                          required
-                          placeholder="Your Name" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div className="space-y-1.5 group/input">
-                        <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Phone</label>
-                        <div className="relative">
-                          <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                          <input 
-                            name="phone"
-                            type="tel" 
-                            required
-                            pattern="[0-9]{10}"
-                            placeholder="Phone Number" 
-                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-1.5 group/input">
-                        <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Program</label>
-                        <div className="relative">
-                          <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                          <select 
-                            name="course"
-                            defaultValue=""
-                            className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all text-gray-300 appearance-none cursor-pointer"
-                          >
-                            <option value="" disabled>Select Course</option>
-                            <option value="Animation">Animation</option>
-                            <option value="VFX">VFX</option>
-                            <option value="Gaming">Gaming</option>
-                            <option value="Graphics">Graphics</option>
-                          </select>
-                          <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5 group/input">
-                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Email Address</label>
-                      <div className="relative">
-                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                        <input 
-                          name="email"
-                          type="email" 
-                          required
-                          placeholder="Your email address" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
-                        />
-                      </div>
-                    </div>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      disabled={isSubmitting}
-                      className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-5 rounded-2xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
-                    >
-                      {isSubmitting ? "Processing..." : "Enquire Now"}
-                    </motion.button>
-                  </form>
-
-                  <div className="mt-8 flex flex-col items-center gap-4">
-                    <p className="text-[10px] text-gray-600 uppercase tracking-widest font-black">⚡ Limited Seats Available for Next Batch</p>
-                    <div className="flex items-center gap-6 text-[10px] font-black text-gray-500 uppercase tracking-widest">
-                       <a href="tel:+917900400300" className="flex items-center gap-2 hover:text-white transition-colors">
-                        <Phone className="w-3 h-3 text-[#ff0000]" />
-                        Call Us
-                      </a>
-                      <a href="https://wa.me/917900400300" target="_blank" className="flex items-center gap-2 hover:text-white transition-colors">
-                        <MessageCircle className="w-3 h-3 text-[#25d366]" />
-                        WhatsApp
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      <LeadPopup 
+        isOpen={isPopupOpen} 
+        onClose={() => setIsPopupOpen(false)} 
+        onSubmit={handleFormSubmit}
+        isSubmitting={isSubmitting}
+      />
 
       {/* --- CINEMATIC STICKY QUICK ACCESS BAR --- */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[150] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden rounded-l-3xl border-l border-y border-white/10 group/sidebar">
