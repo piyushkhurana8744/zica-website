@@ -1743,10 +1743,6 @@ export default function Home() {
                   >
                     {isSubmitting ? "Processing..." : "Book Free Session"}
                   </motion.button>
-
-                  <p className="text-[10px] text-gray-600 text-center uppercase tracking-widest">
-                    No credit card required • Industry vetted experts
-                  </p>
                 </form>
               </div>
 
@@ -1792,6 +1788,38 @@ export default function Home() {
           <span className="absolute right-full mr-4 bg-[#0a0a0a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enquire Now</span>
         </motion.button>
       </div>
+
+      {/* --- FLOATING ENQUIRY BUTTON --- */}
+      <motion.button
+        id="floating-enquiry-btn"
+        onClick={() => setIsPopupOpen(true)}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 1.5, type: 'spring', damping: 18, stiffness: 200 }}
+        whileHover={{ scale: 1.12 }}
+        whileTap={{ scale: 0.9 }}
+        className="fixed bottom-6 right-6 z-[200] w-16 h-16 rounded-full shadow-[0_8px_30px_rgba(255,0,0,0.4)] flex items-center justify-center group/fab cursor-pointer"
+      >
+        {/* Gradient background */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-800 group-hover/fab:from-red-400 group-hover/fab:via-red-500 group-hover/fab:to-red-700 transition-all duration-500" />
+
+        {/* Pulsing ripple */}
+        <div className="absolute inset-0 rounded-full animate-ping bg-red-600/25" style={{ animationDuration: '2.5s' }} />
+        <div className="absolute -inset-1.5 rounded-full bg-red-600/15 blur-lg animate-pulse" />
+
+        {/* Icon */}
+        <MessageCircle className="w-7 h-7 text-white relative z-10 fill-white/20" />
+
+        {/* Notification dot */}
+        <span className="absolute top-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-[#030008] flex items-center justify-center z-20">
+          <span className="w-1.5 h-1.5 bg-white rounded-full" />
+        </span>
+
+        {/* Tooltip label */}
+        <span className="absolute right-full mr-4 bg-[#0a0a0a] border border-white/10 text-white px-4 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap opacity-0 group-hover/fab:opacity-100 transition-all duration-300 pointer-events-none shadow-xl translate-x-2 group-hover/fab:translate-x-0">
+          💬 Chat with us
+        </span>
+      </motion.button>
     </div>
   );
 }
