@@ -1741,7 +1741,7 @@ export default function Home() {
                     disabled={isSubmitting}
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-4 rounded-xl text-sm shadow-xl shadow-red-600/20 transition-all btn-glow mt-2 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Processing..." : "Book Free Session"}
+                    {isSubmitting ? "Processing..." : "Call Me"}
                   </motion.button>
                 </form>
               </div>
@@ -1808,7 +1808,7 @@ export default function Home() {
         <div className="absolute -inset-1.5 rounded-full bg-red-600/15 blur-lg animate-pulse" />
 
         {/* Icon */}
-        <MessageCircle className="w-7 h-7 text-white relative z-10 fill-white/20" />
+        <Phone className="w-7 h-7 text-white relative z-10" />
 
         {/* Notification dot */}
         <span className="absolute top-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-[#030008] flex items-center justify-center z-20">
@@ -1817,8 +1817,7 @@ export default function Home() {
 
         {/* Tooltip label */}
         <span className="absolute right-full mr-4 bg-[#0a0a0a] border border-white/10 text-white px-4 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap opacity-0 group-hover/fab:opacity-100 transition-all duration-300 pointer-events-none shadow-xl translate-x-2 group-hover/fab:translate-x-0">
-          💬 Chat with us
-        </span>
+          📞 Call Us        </span>
       </motion.button>
     </div>
   );
