@@ -31,13 +31,17 @@ import {
 } from "lucide-react";
 import { div } from "framer-motion/client";
 
-import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES } from "./constants";
+import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS } from "./constants";
 
 const LeadPopup = dynamic(() => import("@/components/LeadPopup"), {
   ssr: false,
 });
 
 const FAQSection = dynamic(() => import("@/components/FAQSection"), {
+  ssr: false,
+});
+
+const CourseDetailModal = dynamic(() => import("@/components/CourseDetailModal"), {
   ssr: false,
 });
 
@@ -52,6 +56,34 @@ export default function Home() {
   const [hasSeenPopup, setHasSeenPopup] = useState(false);
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCourseDetailOpen, setIsCourseDetailOpen] = useState(false);
+  const [selectedCourseData, setSelectedCourseData] = useState<any>(null);
+  const [popupSubmitText, setPopupSubmitText] = useState("Enquire Now");
+  const [isPopupMinimal, setIsPopupMinimal] = useState(false);
+
+  const openLeadPopup = (text: string = "Enquire Now", minimal: boolean = false) => {
+    setPopupSubmitText(text);
+    setIsPopupMinimal(minimal);
+    setIsPopupOpen(true);
+  };
+
+  const openCourseDetail = (courseName: string) => {
+    const details = (COURSE_DETAILS as any)[courseName];
+    if (details) {
+      setSelectedCourseData(details);
+      setIsCourseDetailOpen(true);
+    } else {
+      openLeadPopup("Enquire Now");
+    }
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      window.history.pushState(null, '', `/${sectionId}`);
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>, formType: string) => {
     e.preventDefault();
@@ -106,7 +138,7 @@ export default function Home() {
     const triggerPopup = () => {
       console.log("Popup Triggered!");
       // alert("Popup Triggered!"); // Uncomment if console is not visible
-      setIsPopupOpen(true);
+      openLeadPopup();
     };
 
     // 2. Scroll Trigger (20% or 600px)
@@ -229,7 +261,7 @@ export default function Home() {
           >
             {/* Left: Logo */}
             <div className="flex-1 flex justify-start">
-              <Link href="#home" className="relative z-[110] group">
+              <button onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); window.history.pushState(null, '', '/'); }} className="relative z-[110] group">
                 <motion.div 
                   whileHover={{ scale: 1.1 }} 
                   whileTap={{ scale: 0.95 }}
@@ -245,7 +277,7 @@ export default function Home() {
                     priority
                   />
                 </motion.div>
-              </Link>
+              </button>
             </div>
 
             {/* Center: Navigation — Glassmorphism Pill */}
@@ -255,12 +287,12 @@ export default function Home() {
                 <div className="absolute inset-0 rounded-full opacity-40 pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,0,0,0.1), rgba(168,85,247,0.1), transparent)', backgroundSize: '200% 100%', animation: 'gradient-shift 4s linear infinite' }} />
                 
                 {[
-                  { label: "About", href: "#about" },
-                  { label: "Programs", href: "#program" },
-                  { label: "Why ZICA", href: "#why-zica" },
-                  { label: "Goals", href: "#goals" },
-                  { label: "Reviews", href: "#testimonials" },
-                  { label: "FAQs", href: "#faqs" },
+                  { label: "About Us", id: "aboutus" },
+                  { label: "Courses", id: "courses" },
+                  { label: "Why ZICA", id: "why-zica" }, 
+                  { label: "Goals", id: "goals" },
+                  { label: "Reviews", id: "testimonials" },
+                  { label: "FAQs", id: "faqs" },
                 ].map((item, idx) => (
                   <motion.div
                     key={item.label}
@@ -268,13 +300,13 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 + idx * 0.08, duration: 0.5 }}
                   >
-                    <Link
-                      href={item.href}
+                    <button
+                      onClick={() => scrollToSection(item.id)}
                       className="relative px-5 py-2.5 text-[13px] font-black text-gray-300 uppercase tracking-[0.15em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.08] group/link"
                     >
                       {item.label}
                       <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-600 rounded-full transition-all duration-500 group-hover/link:w-[50%]" />
-                    </Link>
+                    </button>
                   </motion.div>
                 ))}
               </div>
@@ -289,7 +321,7 @@ export default function Home() {
                   transition={{ delay: 1.2, duration: 0.5 }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setIsPopupOpen(true)}
+                  onClick={() => openLeadPopup()}
                   className="hidden sm:flex items-center gap-2 bg-[#ff0000] hover:bg-red-600 text-white px-5 lg:px-7 py-2.5 rounded-full text-[12px] font-black shadow-lg shadow-red-600/20 transition-all btn-glow uppercase tracking-[0.2em]"
                 >
                   <span className="relative flex h-2 w-2">
@@ -337,12 +369,12 @@ export default function Home() {
 
                   <div className="flex flex-col items-center space-y-6">
                     {[
-                      { label: "About Us", href: "#about" },
-                      { label: "Programs", href: "#program" },
-                      { label: "Why ZICA", href: "#why-zica" },
-                      { label: "Goals", href: "#goals" },
-                      { label: "Reviews", href: "#testimonials" },
-                      { label: "FAQs", href: "#faqs" },
+                      { label: "About Us", id: "aboutus" },
+                      { label: "Courses", id: "courses" },
+                      { label: "Why ZICA", id: "why-zica" },
+                      { label: "Goals", id: "goals" },
+                      { label: "Reviews", id: "testimonials" },
+                      { label: "FAQs", id: "faqs" },
                     ].map((item, idx) => (
                       <motion.div
                         key={item.label}
@@ -351,21 +383,20 @@ export default function Home() {
                         exit={{ opacity: 0, x: 30 }}
                         transition={{ delay: 0.1 + idx * 0.07, duration: 0.4 }}
                       >
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsMenuOpen(false)}
+                        <button
+                          onClick={() => { setIsMenuOpen(false); scrollToSection(item.id); }}
                           className="text-3xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors relative group"
                         >
                           {item.label}
                           <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 transition-all duration-300 group-hover:w-full" />
-                        </Link>
+                        </button>
                       </motion.div>
                     ))}
                     <motion.button 
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6 }}
-                      onClick={() => { setIsMenuOpen(false); setIsPopupOpen(true); }}
+                      onClick={() => { setIsMenuOpen(false); openLeadPopup(); }}
                       className="mt-6 bg-[#ff0000] text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-sm shadow-xl shadow-red-600/30 hover:bg-red-600 transition-all"
                     >
                       Enquire Now
@@ -493,12 +524,12 @@ export default function Home() {
 
               {/* CTAs */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-5 pt-4">
-                <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow">
+                {/* <button onClick={() => openCourseDetail(COURSES[currentCourseIndex])} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow">
                   Apply Now
-                </button>
-                <Link href="#program" className="border border-white/20 hover:border-white/40 bg-white/5 backdrop-blur-md text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 text-center">
+                </button> */}
+                <button onClick={() => scrollToSection('courses')} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all active:scale-95 shadow-lg shadow-red-600/20 btn-glow text-center">
                   Explore Our Courses
-                </Link>
+                </button>
               </div>
             </motion.div>
 
@@ -597,7 +628,7 @@ export default function Home() {
 
         {/* --- ZICA WAY SECTION --- */}
         <section
-          id="about"
+          id="aboutus"
           className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2rem,4vw,3.5rem)] bg-[#030008]/60 border-t border-white/5"
         >
           <div className="absolute inset-0 z-0 opacity-40 pointer-events-none overflow-hidden">
@@ -698,7 +729,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center md:justify-start">
-                  <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
+                  <button onClick={() => openLeadPopup()} className="bg-[#ff0000] hover:bg-red-700 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg shadow-red-600/20 active:scale-95">
                     Download Brochure
                   </button>
                 </div>
@@ -709,7 +740,7 @@ export default function Home() {
 
         {/* --- PROGRAMS SECTION --- */}
         <section
-          id="program"
+          id="courses"
           className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black/60 overflow-hidden border-t border-white/5"
         >
           <motion.div
@@ -729,8 +760,8 @@ export default function Home() {
                   the tools to turn your imagination into a professional career.
                 </p>
               </div>
-              <button onClick={() => setIsPopupOpen(true)} className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow">
-                Enquire Now
+              <button onClick={() => openLeadPopup()} className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow">
+                Apply Now
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
@@ -813,6 +844,7 @@ export default function Home() {
                     ease: [0.215, 0.61, 0.355, 1]
                   }}
                   viewport={{ once: true }}
+                  onClick={() => openCourseDetail(`${course.title} ${course.highlight}`.trim())}
                   className={`group bg-[#0a0a0a] rounded-[24px] overflow-hidden shadow-2xl hover:shadow-red-600/10 transition-all cursor-pointer border border-white/10 hover:border-red-600/30 ${
                     isFeatured
                       ? 'lg:col-span-3 flex flex-col lg:flex-row'
@@ -862,7 +894,7 @@ export default function Home() {
 
         {/* --- WHY CHOOSE ZICA SECTION (DARK RE-DESIGN) --- */}
         <section
-          id="about"
+          id="why-zica"
           className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black overflow-hidden border-t border-white/5"
         >
 
@@ -970,7 +1002,7 @@ export default function Home() {
 
                 <div className="flex justify-center lg:justify-start">
                   <motion.button
-                    onClick={() => setIsPopupOpen(true)}
+                    onClick={() => openLeadPopup()}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="bg-[#ff0000] hover:bg-red-700 text-white px-12 py-5 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-red-600/20 active:scale-95 btn-glow"
@@ -1240,9 +1272,9 @@ export default function Home() {
         />
 
         {/* --- FOOTER --- */}
-        <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-24 pb-12 bg-black border-t border-white/10">
+        <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-12 pb-12 bg-black border-t border-white/10">
           <div className="max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20 text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-12 text-center md:text-left">
               {/* Powered By */}
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
@@ -1387,25 +1419,19 @@ export default function Home() {
 
 
       </motion.div>
-      <LeadPopup 
-        isOpen={isPopupOpen} 
-        onClose={() => setIsPopupOpen(false)} 
-        onSubmit={handleFormSubmit}
-        isSubmitting={isSubmitting}
-      />
 
       {/* --- CINEMATIC STICKY QUICK ACCESS BAR --- */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[150] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden rounded-l-3xl border-l border-y border-white/10 group/sidebar">
         {/* Call Button */}
-        <motion.a
-          href="tel:+917900400300"
+        <motion.button
+          onClick={() => openLeadPopup("Call Us", true)}
           whileHover={{ x: -10 }}
           className="w-14 h-16 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
         >
           <Phone className="w-6 h-6" />
           {/* Label that slides out on hover */}
           <span className="absolute right-full mr-4 bg-[#ff4d5a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">Call Us</span>
-        </motion.a>
+        </motion.button>
 
         {/* WhatsApp Button */}
         <motion.a
@@ -1421,7 +1447,7 @@ export default function Home() {
 
         {/* Inquiry / Popup Button */}
         <motion.button
-          onClick={() => setIsPopupOpen(true)}
+          onClick={() => openLeadPopup()}
           whileHover={{ x: -10 }}
           className="w-14 h-16 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
         >
@@ -1433,12 +1459,9 @@ export default function Home() {
       {/* --- FLOATING ENQUIRY BUTTON --- */}
       <motion.button
         id="floating-enquiry-btn"
-        onClick={() => setIsPopupOpen(true)}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1.5, type: 'spring', damping: 18, stiffness: 200 }}
-        whileHover={{ scale: 1.12 }}
-        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        onClick={() => openLeadPopup("Call Us", true)}
         className="fixed bottom-6 right-6 z-[200] w-16 h-16 rounded-full shadow-[0_8px_30px_rgba(255,0,0,0.4)] flex items-center justify-center group/fab cursor-pointer"
       >
         {/* Gradient background */}
@@ -1460,6 +1483,21 @@ export default function Home() {
         <span className="absolute right-full mr-4 bg-[#0a0a0a] border border-white/10 text-white px-4 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap opacity-0 group-hover/fab:opacity-100 transition-all duration-300 pointer-events-none shadow-xl translate-x-2 group-hover/fab:translate-x-0">
           📞 Call Us        </span>
       </motion.button>
+      <CourseDetailModal
+        isOpen={isCourseDetailOpen}
+        onClose={() => setIsCourseDetailOpen(false)}
+        course={selectedCourseData}
+        onSubmit={handleFormSubmit}
+        isSubmitting={isSubmitting}
+      />
+      <LeadPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onSubmit={handleFormSubmit}
+        isSubmitting={isSubmitting}
+        submitText={popupSubmitText}
+        minimal={isPopupMinimal}
+      />
     </div>
   );
 }

@@ -36,7 +36,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
   const [expandedFaq, setExpandedFaq] = useState<number | null>(2);
 
   return (
-    <section id="faqs" className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-24 lg:py-32 bg-[#030008]">
+    <section id="faqs" className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-16 lg:py-20 bg-[#030008]">
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
         {/* FAQ Column */}
         <div className="space-y-12">

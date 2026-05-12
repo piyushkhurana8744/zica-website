@@ -10,9 +10,11 @@ interface LeadPopupProps {
   onClose: () => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>, formType: string) => Promise<void>;
   isSubmitting: boolean;
+  submitText?: string;
+  minimal?: boolean;
 }
 
-export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting }: LeadPopupProps) {
+export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, submitText, minimal }: LeadPopupProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -32,10 +34,11 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting }: L
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 40 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-5xl bg-[#0a0a0a] border border-white/10 rounded-[40px] overflow-hidden shadow-[0_0_80px_rgba(255,0,0,0.4)] flex flex-col lg:flex-row group"
+            className={`relative w-full ${minimal ? 'max-w-lg' : 'max-w-5xl'} bg-[#0a0a0a] border border-white/10 rounded-[32px] lg:rounded-[40px] overflow-hidden shadow-[0_0_80px_rgba(255,0,0,0.3)] flex flex-col lg:flex-row group`}
           >
             {/* LEFT SIDE: BRANDING & GRAPHICS (Desktop Only) */}
-            <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden border-r border-white/5">
+            {!minimal && (
+              <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden border-r border-white/5">
               <Image 
                 src="/Program/Visual-Effects.png" 
                 alt="ZICA Visuals" 
@@ -89,9 +92,10 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting }: L
                 </div>
               </div>
             </div>
-
+            )}
+            
             {/* RIGHT SIDE: FORM */}
-            <div className="w-full lg:w-[55%] relative flex flex-col">
+            <div className={`w-full ${minimal ? 'lg:w-full' : 'lg:w-[55%]'} relative flex flex-col`}>
               {/* Premium Background Graphics */}
               <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(255,0,0,0.08),transparent_70%)]" />
@@ -108,20 +112,35 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting }: L
               </button>
 
               <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col justify-center min-h-full">
-                <div className="mb-10 lg:hidden">
-                   <h2 className="text-4xl font-black text-white uppercase italic leading-none tracking-tighter mb-4">
-                    Download <br />
-                    <span className="text-[#ff0000]">Brochure</span>
+                {/* Minimal Graphic Background */}
+                {minimal && (
+                  <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none overflow-hidden">
+                    <Image 
+                      src="/Program/Game-Design.png" 
+                      alt="Background Graphic" 
+                      fill 
+                      className="object-cover object-right-top scale-110 blur-[3px] brightness-[0.2]"
+                      sizes="500px"
+                    />
+                    <div className="absolute inset-0 bg-[#0a0a0a]/40 mix-blend-multiply" />
+                  </div>
+                )}
+
+                <div className={`${minimal ? 'block' : 'lg:hidden'} mb-8 text-center lg:text-left relative z-10`}>
+                   <h2 className={`${minimal ? 'text-3xl' : 'text-3xl'} font-black text-white uppercase italic leading-none tracking-tighter mb-4`}>
+                    {submitText || "Enquire Now"}
                   </h2>
-                  <div className="w-12 h-1 bg-[#ff0000]" />
+                  <div className="w-12 h-1 bg-[#ff0000] mx-auto lg:mx-0" />
                 </div>
 
-                <div className="hidden lg:block mb-10">
-                   <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">
-                    Ready to Start?
-                  </h3>
-                  <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Submit your enquiry below</p>
-                </div>
+                {!minimal && (
+                  <div className="hidden lg:block mb-10">
+                     <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">
+                      Ready to Start?
+                    </h3>
+                    <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Submit your enquiry below</p>
+                  </div>
+                )}
 
                 <form className="space-y-5" onSubmit={(e) => onSubmit(e, "Popup Enquiry Form")}>
                   <div className="space-y-1.5 group/input">
@@ -193,7 +212,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting }: L
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-5 rounded-2xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Processing..." : "Enquire Now"}
+                    {isSubmitting ? "Processing..." : (submitText || "Enquire Now")}
                   </motion.button>
                 </form>
 
