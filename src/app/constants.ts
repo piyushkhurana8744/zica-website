@@ -56,47 +56,51 @@ export const COURSE_DETAILS = {
   "2D Animation": {
     title: "Professional Program In 2D Animation",
     duration: "12 Months",
-    description: "This program has been developed based on the current requirement of 2D Animators in the world. Student will learn all the aspects of 2D Animation film making from Pre-production, Production and Post production. Student will initially learn fundamental of Art and design by manual drawing and then they will learn character design, background painting, character animation, audio and video editing by using advance digital tools.",
+    description: "This program has been developed based on the current requirement of 2D Animators in the world. Student will learn all the aspects of 2D Animation film making from Pre-production, Production and Post production. Student will initially learn fundamental of Art and design by manual drawing and then they will learn character design, background painting, character animation, audio and video editing by using advance digital tools. Become a Professional 2D Animation Artist with well laid out assessment procedure ensuring the students acceptability as distinguished professionals. ZICA's placement cell provides placement assistance to all ZICA students across the country.",
     prerequisite: "Good drawing skills",
     highlights: [
       "Increase design and visualisation skills",
       "Learn the complete 2D Production Pipeline",
       "Continuous evaluation through competitions and activities",
       "Placement support",
-      "Become a Professional Artist with ZICA's placement cell",
-      "Access to high-end animation tools & VFX Labs"
+      "Industry Ready Portfolio: Digital paint, Matte paint, Character design, and 2D digital Animation"
     ],
     modules: [
       {
         title: "FUNDAMENTALS OF ART, DESIGN & COMPUTER GRAPHICS",
-        duration: "6 Months",
+        duration: "6 MONTHS",
         topics: [
+          "Preface",
           "Principles of Design",
-          "Sketching & Still life",
+          "Sketching",
+          "Still life",
           "Cartoon Drawing",
           "Digital illustration",
           "Computer Graphics",
-          "Human Figure & Anatomy Study",
+          "Human Figure Study",
+          "Anatomy study",
           "Animal Study (Skeleton)",
           "Perspective Study",
           "Colour Theory",
-          "Story & Character design",
+          "Story",
+          "Character design",
           "Master Layout Design",
           "Layout & Background"
         ]
       },
       {
         title: "3D DIGITAL ANIMATION",
-        duration: "6 Months",
+        duration: "6 MONTHS",
         topics: [
-          "Pre-production Techniques",
-          "Production Pipeline",
-          "Post-production Workflow",
+          "Video Editing",
+          "Audio Editing",
+          "Storyboard",
+          "Animatic",
+          "Stopmotion",
           "Digital 2D Animation",
-          "Character Animation",
-          "Background Painting",
-          "Audio & Video Editing",
-          "Portfolio Development"
+          "Acting for Animation",
+          "Bio-Mechanics / Organic Animation (Digital)",
+          "Special effects (Digital)"
         ]
       }
     ],

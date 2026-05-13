@@ -178,7 +178,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
               disabled={isSubmitting}
               className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
             >
-              {isSubmitting ? "Sending..." : "Submit"}
+              {isSubmitting ? "Sending..." : "Apply Now"}
             </motion.button>
           </form>
         </motion.div>

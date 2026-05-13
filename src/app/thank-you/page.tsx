@@ -43,18 +43,19 @@ export default function ThankYou() {
 
         {/* Quick Contact Options */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-          <motion.div 
+          <motion.a 
+            href="tel:+917900400300"
             whileHover={{ y: -5 }}
-            className="p-6 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-4 text-left group transition-all hover:bg-white/10"
+            className="p-6 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-4 text-left group transition-all hover:bg-white/10 cursor-pointer"
           >
             <div className="w-12 h-12 bg-red-600/10 rounded-xl flex items-center justify-center group-hover:bg-red-600/20 transition-colors">
               <Phone className="w-6 h-6 text-red-600" />
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Call Us Now</p>
+              <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Call Me Now</p>
               <p className="text-sm font-bold">+91 79004 00300</p>
             </div>
-          </motion.div>
+          </motion.a>
 
           <motion.div 
             whileHover={{ y: -5 }}

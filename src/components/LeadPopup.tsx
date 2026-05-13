@@ -128,7 +128,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
 
                 <div className={`${minimal ? 'block' : 'lg:hidden'} mb-8 text-center lg:text-left relative z-10`}>
                    <h2 className={`${minimal ? 'text-3xl' : 'text-3xl'} font-black text-white uppercase italic leading-none tracking-tighter mb-4`}>
-                    {submitText || "Enquire Now"}
+                    {submitText || "Apply Now"}
                   </h2>
                   <div className="w-12 h-1 bg-[#ff0000] mx-auto lg:mx-0" />
                 </div>
@@ -138,7 +138,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                      <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">
                       Ready to Start?
                     </h3>
-                    <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Submit your enquiry below</p>
+                    <p className="text-gray-500 text-xs mt-1 font-bold uppercase tracking-widest">Apply below</p>
                   </div>
                 )}
 
@@ -212,7 +212,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-5 rounded-2xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Processing..." : (submitText || "Enquire Now")}
+                    {isSubmitting ? "Processing..." : (submitText || "Apply Now")}
                   </motion.button>
                 </form>
 

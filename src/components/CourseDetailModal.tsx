@@ -235,7 +235,7 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3 rounded-lg transition-all mt-1 text-[10px] uppercase tracking-[0.15em] shadow-lg shadow-red-600/20 active:scale-[0.98] disabled:opacity-50"
                   >
-                    {isSubmitting ? "Sending..." : "Submit Enquiry"}
+                    {isSubmitting ? "Sending..." : "Apply Now"}
                   </button>
                 </form>
 

@@ -61,7 +61,7 @@ export default function Home() {
   const [popupSubmitText, setPopupSubmitText] = useState("Enquire Now");
   const [isPopupMinimal, setIsPopupMinimal] = useState(false);
 
-  const openLeadPopup = (text: string = "Enquire Now", minimal: boolean = false) => {
+  const openLeadPopup = (text: string = "Apply Now", minimal: boolean = false) => {
     setPopupSubmitText(text);
     setIsPopupMinimal(minimal);
     setIsPopupOpen(true);
@@ -73,7 +73,7 @@ export default function Home() {
       setSelectedCourseData(details);
       setIsCourseDetailOpen(true);
     } else {
-      openLeadPopup("Enquire Now");
+      openLeadPopup("Apply Now");
     }
   };
 
@@ -291,7 +291,7 @@ export default function Home() {
                   { label: "Courses", id: "courses" },
                   { label: "Why ZICA", id: "why-zica" }, 
                   { label: "Goals", id: "goals" },
-                  { label: "Reviews", id: "testimonials" },
+                  { label: "Testimonials", id: "testimonials" },
                   { label: "FAQs", id: "faqs" },
                 ].map((item, idx) => (
                   <motion.div
@@ -373,7 +373,7 @@ export default function Home() {
                       { label: "Courses", id: "courses" },
                       { label: "Why ZICA", id: "why-zica" },
                       { label: "Goals", id: "goals" },
-                      { label: "Reviews", id: "testimonials" },
+                      { label: "Testimonials", id: "testimonials" },
                       { label: "FAQs", id: "faqs" },
                     ].map((item, idx) => (
                       <motion.div
@@ -618,7 +618,7 @@ export default function Home() {
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Sending..." : "Submit Now"}
+                    {isSubmitting ? "Sending..." : "Apply Now"}
                   </button>
                 </form>
               </div>
@@ -777,7 +777,7 @@ export default function Home() {
                   title: "2D",
                   highlight: "Animation",
                   image: "2D-Animation.png",
-                  desc: "Learn the art of traditional and digital frame-by-frame animation with character development, storyboarding, and the 12 principles of animation.",
+                  desc: "Learn the complete 2D production pipeline from art fundamentals to character design, background painting, and advanced digital animation.",
                   featured: true,
                 },
                 {
@@ -1096,6 +1096,8 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+
+
           </motion.div>
         </section>
 
@@ -1279,7 +1281,7 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Powered by
                   </h3>
                 </div>
@@ -1320,7 +1322,7 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Placement Partner
                   </h3>
                 </div>
@@ -1339,7 +1341,7 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Quick Links
                   </h3>
                 </div>
@@ -1366,7 +1368,7 @@ export default function Home() {
               <div className="flex flex-col items-center md:items-start space-y-8">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
-                  <h3 className="text-white font-black uppercase tracking-widest text-lg">
+                  <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Contact Info
                   </h3>
                 </div>
@@ -1423,56 +1425,57 @@ export default function Home() {
       {/* --- CINEMATIC STICKY QUICK ACCESS BAR --- */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[150] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden rounded-l-3xl border-l border-y border-white/10 group/sidebar">
         {/* Call Button */}
-        <motion.button
-          onClick={() => openLeadPopup("Call Us", true)}
-          whileHover={{ x: -10 }}
-          className="w-14 h-16 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
+        <motion.a
+          href="tel:+917900400300"
+          whileHover={{ x: -10, scale: 1.15 }}
+          className="w-16 h-20 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10 group/btn cursor-pointer"
         >
-          <Phone className="w-6 h-6" />
-          {/* Label that slides out on hover */}
-          <span className="absolute right-full mr-4 bg-[#ff4d5a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">Call Us</span>
-        </motion.button>
+          <Phone className="w-7 h-7" />
+          {/* Label that is visible and slides slightly on hover */}
+          <span className="absolute right-full mr-4 bg-[#ff4d5a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-100 transition-all whitespace-nowrap pointer-events-none shadow-2xl">Call Me</span>
+        </motion.a>
 
         {/* WhatsApp Button */}
         <motion.a
           href="https://wa.me/917900400300"
           target="_blank"
           rel="noopener noreferrer"
-          whileHover={{ x: -10 }}
-          className="w-14 h-16 bg-[#25d366] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
+          whileHover={{ x: -10, scale: 1.1 }}
+          className="w-16 h-20 bg-[#25d366] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
         >
-          <MessageCircle className="w-6 h-6 fill-white/10" />
-          <span className="absolute right-full mr-4 bg-[#25d366] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">WhatsApp</span>
+          <MessageCircle className="w-7 h-7 fill-white/10" />
+          <span className="absolute right-full mr-4 bg-[#25d366] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">WhatsApp</span>
         </motion.a>
 
         {/* Inquiry / Popup Button */}
         <motion.button
           onClick={() => openLeadPopup()}
-          whileHover={{ x: -10 }}
-          className="w-14 h-16 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
+          whileHover={{ x: -10, scale: 1.1 }}
+          className="w-16 h-20 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
         >
-          <ChevronRight className="w-6 h-6 text-red-600 animate-pulse" />
-          <span className="absolute right-full mr-4 bg-[#0a0a0a] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enquire Now</span>
+          <ChevronRight className="w-7 h-7 text-red-600 animate-pulse" />
+          <span className="absolute right-full mr-4 bg-[#0a0a0a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enquire Now</span>
         </motion.button>
       </div>
 
       {/* --- FLOATING ENQUIRY BUTTON --- */}
-      <motion.button
+      <motion.a
+        href="tel:+917900400300"
         id="floating-enquiry-btn"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
-        onClick={() => openLeadPopup("Call Us", true)}
-        className="fixed bottom-6 right-6 z-[200] w-16 h-16 rounded-full shadow-[0_8px_30px_rgba(255,0,0,0.4)] flex items-center justify-center group/fab cursor-pointer"
+        whileHover={{ scale: 1.15 }}
+        className="fixed bottom-8 right-8 z-[200] w-20 h-20 rounded-full shadow-[0_12px_40px_rgba(255,0,0,0.5)] flex items-center justify-center group/fab cursor-pointer"
       >
         {/* Gradient background */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 via-red-600 to-red-800 group-hover/fab:from-red-400 group-hover/fab:via-red-500 group-hover/fab:to-red-700 transition-all duration-500" />
 
         {/* Pulsing ripple */}
         <div className="absolute inset-0 rounded-full animate-ping bg-red-600/25" style={{ animationDuration: '2.5s' }} />
-        <div className="absolute -inset-1.5 rounded-full bg-red-600/15 blur-lg animate-pulse" />
+        <div className="absolute -inset-2 rounded-full bg-red-600/20 blur-xl animate-pulse" />
 
         {/* Icon */}
-        <Phone className="w-7 h-7 text-white relative z-10" />
+        <Phone className="w-9 h-9 text-white relative z-10" />
 
         {/* Notification dot */}
         <span className="absolute top-0 right-0 w-4 h-4 bg-green-500 rounded-full border-2 border-[#030008] flex items-center justify-center z-20">
@@ -1480,9 +1483,9 @@ export default function Home() {
         </span>
 
         {/* Tooltip label */}
-        <span className="absolute right-full mr-4 bg-[#0a0a0a] border border-white/10 text-white px-4 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap opacity-0 group-hover/fab:opacity-100 transition-all duration-300 pointer-events-none shadow-xl translate-x-2 group-hover/fab:translate-x-0">
-          📞 Call Us        </span>
-      </motion.button>
+        <span className="absolute right-full mr-6 bg-[#0a0a0a] border border-white/10 text-white px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap opacity-100 transition-all duration-300 pointer-events-none shadow-2xl">
+          📞 Call Me        </span>
+      </motion.a>
       <CourseDetailModal
         isOpen={isCourseDetailOpen}
         onClose={() => setIsCourseDetailOpen(false)}
