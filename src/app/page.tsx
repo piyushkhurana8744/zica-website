@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { div } from "framer-motion/client";
 
-import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS } from "./constants";
+import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS, TESTIMONIALS } from "./constants";
 
 const LeadPopup = dynamic(() => import("@/components/LeadPopup"), {
   ssr: false,
@@ -42,6 +42,10 @@ const FAQSection = dynamic(() => import("@/components/FAQSection"), {
 });
 
 const CourseDetailModal = dynamic(() => import("@/components/CourseDetailModal"), {
+  ssr: false,
+});
+
+const TestimonialModal = dynamic(() => import("@/components/TestimonialModal"), {
   ssr: false,
 });
 
@@ -60,6 +64,7 @@ export default function Home() {
   const [selectedCourseData, setSelectedCourseData] = useState<any>(null);
   const [popupSubmitText, setPopupSubmitText] = useState("Enquire Now");
   const [isPopupMinimal, setIsPopupMinimal] = useState(false);
+  const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
 
   const openLeadPopup = (text: string = "Apply Now", minimal: boolean = false) => {
     setPopupSubmitText(text);
@@ -67,10 +72,18 @@ export default function Home() {
     setIsPopupOpen(true);
   };
 
+  const [courseVariants, setCourseVariants] = useState<any[]>([]);
+
   const openCourseDetail = (courseName: string) => {
     const details = (COURSE_DETAILS as any)[courseName];
     if (details) {
-      setSelectedCourseData(details);
+      if (Array.isArray(details)) {
+        setCourseVariants(details);
+        setSelectedCourseData(details[0]);
+      } else {
+        setCourseVariants([]);
+        setSelectedCourseData(details);
+      }
       setIsCourseDetailOpen(true);
     } else {
       openLeadPopup("Apply Now");
@@ -108,6 +121,14 @@ export default function Home() {
       const result = await res.json();
       
       if (result.success) {
+        // Trigger Brochure Download
+        const link = document.createElement('a');
+        link.href = '/ZICA Brochure (2026-27) (c).pdf';
+        link.download = 'ZICA Brochure (2026-27).pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
         router.push("/thank-you");
         (e.target as HTMLFormElement).reset();
         if (formType === 'Popup') setIsPopupOpen(false);
@@ -607,6 +628,7 @@ export default function Home() {
                         <option className="bg-black" value="Gaming">Gaming</option>
                         <option className="bg-black" value="Graphic Design">Graphic Design</option>
                         <option className="bg-black" value="Motion Graphics">Motion Graphics</option>
+                        <option className="bg-black" value="3D Maya Course">3D Maya Course</option>
                         <option className="bg-black" value="Video Editing">Video Editing</option>
                         <option className="bg-black" value="Unreal Engine">Unreal Engine</option>
                         <option className="bg-black" value="Blender Mastery">Blender Mastery</option>
@@ -793,8 +815,8 @@ export default function Home() {
                   desc: "Combine graphic design with animation principles to create dynamic, moving visuals for broadcast and web.",
                 },
                 {
-                  title: "Visual",
-                  highlight: "Effects (VFX)",
+                  title: "VFX",
+                  highlight: "Master",
                   image: "Visual-Effects.png",
                   desc: "Master compositing, green-screen removal, 3D tracking, and dynamic simulation with Nuke and industry tools.",
                 },
@@ -814,9 +836,9 @@ export default function Home() {
                 },
                 {
                   title: "3D",
-                  highlight: "Maya",
+                  highlight: "Maya Course",
                   image: "3D-Maya.png",
-                  desc: "A comprehensive course in Maya for professional film and game production with advanced rigging and simulation.",
+                  desc: "Step into the world of high-end animation and visual effects. Master the full pipeline of 3D animation from character modeling to emotional expression.",
                 },
                 {
                   title: "Architectural",
@@ -1037,23 +1059,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-12">
-              {[
-                {
-                  name: "SHANEL MORAES",
-                  img: "1707305845930testimonial_img05.jpg",
-                  rating: 4.5,
-                  quote:
-                    "ZICA has been an amazing place to be at; the teachers, as well as the staff have been very helpful since the beginning. Throughout the years I spent here, I have grown abundantly in knowledge and learnt various techniques used in the actual Animation field.",
-                },
-                {
-                  name: "SUMIT BADONIYA",
-                  img: "1707305855603testimonial_img06.jpg",
-                  rating: 5,
-                  role: "NY VFXWAALA AS 3D ARTIST",
-                  quote:
-                    "I would like to thank ZICA for providing quality education and guidance. Their focus on each student truly makes a difference. Specialized faculties helped us grow in our chosen creative fields. Their support and expertise played a big role in our development.",
-                },
-              ].map((testi, idx) => (
+              {TESTIMONIALS.slice(0, 2).map((testi, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 30 }}
@@ -1067,22 +1073,22 @@ export default function Home() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-5 h-5 ${i < Math.floor(testi.rating) ? "fill-current" : "text-gray-600"} ${i === 4 && testi.rating === 4.5 ? "fill-current opacity-50" : ""}`}
+                        className={`w-5 h-5 ${i < Math.floor(testi.star) ? "fill-current" : "text-gray-600"} ${i === Math.floor(testi.star) && testi.star % 1 !== 0 ? "fill-current opacity-50" : ""}`}
                       />
                     ))}
                   </div>
                   {testi.role && (
-                    <p className="text-[11px] font-bold text-gray-500 uppercase tracking-[0.2em]">
+                    <p className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em]">
                       {testi.role}
                     </p>
                   )}
                   <p className="text-gray-300 text-sm lg:text-[15px] leading-relaxed italic font-medium">
-                    "{testi.quote}"
+                    "{testi.review}"
                   </p>
                   <div className="flex flex-col items-center gap-4 pt-4">
                     <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full border-2 border-red-600/30 overflow-hidden relative shadow-xl group-hover:border-red-600 transition-colors">
                       <Image
-                        src={`/Testimonial/${testi.img}`}
+                        src={`/Testimonial/${testi.image}`}
                         alt={testi.name}
                         fill
                         className="object-cover"
@@ -1095,6 +1101,19 @@ export default function Home() {
                   </div>
                 </motion.div>
               ))}
+            </div>
+
+            <div className="flex justify-center mt-12">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsTestimonialModalOpen(true)}
+                className="group relative px-12 py-5 bg-[#ff0000] border border-red-600/50 rounded-2xl font-black text-xs uppercase tracking-[0.4em] overflow-hidden transition-all shadow-[0_10px_40px_rgba(255,0,0,0.3)] hover:shadow-red-600/50 active:scale-95"
+              >
+                <span className="relative z-10 text-white group-hover:scale-110 transition-transform inline-block">View More Reviews</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+              </motion.button>
             </div>
 
 
@@ -1490,6 +1509,8 @@ export default function Home() {
         isOpen={isCourseDetailOpen}
         onClose={() => setIsCourseDetailOpen(false)}
         course={selectedCourseData}
+        variants={courseVariants}
+        onVariantChange={(variant: any) => setSelectedCourseData(variant)}
         onSubmit={handleFormSubmit}
         isSubmitting={isSubmitting}
       />
@@ -1500,6 +1521,12 @@ export default function Home() {
         isSubmitting={isSubmitting}
         submitText={popupSubmitText}
         minimal={isPopupMinimal}
+      />
+
+      <TestimonialModal
+        isOpen={isTestimonialModalOpen}
+        onClose={() => setIsTestimonialModalOpen(false)}
+        testimonials={TESTIMONIALS.slice(2)}
       />
     </div>
   );

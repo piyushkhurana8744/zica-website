@@ -25,12 +25,16 @@ interface CourseDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   course: CourseDetails | null;
+  variants?: CourseDetails[];
+  onVariantChange?: (variant: CourseDetails) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>, formType: string) => Promise<void>;
   isSubmitting: boolean;
 }
 
-export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, isSubmitting }: CourseDetailModalProps) {
+export default function CourseDetailModal({ isOpen, onClose, course, variants, onVariantChange, onSubmit, isSubmitting }: CourseDetailModalProps) {
   if (!course) return null;
+
+  const hasVariants = variants && variants.length > 1;
 
   return (
     <AnimatePresence>
@@ -51,42 +55,92 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="relative w-full max-w-6xl h-full max-h-[92vh] bg-[#0a0a0a] border border-white/10 rounded-[32px] overflow-hidden shadow-[0_0_100px_rgba(255,0,0,0.2)] flex flex-col"
           >
-            {/* Compact Header with Image & Title */}
-            <div className="relative h-[180px] sm:h-[220px] shrink-0">
+            {/* BACKGROUND GRAPHICS */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_100%_0%,rgba(255,0,0,0.1),transparent_70%)]" />
+              <div className="absolute -bottom-24 -right-24 w-[600px] h-[600px] bg-red-600/10 blur-[130px] rounded-full animate-pulse" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/5 blur-[150px] rounded-full" />
+              <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+            </div>
+            {/* Cinematic Background Header */}
+            <div className="relative h-[250px] sm:h-[350px] shrink-0 overflow-hidden">
               <Image
                 src={course.image}
                 alt={course.title}
                 fill
-                className="object-cover brightness-[0.35]"
+                priority
+                quality={100}
+                className="object-cover object-center"
+                sizes="(max-width: 1280px) 100vw, 1200px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+              {/* Overlays */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
               
-              <button
-                onClick={onClose}
-                className="absolute top-5 right-5 w-10 h-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all z-50"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="absolute bottom-6 left-8 right-8 space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full">
-                    Professional Program
-                  </span>
-                  <div className="flex items-center gap-1.5 text-white/50 text-[11px] font-bold">
-                    <Clock className="w-3.5 h-3.5" />
-                    {course.duration}
+              {/* Content on Image */}
+              <div className="absolute inset-0 p-8 sm:p-12 flex flex-col justify-end">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="space-y-6"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-[2px] bg-[#ff0000]" />
+                    <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.4em]">Academic Program</span>
                   </div>
-                </div>
-                <h2 className="text-2xl sm:text-4xl font-black text-white uppercase italic tracking-tighter leading-[0.95]">
-                  {course.title.split(' ').map((word, i) => (
-                    <span key={i} className={i === course.title.split(' ').length - 1 ? "text-[#ff0000]" : ""}>
-                      {word}{" "}
-                    </span>
-                  ))}
-                </h2>
+                  
+                  <h2 className="text-3xl sm:text-5xl font-black text-white uppercase italic leading-[0.9] tracking-tighter drop-shadow-2xl">
+                    {course.title.split(' ').map((word, i, arr) => (
+                      <span key={i} className={i === arr.length - 1 ? "text-[#ff0000] text-glow" : ""}>
+                        {word}{" "}
+                      </span>
+                    ))}
+                  </h2>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                    <div className="flex items-center gap-3">
+                      <span className="px-3 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-full">
+                        Professional Program
+                      </span>
+                      {!hasVariants && (
+                        <div className="flex items-center gap-1.5 text-white/50 text-[11px] font-bold">
+                          <Clock className="w-3.5 h-3.5 text-red-600" />
+                          {course.duration}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Duration Variant Tabs */}
+                    {hasVariants && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-black text-white/30 uppercase tracking-widest mr-1">Select Duration:</span>
+                        {variants!.map((variant, vIdx) => (
+                          <button
+                            key={vIdx}
+                            onClick={() => onVariantChange?.(variant)}
+                            className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.15em] border transition-all ${
+                              course.duration === variant.duration
+                                ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/30"
+                                : "bg-white/10 border-white/20 text-white/60 hover:border-white/40 hover:text-white backdrop-blur-md"
+                            }`}
+                          >
+                            {variant.duration}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
               </div>
+
+              {/* Close Button on Header */}
+              <button 
+                onClick={onClose}
+                className="absolute top-6 right-6 w-12 h-12 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center text-white hover:bg-red-600 transition-all z-50 hover:scale-110 active:scale-90"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
 
             {/* Content Area */}
@@ -102,7 +156,7 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
                       <BookOpen className="w-5 h-5 text-red-600" />
                       Program Overview
                     </h3>
-                    <p className="text-gray-400 leading-relaxed text-sm">
+                    <p className="text-gray-400 leading-relaxed text-sm whitespace-pre-line">
                       {course.description}
                     </p>
                     {course.prerequisite && (
@@ -116,6 +170,11 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
                   </section>
 
                   {/* Highlights */}
+                  <section className="space-y-5">
+                    <h3 className="text-base font-black text-white uppercase tracking-tight flex items-center gap-2.5">
+                      <CheckCircle2 className="w-5 h-5 text-red-600" />
+                      Course Highlights
+                    </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {course.highlights.map((highlight, idx) => (
                       <div key={idx} className="flex items-start gap-2.5 p-3 bg-white/[0.02] border border-white/5 rounded-xl">
@@ -124,6 +183,7 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
                       </div>
                     ))}
                   </div>
+                </section>
 
                   {/* Modules */}
                   <section className="space-y-5">
@@ -223,6 +283,7 @@ export default function CourseDetailModal({ isOpen, onClose, course, onSubmit, i
                         <option value="Gaming">Gaming</option>
                         <option value="Graphic Design">Graphic Design</option>
                         <option value="Motion Graphics">Motion Graphics</option>
+                        <option value="3D Maya Course">3D Maya Course</option>
                         <option value="Video Editing">Video Editing</option>
                         <option value="Unreal Engine">Unreal Engine</option>
                         <option value="Blender Mastery">Blender Mastery</option>

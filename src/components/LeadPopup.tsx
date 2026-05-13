@@ -183,9 +183,14 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                         >
                           <option value="" disabled>Select Course</option>
                           <option value="Animation">Animation</option>
-                          <option value="VFX">VFX</option>
+                          <option value="VFX - Visual Effects">VFX - Visual Effects</option>
                           <option value="Gaming">Gaming</option>
-                          <option value="Graphics">Graphics</option>
+                          <option value="Graphic Design">Graphic Design</option>
+                          <option value="Motion Graphics">Motion Graphics</option>
+                          <option value="3D Maya Course">3D Maya Course</option>
+                          <option value="Video Editing">Video Editing</option>
+                          <option value="Unreal Engine">Unreal Engine</option>
+                          <option value="Blender Mastery">Blender Mastery</option>
                         </select>
                         <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                       </div>
