@@ -15,8 +15,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ZICA",
-  description: "ZICA Animation & VFX Institute",
+  title: "ZICA Pitampura | Top Creative Media Institute in Delhi",
+  description: "Transform your creativity into a successful media career with ZICA Pitampura through industry-focused courses in 3D Animations, 2D Animations, VFX, Graphic Design, Gaming.",
+  keywords: [
+    "zica institute pitampura",
+    "animation institute in delhi",
+    "best animation institute in delhi",
+    "graphic design course delhi",
+    "video editing course delhi",
+    "video editing institute",
+    "animation and multimedia courses",
+    "Vfx institute Delhi",
+    "Top vfx institute Delhi",
+    "Vfx institute"
+  ],
   icons: { icon: "/zica-favicon.ico" },
 };
 

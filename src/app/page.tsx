@@ -294,7 +294,7 @@ export default function Home() {
                     alt="ZICA Logo"
                     width={220}
                     height={56}
-                    className="h-10 lg:h-14 w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
+                    className="h-14 lg:h-[72px] w-auto brightness-125 transition-all duration-500 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_20px_rgba(255,0,0,0.7)] relative z-10"
                     priority
                   />
                 </motion.div>
@@ -303,9 +303,8 @@ export default function Home() {
 
             {/* Center: Navigation — Glassmorphism Pill */}
             <div className="hidden lg:flex flex-none items-center justify-center relative">
-              <div className="flex items-center gap-1 bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-full px-2 py-1.5 relative overflow-hidden">
-                {/* Animated gradient border glow */}
-                <div className="absolute inset-0 rounded-full opacity-40 pointer-events-none" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,0,0,0.1), rgba(168,85,247,0.1), transparent)', backgroundSize: '200% 100%', animation: 'gradient-shift 4s linear infinite' }} />
+              <div className="flex items-center gap-1">
+
                 
                 {[
                   { label: "About Us", id: "aboutus" },
@@ -502,7 +501,7 @@ export default function Home() {
                       src="/footer/ZLL_Logo.png"
                       alt="Zee Learn Logo"
                       fill
-                      className="object-contain brightness-[1.8] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+                      className="object-contain"
                     />
                   </div>
                   <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-all duration-500 hover:scale-110">
@@ -510,7 +509,7 @@ export default function Home() {
                       src="/footer/Zee_Media_logo.png"
                       alt="Zee Media Logo"
                       fill
-                      className="object-contain brightness-[1.8] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+                      className="object-contain [filter:drop-shadow(0_0_5px_rgba(255,255,255,0.8))_drop-shadow(0_0_5px_rgba(255,255,255,0.6))_drop-shadow(0_0_10px_rgba(255,255,255,0.4))]"
                     />
                   </div>
                 </div>
@@ -656,7 +655,7 @@ export default function Home() {
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30 disabled:opacity-50"
                   >
-                    {isSubmitting ? "Sending..." : "Apply Now"}
+                    {isSubmitting ? "Sending..." : "Download"}
                   </button>
                 </form>
               </div>
