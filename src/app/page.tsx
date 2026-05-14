@@ -290,7 +290,7 @@ export default function Home() {
                 >
                   <div className="absolute inset-0 bg-red-600/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full scale-150" />
                   <Image
-                    src="/ZICA-LOGO-PNG.png"
+                    src="/ZICA-LOGO.png"
                     alt="ZICA Logo"
                     width={220}
                     height={56}
@@ -312,7 +312,7 @@ export default function Home() {
                   { label: "Courses", id: "courses" },
                   { label: "Why ZICA", id: "why-zica" }, 
                   { label: "Goals", id: "goals" },
-                  { label: "Testimonials", id: "testimonials" },
+                  { label: "Reviews", id: "reviews" },
                   { label: "FAQs", id: "faqs" },
                 ].map((item, idx) => (
                   <motion.div
@@ -394,7 +394,7 @@ export default function Home() {
                       { label: "Courses", id: "courses" },
                       { label: "Why ZICA", id: "why-zica" },
                       { label: "Goals", id: "goals" },
-                      { label: "Testimonials", id: "testimonials" },
+                      { label: "Reviews", id: "reviews" },
                       { label: "FAQs", id: "faqs" },
                     ].map((item, idx) => (
                       <motion.div
@@ -476,27 +476,49 @@ export default function Home() {
               </p>
 
               {/* Trust Info */}
-              <div className="flex items-center gap-4 py-2">
-                <div className="flex -space-x-3">
-                  {TRUSTED_AVATARS.map((img) => (
-                    <div
-                      key={img}
-                      className="w-11 h-11 rounded-full border-2 border-black overflow-hidden relative shadow-lg"
-                    >
-                      <Image
-                        src={`/Trusted by/${img}`}
-                        alt="Student"
-                        fill
-                        className="object-cover"
-                        priority
-                        sizes="44px"
-                      />
-                    </div>
-                  ))}
+              <div className="flex flex-wrap items-center gap-4 lg:gap-6 py-2">
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    {TRUSTED_AVATARS.map((img) => (
+                      <div
+                        key={img}
+                        className="w-11 h-11 rounded-full border-2 border-black overflow-hidden relative shadow-lg"
+                      >
+                        <Image
+                          src={`/Trusted by/${img}`}
+                          alt="Student"
+                          fill
+                          className="object-cover"
+                          priority
+                          sizes="44px"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-[13px]">
+                    <p className="text-gray-400">Trusted by:</p>
+                    <p className="font-bold">3k+ students</p>
+                  </div>
                 </div>
-                <div className="text-[13px]">
-                  <p className="text-gray-400">Trusted by:</p>
-                  <p className="font-bold">3k+ students</p>
+
+                {/* Corporate Trust Logos */}
+                <div className="flex items-center gap-4 lg:gap-6 border-l border-white/20 pl-4 lg:pl-6 py-1">
+                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-transform duration-500 hover:scale-110">
+                    <Image
+                      src="/footer/ZLL_Logo.png"
+                      alt="Zee Learn Logo"
+                      fill
+                      className="object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]"
+                    />
+                  </div>
+                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-transform duration-500 hover:scale-110">
+                    <Image
+                      src="/footer/Zee_Media_logo.png"
+                      alt="Zee Media Logo"
+                      fill
+                      className="object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -1037,9 +1059,9 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* --- TESTIMONIALS SECTION --- */}
+        {/* --- REVIEWS SECTION --- */}
         <section
-          id="testimonials"
+          id="reviews"
           className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-[clamp(2.5rem,5vw,4.5rem)] bg-black/60 overflow-hidden border-t border-white/5"
         >
           <motion.div
@@ -1370,7 +1392,7 @@ export default function Home() {
                     { label: "Our Program", href: "#program" },
                     { label: "Why ZICA", href: "#why-zica" },
                     { label: "Goals", href: "#goals" },
-                    { label: "Testimonials", href: "#testimonials" },
+                    { label: "Reviews", href: "#reviews" },
                     { label: "FAQ's", href: "#faqs" },
                   ].map((link, i) => (
                     <li
@@ -1422,11 +1444,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left pr-0 md:pr-24">
               <p className="text-gray-500 text-sm font-medium">
                 © 2025 ZICA Pitampura. All rights reserved.
               </p>
-              <div className="flex gap-8 text-gray-500 text-sm font-medium justify-center">
+              <div className="flex gap-4 text-gray-500 text-sm font-medium justify-center">
                 <span className="hover:text-white cursor-pointer transition-colors">
                   Privacy Policy
                 </span>

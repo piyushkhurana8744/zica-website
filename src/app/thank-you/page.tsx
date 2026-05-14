@@ -91,7 +91,7 @@ export default function ThankYou() {
         transition={{ delay: 1 }}
         className="absolute bottom-10"
       >
-        <Image src="/ZICA_Logo.png" alt="ZICA" width={100} height={26} />
+        <Image src="/ZICA_LOGO.jpg" alt="ZICA" width={100} height={26} />
       </motion.div>
     </div>
   );
