@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Users, Phone, BookOpen, ChevronDown, Mail, MessageCircle } from "lucide-react";
@@ -15,6 +16,17 @@ interface LeadPopupProps {
 }
 
 export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, submitText, minimal }: LeadPopupProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (

@@ -701,29 +701,30 @@ export const COURSE_DETAILS = {
     image: "/Program/Architectural-Design.png"
   },
   "3DS Max": {
-    title: "3ds Max Course",
-    duration: "Professional Course",
-    description: "If you have ever been amazed by a hyper-realistic building render, a dramatic game environment, or a detailed 3D product visual and wondered how something like that is actually built this is the course that answers that question. The 3ds Max course at ZICA is designed for students who want to enter the world of three dimensional design, modeling, and animation with real skills and real confidence.\n\nThis is not just a course. It is where flat ideas become three-dimensional realities. 3D modeling and visualization are used across architecture to show clients what a building will look like before construction begins. They are used in interior design, product manufacturing, advertising, e-commerce, and education. Brands use 3D product visuals for advertising campaigns. Architects use them to present projects. Game studios use them to build entire virtual worlds.\n\nThe demand for people who can create in three dimensions is growing fast across more industries than most students realize. And 3ds Max is one of the most powerful and widely used tools to do exactly that.",
+    title: "Professional 3ds Max Course",
+    duration: "12 Months",
+    description: "If you have ever been amazed by a hyper-realistic building render, a dramatic game environment, or a detailed 3D product visual and wondered how something like that is actually built this is the course that answers that question. The 3ds Max course in Pitampura at ZICA Pitampura is designed for students who want to enter the world of three dimensional design, modeling, and animation with real skills and real confidence.\n\nThis is not just a course. It is where flat ideas become three-dimensional realities.\n\nThe World of 3D Bigger Than You Think: Most people associate 3D design with movies and video games. And yes the stunning environments in blockbuster films, the detailed characters in AAA games, and the realistic creatures in animated features are all built using 3D tools. But that is only one part of the picture.\n\n3D modeling and visualization are used across architecture to show clients what a building will look like before construction begins. They are used in interior design, product manufacturing, advertising, e-commerce, and education. Brands use 3D product visuals for advertising campaigns. Architects use them to present projects. Game studios use them to build entire virtual worlds.\n\nThe demand for people who can create in three dimensions is growing fast across more industries than most students realize. And 3ds Max is one of the most powerful and widely used tools to do exactly that.",
     highlights: [
-      "Master Hyper-Realistic 3D Modeling",
-      "Learn Advanced Materials and Texturing",
-      "Set Up Professional Lighting and Rendering",
-      "Architectural Visualization and Walkthroughs",
-      "Camera Setup and Cinematic Framing"
+      "Master Professional 3D Modeling from Scratch",
+      "Advanced Materials and Texturing for Photorealism",
+      "Professional Lighting and Rendering Techniques",
+      "Specialized Architectural Visualization Training",
+      "Cinematic Camera Setup and Scene Creation",
+      "Industry-Standard Rendering Optimization"
     ],
     modules: [
       {
         title: "Skills You Will Learn",
-        duration: "Full Course",
+        duration: "Full Pipeline",
         topics: [
-          "3D Modeling — Build detailed 3D objects and structures",
-          "Materials and Texturing — Apply realistic surface textures",
-          "Lighting and Rendering — Set up professional lighting",
-          "3D Animation Basics — Understand movement and timing",
-          "Architectural Visualization — Create photorealistic renders",
-          "Camera Setup — Position and animate cameras",
-          "Scene Creation — Build complete, detailed environments",
-          "Rendering Techniques — Produce high-quality final renders"
+          "3D Modeling — Build detailed three-dimensional objects, spaces, and structures from scratch",
+          "Materials and Texturing — Apply realistic surface textures that make models look believable and detailed",
+          "Lighting and Rendering — Set up professional lighting that brings depth, mood, and realism to your scenes",
+          "3D Animation Basics — Understand movement, timing, and how objects behave in animated sequences",
+          "Architectural Visualization — Create photorealistic renders of buildings, interiors, and spaces",
+          "Camera Setup — Position and animate cameras to frame your scenes like a cinematographer",
+          "Scene Creation — Build complete, detailed environments with multiple objects, lighting, and atmosphere",
+          "Rendering Techniques — Learn how to produce high-quality final renders optimized for client presentations and portfolios"
         ]
       }
     ],
@@ -734,14 +735,15 @@ export const COURSE_DETAILS = {
       "Interior Design Visualizer",
       "Product Designer",
       "Game Environment Artist",
-      "VFX Artist"
+      "VFX Artist",
+      "3D Character Artist"
     ],
     image: "/Program/3Ds-Max.png"
   },
   "3D Maya Course": {
-    title: "3D Maya Course",
-    duration: "Professional Course",
-    description: "If you have ever watched a CGI character move so naturally on screen that you forgot it was not real that is Maya at work. This Autodesk Maya course in Pitampura is built for students who want to go beyond watching great animation and actually learn how to create it. From building a character model to making it walk, run, and express emotion this programme takes you through the full pipeline of professional 3D animation, step by step.\n\nThis is not just a course. It is your entry point into the world of high-end animation and visual effects.\n\nEvery dragon that breathes fire in a fantasy film. Every superhero landing in a blockbuster. Every cartoon character that makes a child laugh. Behind all of it — there is a team of animators and VFX artists who spent hours crafting every single movement, expression, and effect frame by frame.\n\nThis is the world of 3D animation and visual effects and it is one of the most creatively rich and technically exciting industries in the world right now.\n\nIndia's animation and VFX industry is growing at a rapid pace. Studios across Mumbai, Hyderabad, Bangalore, and Delhi NCR are actively hiring trained animators and artists. Global productions regularly outsource animation work to Indian studios. The opportunity is real and it starts with mastering the right tool.\n\nThat tool is Autodesk Maya.",
+    title: "Autodesk Maya Course",
+    duration: "12 Months",
+    description: "If you have ever watched a CGI character move so naturally on screen that you forgot it was not real that is Maya at work. This Autodesk Maya course in Pitampura is built for students who want to go beyond watching great animation and actually learn how to create it. From building a character model to making it walk, run, and express emotion this programme takes you through the full pipeline of professional 3D animation, step by step.\n\nThis is not just a course. It is your entry point into the world of high-end animation and visual effects.\n\nEvery dragon that breathes fire in a fantasy film. Every superhero landing in a blockbuster. Every cartoon character that makes a child laugh. Behind all of it — there is a team of animators and VFX artists who spent hours crafting every single movement, expression, and effect frame by frame.\n\nThis is the world of 3D animation and visual effects and it is one of the most creatively rich and technically exciting industries in the world right now.\n\nIndia's animation and VFX industry is growing at a rapid pace. Studios across Mumbai, Hyderabad, Bangalore, and Delhi NCR are actively hiring trained animators and artists. Global productions regularly outsource animation work to Indian studios. The opportunity is real and it starts with mastering the right tool. That tool is Autodesk Maya.\n\nEach of these skills connects directly to real job roles in animation studios, game companies, and VFX houses.",
     highlights: [
       "Master Professional 3D Animation Pipeline",
       "Character Modeling and Advanced Rigging",
@@ -776,40 +778,78 @@ export const COURSE_DETAILS = {
     ],
     image: "/Program/3D-Maya.png"
   },
-  "Video Editing": {
-    title: "Professional Video Editing Course",
-    duration: "6 Months",
-    description: "Master the art of post-production and storytelling. This course covers everything from basic cutting techniques to advanced color grading and sound design. Learn to use industry-standard tools like Adobe Premiere Pro and DaVinci Resolve to create professional-quality videos for film, television, and social media.\n\nYou will learn the complete video production pipeline, including importing footage, organizing projects, multicam editing, motion graphics integration, and exporting for various platforms. Our hands-on approach ensures you gain the practical skills needed to succeed in the fast-paced world of digital media.",
-    highlights: [
-      "Master Adobe Premiere Pro and DaVinci Resolve",
-      "Advanced Color Grading and Correction",
-      "Professional Sound Design and Mixing",
-      "Motion Graphics Integration",
-      "Multi-Camera Editing Techniques"
-    ],
-    modules: [
-      {
-        title: "Post-Production Pipeline",
-        duration: "6 MONTHS",
-        topics: [
-          "Introduction to Video Editing — Software interface and basic tools",
-          "Advanced Cutting Techniques — Understanding rhythm and pacing",
-          "Color Grading — Enhancing visual mood and consistency",
-          "Audio Post-Production — Sound cleaning, mixing, and music integration",
-          "Motion Graphics in Video — Using After Effects with Premiere Pro",
-          "Visual Effects Basics — Compositing and green screen removal",
-          "Final Rendering — Optimizing for web, TV, and cinema"
-        ]
-      }
-    ],
-    careerAvenues: [
-      "Video Editor",
-      "Colorist",
-      "Sound Editor",
-      "Post-Production Supervisor",
-      "Content Creator",
-      "VFX Editor"
-    ],
-    image: "/Program/video-Editing.png"
-  }
+  "Video Editing": [
+    {
+      title: "Program In Digital Audio and Video Editing",
+      duration: "3 Months",
+      description: "Video editing plays a crucial role in merging images, videos, and music to create an emotional connection and immerse viewers in the story. This program equips students with the skills to create both personal and professional videos, emphasizing the importance of attention to detail. Throughout the course, students will learn how to eliminate unwanted footage, establish a seamless flow, incorporate effects and graphics, add music, and adjust the style, pace, or mood to enhance the overall impact of the video.\n\nBecome a Professional Video Editing Artist: Starting the journey of mastering digital audio and video editing empowers individuals to become skilled professionals in the creative arts. By gaining technical proficiency in editing software, mastering sound and visual elements, and understanding the art of storytelling, students are equipped to craft captivating narratives, stunning visuals, and immersive experiences.\n\nBe Editing Industry Ready: Gain industry-ready skills through comprehensive digital audio and video editing education. Master editing software, audio engineering, and video production techniques. Learn the art of storytelling, visual composition, and sound design to enhance your creative projects. With hands-on practice, students build a professional portfolio that prepares them for careers in film, television, advertising, and multimedia production.",
+      highlights: [
+        "Enhance your design and visualisation skills through practical exercises and projects",
+        "Master a range of multimedia tools and techniques essential for creating compelling content",
+        "Participate in continuous evaluations, including competitions and activities",
+        "Gain hands-on experience with industry-standard software and tools",
+        "Refine your creative process and approach to problem-solving",
+        "Receive personalised feedback from experts to ensure continuous improvement"
+      ],
+      modules: [
+        {
+          title: "Course Module",
+          duration: "3 MONTHS",
+          topics: [
+            "Overview of Editing",
+            "Computer Graphics",
+            "Audio Editing",
+            "Video Editing",
+            "Motion Graphics"
+          ]
+        }
+      ],
+      careerAvenues: [
+        "Video Editor",
+        "Audio Editor",
+        "Motion Graphics Designer",
+        "Title Sequence Designer",
+        "Broadcast Designer",
+        "Multimedia Artist",
+        "Interactive Media Designer"
+      ],
+      image: "/Program/video-Editing.png"
+    },
+    {
+      title: "Professional Video Editing Course",
+      duration: "6 Months",
+      description: "Master the art of post-production and storytelling. This course covers everything from basic cutting techniques to advanced color grading and sound design. Learn to use industry-standard tools like Adobe Premiere Pro and DaVinci Resolve to create professional-quality videos for film, television, and social media.\n\nYou will learn the complete video production pipeline, including importing footage, organizing projects, multicam editing, motion graphics integration, and exporting for various platforms. Our hands-on approach ensures you gain the practical skills needed to succeed in the fast-paced world of digital media.",
+      highlights: [
+        "Master Adobe Premiere Pro and DaVinci Resolve",
+        "Advanced Color Grading and Correction",
+        "Professional Sound Design and Mixing",
+        "Motion Graphics Integration",
+        "Multi-Camera Editing Techniques"
+      ],
+      modules: [
+        {
+          title: "Post-Production Pipeline",
+          duration: "6 MONTHS",
+          topics: [
+            "Introduction to Video Editing — Software interface and basic tools",
+            "Advanced Cutting Techniques — Understanding rhythm and pacing",
+            "Color Grading — Enhancing visual mood and consistency",
+            "Audio Post-Production — Sound cleaning, mixing, and music integration",
+            "Motion Graphics in Video — Using After Effects with Premiere Pro",
+            "Visual Effects Basics — Compositing and green screen removal",
+            "Final Rendering — Optimizing for web, TV, and cinema"
+          ]
+        }
+      ],
+      careerAvenues: [
+        "Video Editor",
+        "Colorist",
+        "Sound Editor",
+        "Post-Production Supervisor",
+        "Content Creator",
+        "VFX Editor"
+      ],
+      image: "/Program/video-Editing.png"
+    }
+  ]
 };

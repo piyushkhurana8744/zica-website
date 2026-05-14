@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle2, Clock, BookOpen, Briefcase, GraduationCap, Users, Phone, Mail, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -32,6 +33,17 @@ interface CourseDetailModalProps {
 }
 
 export default function CourseDetailModal({ isOpen, onClose, course, variants, onVariantChange, onSubmit, isSubmitting }: CourseDetailModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   if (!course) return null;
 
   const hasVariants = variants && variants.length > 1;

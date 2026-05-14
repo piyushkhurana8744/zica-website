@@ -29,7 +29,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { div } from "framer-motion/client";
+
 
 import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS, TESTIMONIALS } from "./constants";
 
@@ -477,20 +477,15 @@ export default function Home() {
 
               {/* Trust Info */}
               <div className="flex flex-wrap items-center gap-4 lg:gap-6 py-2">
-                <div className="flex items-center gap-4">
-                  <div className="flex -space-x-3">
-                    {TRUSTED_AVATARS.map((img) => (
-                      <div
-                        key={img}
-                        className="w-11 h-11 rounded-full border-2 border-black overflow-hidden relative shadow-lg"
-                      >
+                  <div className="flex -space-x-4">
+                    {[1, 2, 3].map((i) => (
+                      <div key={i} className="w-12 h-12 rounded-full border-2 border-[#030008] overflow-hidden relative shadow-xl">
                         <Image
-                          src={`/Trusted by/${img}`}
+                          src={`/Trusted by/17073058${i === 1 ? '10351' : i === 2 ? '18392' : '26339'}testimonial_img0${i}.jpg`}
                           alt="Student"
                           fill
                           className="object-cover"
-                          priority
-                          sizes="44px"
+                          sizes="48px"
                         />
                       </div>
                     ))}
@@ -499,24 +494,23 @@ export default function Home() {
                     <p className="text-gray-400">Trusted by:</p>
                     <p className="font-bold">3k+ students</p>
                   </div>
-                </div>
 
                 {/* Corporate Trust Logos */}
                 <div className="flex items-center gap-4 lg:gap-6 border-l border-white/20 pl-4 lg:pl-6 py-1">
-                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-transform duration-500 hover:scale-110">
+                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-all duration-500 hover:scale-110">
                     <Image
                       src="/footer/ZLL_Logo.png"
                       alt="Zee Learn Logo"
                       fill
-                      className="object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]"
+                      className="object-contain brightness-[1.8] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                     />
                   </div>
-                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-transform duration-500 hover:scale-110">
+                  <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-all duration-500 hover:scale-110">
                     <Image
                       src="/footer/Zee_Media_logo.png"
                       alt="Zee Media Logo"
                       fill
-                      className="object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.9)] drop-shadow-[0_0_25px_rgba(255,255,255,0.5)]"
+                      className="object-contain brightness-[1.8] contrast-[1.2] drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                     />
                   </div>
                 </div>
@@ -1276,12 +1270,12 @@ export default function Home() {
             viewport={{ once: true }}
             className="max-w-[1440px] mx-auto"
           >
-            <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-center mb-6 lg:mb-8 text-white text-glow uppercase tracking-tighter leading-[0.9]">
+            <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-black text-center mb-4 lg:mb-6 text-white text-glow uppercase tracking-tighter leading-[0.9]">
               Our <span className="text-[#ff0000]">Impact</span>
             </h2>
 
             <div className="bg-[#0a0a0a] border-4 border-[#2d1b4d] rounded-[40px] p-4 lg:p-6 shadow-[0_0_50px_rgba(45,27,77,0.3)]">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
                   { val: "95%+", label: "Placements" },
                   { val: "100+", label: "Recruiters" },
@@ -1294,7 +1288,7 @@ export default function Home() {
                     whileHover={{ scale: 1.05, y: -5 }}
                     transition={{ delay: idx * 0.1, duration: 1 }}
                     viewport={{ once: true }}
-                    className="bg-black border border-white/20 rounded-[24px] py-8 text-center space-y-3 hover:border-red-600/40 transition-all group cursor-default"
+                    className="bg-black border border-white/20 rounded-[24px] py-6 text-center space-y-2 hover:border-red-600/40 transition-all group cursor-default"
                   >
                     <p className="text-4xl lg:text-5xl font-black text-white tracking-tighter group-hover:text-red-600 transition-colors duration-500">
                       {stat.val}
@@ -1315,18 +1309,18 @@ export default function Home() {
         />
 
         {/* --- FOOTER --- */}
-        <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-12 pb-12 bg-black border-t border-white/10">
+        <footer className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] pt-12 pb-8 bg-black border-t border-white/10">
           <div className="max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-12 text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center md:text-left">
               {/* Powered By */}
-              <div className="flex flex-col items-center md:items-start space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-4">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Powered by
                   </h3>
                 </div>
-                <div className="relative w-48 h-20">
+                <div className="relative w-48 h-20 transition-all duration-500 hover:scale-105">
                   <Image
                     src="/footer/ZLL_Logo.png"
                     alt="Zee Learn Logo"
@@ -1340,7 +1334,7 @@ export default function Home() {
                   seek constructive feedback, and continuously enhance your
                   artistic and technical skills with us.
                 </p>
-                <div className="flex items-center gap-6 justify-center md:justify-start">
+                <div className="flex items-center gap-4 justify-center md:justify-start">
                   <div className="text-white hover:text-red-600 cursor-pointer transition-colors">
                     <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -1360,14 +1354,14 @@ export default function Home() {
               </div>
 
               {/* Placement Partner */}
-              <div className="flex flex-col items-center md:items-start space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-4">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
                     Placement Partner
                   </h3>
                 </div>
-                <div className="relative w-48 h-20">
+                <div className="relative w-48 h-20 transition-all duration-500 hover:scale-105">
                   <Image
                     src="/footer/Zee_Media_logo.png"
                     alt="Zee Media Logo"
@@ -1379,7 +1373,7 @@ export default function Home() {
               </div>
 
               {/* Quick Links */}
-              <div className="flex flex-col items-center md:items-start space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-4">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
@@ -1406,7 +1400,7 @@ export default function Home() {
               </div>
 
               {/* Contact Info */}
-              <div className="flex flex-col items-center md:items-start space-y-8">
+              <div className="flex flex-col items-center md:items-start space-y-4">
                 <div className="space-y-2">
                   <div className="w-10 h-1 bg-[#ff0000] mb-4 mx-auto md:mx-0" />
                   <h3 className="text-white font-black uppercase tracking-[0.15em] text-xs">
@@ -1444,11 +1438,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left pr-0 md:pr-24">
+            <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left pr-0 md:pr-24">
               <p className="text-gray-500 text-sm font-medium">
                 © 2025 ZICA Pitampura. All rights reserved.
               </p>
-              <div className="flex gap-4 text-gray-500 text-sm font-medium justify-center">
+              <div className="flex gap-2 text-gray-500 text-sm font-medium justify-center">
                 <span className="hover:text-white cursor-pointer transition-colors">
                   Privacy Policy
                 </span>
@@ -1469,11 +1463,11 @@ export default function Home() {
         <motion.a
           href="tel:+917900400300"
           whileHover={{ x: -10, scale: 1.15 }}
-          className="w-16 h-20 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10 group/btn cursor-pointer"
+          className="w-16 h-16 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10 group/btn cursor-pointer"
         >
           <Phone className="w-7 h-7" />
           {/* Label that is visible and slides slightly on hover */}
-          <span className="absolute right-full mr-4 bg-[#ff4d5a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-100 transition-all whitespace-nowrap pointer-events-none shadow-2xl">Call Me</span>
+          <span className="absolute right-full mr-2 bg-[#ff4d5a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-100 transition-all whitespace-nowrap pointer-events-none shadow-2xl">Call Me</span>
         </motion.a>
 
         {/* WhatsApp Button */}
@@ -1482,7 +1476,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ x: -10, scale: 1.1 }}
-          className="w-16 h-20 bg-[#25d366] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
+          className="w-16 h-16 bg-[#25d366] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10"
         >
           <MessageCircle className="w-7 h-7 fill-white/10" />
           <span className="absolute right-full mr-4 bg-[#25d366] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">WhatsApp</span>
@@ -1492,7 +1486,7 @@ export default function Home() {
         <motion.button
           onClick={() => openLeadPopup()}
           whileHover={{ x: -10, scale: 1.1 }}
-          className="w-16 h-20 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
+          className="w-16 h-16 bg-[#0a0a0a] flex items-center justify-center text-white relative transition-all duration-300"
         >
           <ChevronRight className="w-7 h-7 text-red-600 animate-pulse" />
           <span className="absolute right-full mr-4 bg-[#0a0a0a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-white/10">Enquire Now</span>
@@ -1524,7 +1518,7 @@ export default function Home() {
         </span>
 
         {/* Tooltip label */}
-        <span className="absolute right-full mr-6 bg-[#0a0a0a] border border-white/10 text-white px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap opacity-100 transition-all duration-300 pointer-events-none shadow-2xl">
+        <span className="absolute right-full mr-3 bg-[#0a0a0a] border border-white/10 text-white px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap opacity-100 transition-all duration-300 pointer-events-none shadow-2xl">
           📞 Call Me        </span>
       </motion.a>
       <CourseDetailModal
