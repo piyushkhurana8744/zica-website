@@ -501,7 +501,7 @@ export default function Home() {
                       src="/footer/ZLL_Logo.png"
                       alt="Zee Learn Logo"
                       fill
-                      className="object-contain"
+                      className="object-contain brightness-110 saturate-150 transition-all duration-500 [filter:drop-shadow(0_0_1px_rgba(0,0,0,1))_drop-shadow(0_0_3px_rgba(0,0,0,1))_drop-shadow(0_0_8px_rgba(255,0,0,0.4))]"
                     />
                   </div>
                   <div className="relative w-28 lg:w-40 h-10 lg:h-14 group cursor-pointer transition-all duration-500 hover:scale-110">
@@ -509,7 +509,7 @@ export default function Home() {
                       src="/footer/Zee_Media_logo.png"
                       alt="Zee Media Logo"
                       fill
-                      className="object-contain [filter:drop-shadow(0_0_5px_rgba(255,255,255,0.8))_drop-shadow(0_0_5px_rgba(255,255,255,0.6))_drop-shadow(0_0_10px_rgba(255,255,255,0.4))]"
+                      className="object-contain brightness-110 saturate-150 transition-all duration-500 [filter:drop-shadow(0_0_1px_rgba(0,0,0,1))_drop-shadow(0_0_3px_rgba(0,0,0,1))_drop-shadow(0_0_8px_rgba(255,0,0,0.4))]"
                     />
                   </div>
                 </div>
@@ -1420,7 +1420,7 @@ export default function Home() {
                       <Mail className="w-5 h-5" />
                     </div>
                     <span className="text-sm font-bold tracking-wider">
-                      info@Pitampura.com
+                       info@zicapitampura.com
                     </span>
                   </div>
                   <div className="flex items-start gap-4 text-gray-400 hover:text-white transition-colors group">
