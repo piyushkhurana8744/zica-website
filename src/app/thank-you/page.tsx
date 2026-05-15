@@ -4,10 +4,17 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle2, ArrowLeft, MessageCircle, Phone } from "lucide-react";
+import Script from "next/script";
 
 export default function ThankYou() {
   return (
     <div className="min-h-screen w-full bg-[#030008] text-white flex flex-col items-center justify-center relative overflow-hidden font-sans">
+      {/* Event snippet for Submit lead form conversion page */}
+      <Script id="google-ads-conversion" strategy="afterInteractive">
+        {`
+          gtag('event', 'conversion', {'send_to': 'AW-18138896524/EwzUCKrnqa0cEIyxpslD'});
+        `}
+      </Script>
       
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none">
