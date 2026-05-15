@@ -1407,14 +1407,14 @@ export default function Home() {
                   </h3>
                 </div>
                 <div className="space-y-6 flex flex-col items-center md:items-start">
-                  <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
+                  <button onClick={() => openLeadPopup("Call Us", true)} className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all">
                       <Phone className="w-5 h-5" />
                     </div>
                     <span className="text-sm font-bold tracking-wider">
                       +91 7900400300
                     </span>
-                  </div>
+                  </button>
                   <div className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
                     <div className="w-10 h-10 rounded-lg flex items-center justify-center border border-white/10 group-hover:bg-red-600 transition-all">
                       <Mail className="w-5 h-5" />
@@ -1459,15 +1459,15 @@ export default function Home() {
       {/* --- CINEMATIC STICKY QUICK ACCESS BAR --- */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[150] flex flex-col shadow-[0_0_40px_rgba(0,0,0,0.5)] overflow-hidden rounded-l-3xl border-l border-y border-white/10 group/sidebar">
         {/* Call Button */}
-        <motion.a
-          href="tel:+917900400300"
+        <motion.button
+          onClick={() => openLeadPopup("Call Us", true)}
           whileHover={{ x: -10, scale: 1.15 }}
           className="w-16 h-16 bg-[#ff4d5a] flex items-center justify-center text-white relative transition-all duration-300 border-b border-white/10 group/btn cursor-pointer"
         >
           <Phone className="w-7 h-7" />
           {/* Label that is visible and slides slightly on hover */}
           <span className="absolute right-full mr-2 bg-[#ff4d5a] px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest opacity-100 transition-all whitespace-nowrap pointer-events-none shadow-2xl">Call Me</span>
-        </motion.a>
+        </motion.button>
 
         {/* WhatsApp Button */}
         <motion.a
@@ -1493,8 +1493,8 @@ export default function Home() {
       </div>
 
       {/* --- FLOATING ENQUIRY BUTTON --- */}
-      <motion.a
-        href="tel:+917900400300"
+      <motion.button
+        onClick={() => openLeadPopup("Call Us", true)}
         id="floating-enquiry-btn"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -1519,7 +1519,7 @@ export default function Home() {
         {/* Tooltip label */}
         <span className="absolute right-full mr-3 bg-[#0a0a0a] border border-white/10 text-white px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap opacity-100 transition-all duration-300 pointer-events-none shadow-2xl">
           📞 Call Me        </span>
-      </motion.a>
+      </motion.button>
       <CourseDetailModal
         isOpen={isCourseDetailOpen}
         onClose={() => setIsCourseDetailOpen(false)}
