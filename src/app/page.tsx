@@ -333,7 +333,8 @@ export default function Home() {
             </div>
 
             {/* Right: CTA + Mobile Toggle */}
-            <div className="flex-1 flex justify-end">
+            <div className="flex-1 flex flex-col items-end gap-1.5 justify-center relative z-[110]">
+              <div className="flex items-center gap-3">
                 {/* Enroll Now Button */}
                 <motion.button
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -362,6 +363,21 @@ export default function Home() {
                   {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </motion.button>
               </div>
+
+              {/* Mobile Number below Enroll Now */}
+              <motion.a
+                href="tel:+917900400300"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.4, duration: 0.5 }}
+                className="hidden sm:flex items-center gap-1.5 text-white hover:text-red-500 transition-all duration-300 mr-2 group/phone cursor-pointer drop-shadow-[0_2px_5px_rgba(0,0,0,0.95)] hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.8)]"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#ff0000] group-hover/phone:animate-bounce transition-transform duration-300" />
+                <span className="text-[11px] font-extrabold tracking-widest font-mono">
+                  +91 79004 00300
+                </span>
+              </motion.a>
+            </div>
 
           {/* Mobile Menu Overlay */}
             <AnimatePresence>
@@ -421,6 +437,19 @@ export default function Home() {
                     >
                       Enquire Now
                     </motion.button>
+
+                    <motion.a
+                      href="tel:+917900400300"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.7 }}
+                      className="flex items-center gap-2 text-white hover:text-red-500 transition-all duration-300 group/mob-phone py-2 cursor-pointer drop-shadow-[0_2px_5px_rgba(0,0,0,0.95)] hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.8)]"
+                    >
+                      <Phone className="w-4 h-4 text-[#ff0000] group-hover/mob-phone:animate-bounce transition-transform duration-300" />
+                      <span className="text-sm font-bold tracking-widest font-mono">
+                        +91 79004 00300
+                      </span>
+                    </motion.a>
                   </div>
                 </motion.div>
               )}

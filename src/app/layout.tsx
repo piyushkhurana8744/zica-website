@@ -32,6 +32,7 @@ export const metadata: Metadata = {
   icons: { icon: "/zica-favicon.ico" },
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
