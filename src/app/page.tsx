@@ -372,8 +372,8 @@ export default function Home() {
                 transition={{ delay: 1.4, duration: 0.5 }}
                 className="hidden sm:flex items-center gap-1.5 text-white hover:text-red-500 transition-all duration-300 mr-2 group/phone cursor-pointer drop-shadow-[0_2px_5px_rgba(0,0,0,0.95)] hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.8)]"
               >
-                <Phone className="w-3.5 h-3.5 text-[#ff0000] group-hover/phone:animate-bounce transition-transform duration-300" />
-                <span className="text-[11px] font-extrabold tracking-widest font-mono">
+                <Phone className="w-4 h-4 text-[#ff0000] group-hover/phone:animate-bounce transition-transform duration-300" />
+                <span className="text-[13px] font-black tracking-widest font-mono">
                   +91 79004 00300
                 </span>
               </motion.a>
