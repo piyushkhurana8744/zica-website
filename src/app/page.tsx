@@ -1410,18 +1410,23 @@ export default function Home() {
                 </div>
                 <ul className="space-y-4 text-gray-400 font-medium">
                   {[
-                    { label: "About Us", href: "#about" },
-                    { label: "Our Program", href: "#program" },
-                    { label: "Why ZICA", href: "#why-zica" },
-                    { label: "Goals", href: "#goals" },
-                    { label: "Reviews", href: "#reviews" },
-                    { label: "FAQ's", href: "#faqs" },
+                    { label: "About Us", id: "aboutus" },
+                    { label: "Courses", id: "courses" },
+                    { label: "Why ZICA", id: "why-zica" },
+                    { label: "Goals", id: "goals" },
+                    { label: "Reviews", id: "reviews" },
+                    { label: "FAQ's", id: "faqs" },
                   ].map((link, i) => (
                     <li
                       key={i}
                       className="hover:text-white cursor-pointer transition-colors"
                     >
-                      <Link href={link.href}>{link.label}</Link>
+                      <button
+                        onClick={() => scrollToSection(link.id)}
+                        className="text-left bg-transparent border-none p-0 text-inherit font-inherit cursor-pointer hover:text-white transition-colors"
+                      >
+                        {link.label}
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -1471,12 +1476,12 @@ export default function Home() {
                 © 2025 ZICA Pitampura. All rights reserved.
               </p>
               <div className="flex gap-2 text-gray-500 text-sm font-medium justify-center">
-                <span className="hover:text-white cursor-pointer transition-colors">
+                <Link href="/privacy-policy" className="hover:text-white cursor-pointer transition-colors">
                   Privacy Policy
-                </span>
-                <span className="hover:text-white cursor-pointer transition-colors">
+                </Link>
+                <Link href="/terms-and-conditions" className="hover:text-white cursor-pointer transition-colors">
                   Terms and Conditions
-                </span>
+                </Link>
               </div>
             </div>
           </div>
