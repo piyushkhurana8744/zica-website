@@ -10,12 +10,7 @@ export default function ThankYou() {
   return (
     <div className="min-h-screen w-full bg-[#030008] text-white flex flex-col items-center justify-center relative overflow-hidden font-sans">
       {/* Event snippet for Submit lead form conversion page */}
-      <Script id="google-ads-conversion" strategy="afterInteractive">
-        {`
-          gtag('event', 'conversion', {'send_to': 'AW-18138896524/EwzUCKrnqa0cEIyxpslD'});
-        `}
-      </Script>
-      
+     
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-red-600/10 blur-[120px] rounded-full" />
