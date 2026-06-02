@@ -432,19 +432,19 @@ export default function Home() {
                               animate={{ opacity: 1, y: 0, scale: 1 }}
                               exit={{ opacity: 0, y: 10, scale: 0.95 }}
                               transition={{ duration: 0.25, ease: "easeOut" }}
-                              className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[720px] bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-[200] grid grid-cols-3 gap-6"
+                              className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[820px] bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-[200] grid grid-cols-3 gap-6"
                             >
                               {/* Left Column: Animation */}
                               <div className="space-y-4">
-                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                <h4 className="text-[13px] font-black text-red-500 uppercase tracking-[0.18em] border-b border-white/5 pb-2">
                                   Animation Programs
                                 </h4>
-                                <div className="flex flex-col gap-2.5">
+                                <div className="flex flex-col gap-3">
                                   {[
-                                    { name: "2D Animation", icon: <PenTool className="w-4 h-4 text-purple-400" /> },
-                                    { name: "3D Animation", icon: <Layers className="w-4 h-4 text-purple-400" /> },
-                                    { name: "3D Maya Course", icon: <Cpu className="w-4 h-4 text-purple-400" /> },
-                                    { name: "3DS Max", icon: <Layout className="w-4 h-4 text-purple-400" /> }
+                                    { name: "2D Animation", icon: <PenTool className="w-[18px] h-[18px] text-purple-400" /> },
+                                    { name: "3D Animation", icon: <Layers className="w-[18px] h-[18px] text-purple-400" /> },
+                                    { name: "3D Maya Course", icon: <Cpu className="w-[18px] h-[18px] text-purple-400" /> },
+                                    { name: "3DS Max", icon: <Layout className="w-[18px] h-[18px] text-purple-400" /> }
                                   ].map((course) => (
                                     <button
                                       key={course.name}
@@ -452,9 +452,9 @@ export default function Home() {
                                         setIsCoursesDropdownOpen(false);
                                         openCourseDetail(course.name);
                                       }}
-                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                      className="flex items-center gap-3 text-[15px] text-white hover:text-red-500 transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
                                     >
-                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                      <div className="w-8 h-8 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
                                         {course.icon}
                                       </div>
                                       <span>{course.name}</span>
@@ -465,13 +465,13 @@ export default function Home() {
 
                               {/* Center Column: VFX & Gaming */}
                               <div className="space-y-4">
-                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                <h4 className="text-[13px] font-black text-red-500 uppercase tracking-[0.18em] border-b border-white/5 pb-2">
                                   VFX & Gaming
                                 </h4>
-                                <div className="flex flex-col gap-2.5">
+                                <div className="flex flex-col gap-3">
                                   {[
-                                    { name: "VFX Master", icon: <Video className="w-4 h-4 text-amber-400" /> },
-                                    { name: "Game Design", icon: <Smartphone className="w-4 h-4 text-amber-400" /> }
+                                    { name: "VFX Master", icon: <Video className="w-[18px] h-[18px] text-amber-400" /> },
+                                    { name: "Game Design", icon: <Smartphone className="w-[18px] h-[18px] text-amber-400" /> }
                                   ].map((course) => (
                                     <button
                                       key={course.name}
@@ -479,9 +479,9 @@ export default function Home() {
                                         setIsCoursesDropdownOpen(false);
                                         openCourseDetail(course.name);
                                       }}
-                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                      className="flex items-center gap-3 text-[15px] text-white hover:text-red-500 transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
                                     >
-                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                      <div className="w-8 h-8 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
                                         {course.icon}
                                       </div>
                                       <span>{course.name}</span>
@@ -492,15 +492,15 @@ export default function Home() {
 
                               {/* Right Column: Design & Creative Arts */}
                               <div className="space-y-4">
-                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                <h4 className="text-[13px] font-black text-red-500 uppercase tracking-[0.18em] border-b border-white/5 pb-2">
                                   Design & Editing
                                 </h4>
-                                <div className="flex flex-col gap-2.5">
+                                <div className="flex flex-col gap-3">
                                   {[
-                                    { name: "Graphic Designing", icon: <BookOpen className="w-4 h-4 text-red-400" /> },
-                                    { name: "Motion Graphics", icon: <Award className="w-4 h-4 text-red-400" /> },
-                                    { name: "Architectural Design", icon: <Globe className="w-4 h-4 text-red-400" /> },
-                                    { name: "Video Editing", icon: <Users className="w-4 h-4 text-red-400" /> }
+                                    { name: "Graphic Designing", icon: <BookOpen className="w-[18px] h-[18px] text-red-400" /> },
+                                    { name: "Motion Graphics", icon: <Award className="w-[18px] h-[18px] text-red-400" /> },
+                                    { name: "Architectural Design", icon: <Globe className="w-[18px] h-[18px] text-red-400" /> },
+                                    { name: "Video Editing", icon: <Users className="w-[18px] h-[18px] text-red-400" /> }
                                   ].map((course) => (
                                     <button
                                       key={course.name}
@@ -508,9 +508,9 @@ export default function Home() {
                                         setIsCoursesDropdownOpen(false);
                                         openCourseDetail(course.name);
                                       }}
-                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                      className="flex items-center gap-3 text-[15px] text-white hover:text-red-500 transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
                                     >
-                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                      <div className="w-8 h-8 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
                                         {course.icon}
                                       </div>
                                       <span>{course.name}</span>
@@ -640,12 +640,12 @@ export default function Home() {
                                   animate={{ height: "auto", opacity: 1 }}
                                   exit={{ height: 0, opacity: 0 }}
                                   transition={{ duration: 0.3 }}
-                                  className="w-full overflow-y-auto flex flex-col gap-4 mt-4 max-h-[300px] px-4 py-3 bg-white/[0.03] border border-white/5 rounded-2xl custom-scrollbar"
+                                  className="w-full overflow-y-auto flex flex-col gap-5 mt-4 max-h-[360px] px-4 py-3 bg-white/[0.03] border border-white/5 rounded-2xl custom-scrollbar"
                                 >
                                   {/* Sub-group: Animation */}
                                   <div className="flex flex-col items-center">
-                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">Animation</span>
-                                    <div className="flex flex-col items-center gap-2">
+                                    <span className="text-[12px] font-black text-red-500 uppercase tracking-[0.2em] mb-2.5 border-b border-white/5 pb-1.5 w-1/2 text-center">Animation</span>
+                                    <div className="flex flex-col items-center gap-2.5">
                                       {["2D Animation", "3D Animation", "3D Maya Course", "3DS Max"].map((courseName) => (
                                         <button
                                           key={courseName}
@@ -654,7 +654,7 @@ export default function Home() {
                                             setIsMobileCoursesOpen(false);
                                             openCourseDetail(courseName);
                                           }}
-                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                          className="text-lg font-bold text-white hover:text-red-500 uppercase transition-colors cursor-pointer"
                                         >
                                           {courseName}
                                         </button>
@@ -663,9 +663,9 @@ export default function Home() {
                                   </div>
 
                                   {/* Sub-group: VFX & Gaming */}
-                                  <div className="flex flex-col items-center mt-2">
-                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">VFX & Gaming</span>
-                                    <div className="flex flex-col items-center gap-2">
+                                  <div className="flex flex-col items-center mt-3">
+                                    <span className="text-[12px] font-black text-red-500 uppercase tracking-[0.2em] mb-2.5 border-b border-white/5 pb-1.5 w-1/2 text-center">VFX & Gaming</span>
+                                    <div className="flex flex-col items-center gap-2.5">
                                       {["VFX Master", "Game Design"].map((courseName) => (
                                         <button
                                           key={courseName}
@@ -674,7 +674,7 @@ export default function Home() {
                                             setIsMobileCoursesOpen(false);
                                             openCourseDetail(courseName);
                                           }}
-                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                          className="text-lg font-bold text-white hover:text-red-500 uppercase transition-colors cursor-pointer"
                                         >
                                           {courseName}
                                         </button>
@@ -683,9 +683,9 @@ export default function Home() {
                                   </div>
 
                                   {/* Sub-group: Design & Editing */}
-                                  <div className="flex flex-col items-center mt-2">
-                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">Design & Editing</span>
-                                    <div className="flex flex-col items-center gap-2">
+                                  <div className="flex flex-col items-center mt-3">
+                                    <span className="text-[12px] font-black text-red-500 uppercase tracking-[0.2em] mb-2.5 border-b border-white/5 pb-1.5 w-1/2 text-center">Design & Editing</span>
+                                    <div className="flex flex-col items-center gap-2.5">
                                       {["Graphic Designing", "Motion Graphics", "Architectural Design", "Video Editing"].map((courseName) => (
                                         <button
                                           key={courseName}
@@ -694,7 +694,7 @@ export default function Home() {
                                             setIsMobileCoursesOpen(false);
                                             openCourseDetail(courseName);
                                           }}
-                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                          className="text-lg font-bold text-white hover:text-red-500 uppercase transition-colors cursor-pointer"
                                         >
                                           {courseName}
                                         </button>
