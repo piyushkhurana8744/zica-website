@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Phone, Mail, BookOpen, ChevronDown } from "lucide-react";
+import CaptchaField from "./CaptchaField";
 
 interface FAQSectionProps {
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>, formType: string) => Promise<void>;
@@ -174,6 +175,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
               </div>
             </div>
+            <CaptchaField />
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}

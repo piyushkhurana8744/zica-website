@@ -32,6 +32,7 @@ import {
 
 
 import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS, TESTIMONIALS } from "./constants";
+import CaptchaField from "@/components/CaptchaField";
 
 const LeadPopup = dynamic(() => import("@/components/LeadPopup"), {
   ssr: false,
@@ -146,12 +147,32 @@ export default function Home() {
     setIsSubmitting(true);
     
     const formData = new FormData(e.currentTarget);
+    const num1 = Number(formData.get('captchaNum1'));
+    const num2 = Number(formData.get('captchaNum2'));
+    const op = formData.get('captchaOp');
+    const answer = Number(formData.get('captchaAnswer'));
+
+    let expected = 0;
+    if (op === '+') expected = num1 + num2;
+    else if (op === '-') expected = num1 - num2;
+    else if (op === '*') expected = num1 * num2;
+
+    if (answer !== expected) {
+      alert("Verification answer is incorrect. Please solve the math puzzle again.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const data = {
       name: formData.get('fullName'),
       email: formData.get('email'),
       phone: formData.get('phone'),
       course: formData.get('course'),
-      formType: formType
+      formType: formType,
+      captchaNum1: num1,
+      captchaNum2: num2,
+      captchaOp: op,
+      captchaAnswer: answer
     };
 
     try {
@@ -948,6 +969,7 @@ export default function Home() {
                       <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                     </div>
                   </div>
+                  <CaptchaField />
                   <button 
                     disabled={isSubmitting}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30 disabled:opacity-50"

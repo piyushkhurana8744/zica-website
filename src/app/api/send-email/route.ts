@@ -3,7 +3,29 @@ import nodemailer from 'nodemailer';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, course, formType } = await req.json();
+    const { name, email, phone, course, formType, captchaNum1, captchaNum2, captchaOp, captchaAnswer } = await req.json();
+
+    // Verify Captcha
+    if (captchaNum1 === undefined || captchaNum2 === undefined || captchaOp === undefined || captchaAnswer === undefined) {
+      return NextResponse.json({ success: false, error: 'Verification challenge parameters are missing.' }, { status: 400 });
+    }
+
+    let expected = 0;
+    const n1 = Number(captchaNum1);
+    const n2 = Number(captchaNum2);
+    if (captchaOp === '+') {
+      expected = n1 + n2;
+    } else if (captchaOp === '-') {
+      expected = n1 - n2;
+    } else if (captchaOp === '*') {
+      expected = n1 * n2;
+    } else {
+      return NextResponse.json({ success: false, error: 'Invalid verification operator.' }, { status: 400 });
+    }
+
+    if (Number(captchaAnswer) !== expected) {
+      return NextResponse.json({ success: false, error: 'Incorrect verification answer. Please solve the math puzzle again.' }, { status: 400 });
+    }
 
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
       console.error('SMTP credentials missing in .env');

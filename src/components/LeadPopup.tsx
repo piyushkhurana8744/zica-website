@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Users, Phone, BookOpen, ChevronDown, Mail, MessageCircle } from "lucide-react";
 import { TRUSTED_AVATARS, RECRUITERS } from "@/app/constants";
+import CaptchaField from "./CaptchaField";
 
 interface LeadPopupProps {
   isOpen: boolean;
@@ -224,6 +225,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                     </div>
                   </div>
 
+                  <CaptchaField />
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
