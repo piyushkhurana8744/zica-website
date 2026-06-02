@@ -3,12 +3,30 @@
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 
+const COURSE_SLUGS = [
+  "graphic-designing",
+  "2d-animation",
+  "3d-animation",
+  "motion-graphics",
+  "3d-maya-course",
+  "architectural-design",
+  "vfx-master",
+  "game-design",
+  "3ds-max",
+  "video-editing"
+];
+
 export default function SectionRedirect() {
   const router = useRouter();
   const params = useParams();
   const section = params.section as string;
 
   useEffect(() => {
+    if (COURSE_SLUGS.includes(section)) {
+      router.replace(`/?course=${section}`);
+      return;
+    }
+
     // Navigate to home page, then scroll to the section
     router.replace("/");
     

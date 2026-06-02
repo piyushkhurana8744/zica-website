@@ -49,11 +49,43 @@ const TestimonialModal = dynamic(() => import("@/components/TestimonialModal"), 
   ssr: false,
 });
 
+const VideoShowcase = dynamic(() => import("@/components/VideoShowcase"), {
+  ssr: false,
+});
+
+const COURSE_TO_SLUG: Record<string, string> = {
+  "Graphic Designing": "graphic-designing",
+  "2D Animation": "2d-animation",
+  "3D Animation": "3d-animation",
+  "Motion Graphics": "motion-graphics",
+  "3D Maya Course": "3d-maya-course",
+  "Architectural Design": "architectural-design",
+  "VFX Master": "vfx-master",
+  "Game Design": "game-design",
+  "3DS Max": "3ds-max",
+  "Video Editing": "video-editing",
+};
+
+const SLUG_TO_COURSE: Record<string, string> = {
+  "graphic-designing": "Graphic Designing",
+  "2d-animation": "2D Animation",
+  "3d-animation": "3D Animation",
+  "motion-graphics": "Motion Graphics",
+  "3d-maya-course": "3D Maya Course",
+  "architectural-design": "Architectural Design",
+  "vfx-master": "VFX Master",
+  "game-design": "Game Design",
+  "3ds-max": "3DS Max",
+  "video-editing": "Video Editing",
+};
+
 export default function Home() {
   const router = useRouter();
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const [zicaWayIndex, setZicaWayIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCoursesDropdownOpen, setIsCoursesDropdownOpen] = useState(false);
+  const [isMobileCoursesOpen, setIsMobileCoursesOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -74,7 +106,7 @@ export default function Home() {
 
   const [courseVariants, setCourseVariants] = useState<any[]>([]);
 
-  const openCourseDetail = (courseName: string) => {
+  const openCourseDetail = (courseName: string, isReplace = false) => {
     const details = (COURSE_DETAILS as any)[courseName];
     if (details) {
       if (Array.isArray(details)) {
@@ -85,6 +117,17 @@ export default function Home() {
         setSelectedCourseData(details);
       }
       setIsCourseDetailOpen(true);
+      const slug = COURSE_TO_SLUG[courseName];
+      if (slug) {
+        const currentPath = window.location.pathname;
+        if (currentPath !== `/${slug}`) {
+          if (isReplace) {
+            window.history.replaceState(null, '', `/${slug}`);
+          } else {
+            window.history.pushState(null, '', `/${slug}`);
+          }
+        }
+      }
     } else {
       openLeadPopup("Apply Now");
     }
@@ -146,6 +189,29 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
 
+    // Check if there is a course parameter in URL on mount
+    const params = new URLSearchParams(window.location.search);
+    const courseSlug = params.get("course");
+    if (courseSlug && SLUG_TO_COURSE[courseSlug]) {
+      openCourseDetail(SLUG_TO_COURSE[courseSlug], true);
+    } else {
+      // Direct path check if loaded directly
+      const path = window.location.pathname.replace("/", "");
+      if (path && SLUG_TO_COURSE[path]) {
+        openCourseDetail(SLUG_TO_COURSE[path], true);
+      }
+    }
+
+    const handlePopState = () => {
+      const path = window.location.pathname.replace("/", "");
+      if (path && SLUG_TO_COURSE[path]) {
+        openCourseDetail(SLUG_TO_COURSE[path], true);
+      } else {
+        setIsCourseDetailOpen(false);
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+
     const syncInterval = setInterval(() => {
       setCurrentCourseIndex((prev) => (prev + 1) % COURSES.length);
       setHeroSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
@@ -200,6 +266,7 @@ export default function Home() {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", updateDimensions);
       window.removeEventListener("mouseleave", handleExitIntent);
+      window.removeEventListener("popstate", handlePopState);
       clearInterval(syncInterval);
       clearInterval(carouselInterval);
       clearTimeout(initTimeout);
@@ -308,7 +375,7 @@ export default function Home() {
                 
                 {[
                   { label: "About Us", id: "aboutus" },
-                  { label: "Courses", id: "courses" },
+                  { label: "Courses", id: "courses", isDropdown: true },
                   { label: "Why ZICA", id: "why-zica" }, 
                   { label: "Goals", id: "goals" },
                   { label: "Reviews", id: "reviews" },
@@ -319,14 +386,130 @@ export default function Home() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 + idx * 0.08, duration: 0.5 }}
+                    className="relative"
+                    onMouseEnter={item.isDropdown ? () => setIsCoursesDropdownOpen(true) : undefined}
+                    onMouseLeave={item.isDropdown ? () => setIsCoursesDropdownOpen(false) : undefined}
                   >
-                    <button
-                      onClick={() => scrollToSection(item.id)}
-                      className="relative px-5 py-2.5 text-[13px] font-black text-gray-300 uppercase tracking-[0.15em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.08] group/link"
-                    >
-                      {item.label}
-                      <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-600 rounded-full transition-all duration-500 group-hover/link:w-[50%]" />
-                    </button>
+                    {item.isDropdown ? (
+                      <div className="relative">
+                        <button
+                          onClick={() => {
+                            setIsCoursesDropdownOpen(!isCoursesDropdownOpen);
+                            scrollToSection("courses");
+                          }}
+                          className="flex items-center gap-1.5 relative px-5 py-2.5 text-[13px] font-black text-gray-300 uppercase tracking-[0.15em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.08] group/link cursor-pointer"
+                        >
+                          {item.label}
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isCoursesDropdownOpen ? 'rotate-180 text-red-500' : ''}`} />
+                          <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-600 rounded-full transition-all duration-500 group-hover/link:w-[50%]" />
+                        </button>
+                        
+                        <AnimatePresence>
+                          {isCoursesDropdownOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                              transition={{ duration: 0.25, ease: "easeOut" }}
+                              className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[720px] bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] z-[200] grid grid-cols-3 gap-6"
+                            >
+                              {/* Left Column: Animation */}
+                              <div className="space-y-4">
+                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                  Animation Programs
+                                </h4>
+                                <div className="flex flex-col gap-2.5">
+                                  {[
+                                    { name: "2D Animation", icon: <PenTool className="w-4 h-4 text-purple-400" /> },
+                                    { name: "3D Animation", icon: <Layers className="w-4 h-4 text-purple-400" /> },
+                                    { name: "3D Maya Course", icon: <Cpu className="w-4 h-4 text-purple-400" /> },
+                                    { name: "3DS Max", icon: <Layout className="w-4 h-4 text-purple-400" /> }
+                                  ].map((course) => (
+                                    <button
+                                      key={course.name}
+                                      onClick={() => {
+                                        setIsCoursesDropdownOpen(false);
+                                        openCourseDetail(course.name);
+                                      }}
+                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                    >
+                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                        {course.icon}
+                                      </div>
+                                      <span>{course.name}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Center Column: VFX & Gaming */}
+                              <div className="space-y-4">
+                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                  VFX & Gaming
+                                </h4>
+                                <div className="flex flex-col gap-2.5">
+                                  {[
+                                    { name: "VFX Master", icon: <Video className="w-4 h-4 text-amber-400" /> },
+                                    { name: "Game Design", icon: <Smartphone className="w-4 h-4 text-amber-400" /> }
+                                  ].map((course) => (
+                                    <button
+                                      key={course.name}
+                                      onClick={() => {
+                                        setIsCoursesDropdownOpen(false);
+                                        openCourseDetail(course.name);
+                                      }}
+                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                    >
+                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                        {course.icon}
+                                      </div>
+                                      <span>{course.name}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Right Column: Design & Creative Arts */}
+                              <div className="space-y-4">
+                                <h4 className="text-[11px] font-black text-red-500 uppercase tracking-[0.2em] border-b border-white/5 pb-2">
+                                  Design & Editing
+                                </h4>
+                                <div className="flex flex-col gap-2.5">
+                                  {[
+                                    { name: "Graphic Designing", icon: <BookOpen className="w-4 h-4 text-red-400" /> },
+                                    { name: "Motion Graphics", icon: <Award className="w-4 h-4 text-red-400" /> },
+                                    { name: "Architectural Design", icon: <Globe className="w-4 h-4 text-red-400" /> },
+                                    { name: "Video Editing", icon: <Users className="w-4 h-4 text-red-400" /> }
+                                  ].map((course) => (
+                                    <button
+                                      key={course.name}
+                                      onClick={() => {
+                                        setIsCoursesDropdownOpen(false);
+                                        openCourseDetail(course.name);
+                                      }}
+                                      className="flex items-center gap-3 text-[13px] text-gray-400 hover:text-white transition-all duration-300 hover:translate-x-1 text-left w-full group/item font-bold cursor-pointer"
+                                    >
+                                      <div className="w-6 h-6 rounded bg-white/[0.03] border border-white/[0.06] flex items-center justify-center group-hover/item:bg-red-500/10 group-hover/item:border-red-500/30 transition-all">
+                                        {course.icon}
+                                      </div>
+                                      <span>{course.name}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(item.id)}
+                        className="relative px-5 py-2.5 text-[13px] font-black text-gray-300 uppercase tracking-[0.15em] rounded-full transition-all duration-300 hover:text-white hover:bg-white/[0.08] group/link cursor-pointer"
+                      >
+                        {item.label}
+                        <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-600 rounded-full transition-all duration-500 group-hover/link:w-[50%]" />
+                      </button>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -406,7 +589,7 @@ export default function Home() {
                   <div className="flex flex-col items-center space-y-6">
                     {[
                       { label: "About Us", id: "aboutus" },
-                      { label: "Courses", id: "courses" },
+                      { label: "Courses", id: "courses", isDropdown: true },
                       { label: "Why ZICA", id: "why-zica" },
                       { label: "Goals", id: "goals" },
                       { label: "Reviews", id: "reviews" },
@@ -418,14 +601,98 @@ export default function Home() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 30 }}
                         transition={{ delay: 0.1 + idx * 0.07, duration: 0.4 }}
+                        className="w-full flex flex-col items-center"
                       >
-                        <button
-                          onClick={() => { setIsMenuOpen(false); scrollToSection(item.id); }}
-                          className="text-3xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors relative group"
-                        >
-                          {item.label}
-                          <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 transition-all duration-300 group-hover:w-full" />
-                        </button>
+                        {item.isDropdown ? (
+                          <div className="w-full flex flex-col items-center">
+                            <button
+                              onClick={() => setIsMobileCoursesOpen(!isMobileCoursesOpen)}
+                              className="text-3xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors relative group flex items-center gap-2 cursor-pointer"
+                            >
+                              {item.label}
+                              <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${isMobileCoursesOpen ? 'rotate-180 text-red-500' : ''}`} />
+                            </button>
+                            <AnimatePresence>
+                              {isMobileCoursesOpen && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="w-full overflow-y-auto flex flex-col gap-4 mt-4 max-h-[300px] px-4 py-3 bg-white/[0.03] border border-white/5 rounded-2xl custom-scrollbar"
+                                >
+                                  {/* Sub-group: Animation */}
+                                  <div className="flex flex-col items-center">
+                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">Animation</span>
+                                    <div className="flex flex-col items-center gap-2">
+                                      {["2D Animation", "3D Animation", "3D Maya Course", "3DS Max"].map((courseName) => (
+                                        <button
+                                          key={courseName}
+                                          onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setIsMobileCoursesOpen(false);
+                                            openCourseDetail(courseName);
+                                          }}
+                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                        >
+                                          {courseName}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Sub-group: VFX & Gaming */}
+                                  <div className="flex flex-col items-center mt-2">
+                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">VFX & Gaming</span>
+                                    <div className="flex flex-col items-center gap-2">
+                                      {["VFX Master", "Game Design"].map((courseName) => (
+                                        <button
+                                          key={courseName}
+                                          onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setIsMobileCoursesOpen(false);
+                                            openCourseDetail(courseName);
+                                          }}
+                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                        >
+                                          {courseName}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  {/* Sub-group: Design & Editing */}
+                                  <div className="flex flex-col items-center mt-2">
+                                    <span className="text-[10px] font-black text-red-500 uppercase tracking-[0.2em] mb-2 border-b border-white/5 pb-1 w-1/2 text-center">Design & Editing</span>
+                                    <div className="flex flex-col items-center gap-2">
+                                      {["Graphic Designing", "Motion Graphics", "Architectural Design", "Video Editing"].map((courseName) => (
+                                        <button
+                                          key={courseName}
+                                          onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setIsMobileCoursesOpen(false);
+                                            openCourseDetail(courseName);
+                                          }}
+                                          className="text-base font-bold text-gray-400 hover:text-white uppercase transition-colors cursor-pointer"
+                                        >
+                                          {courseName}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => { setIsMenuOpen(false); scrollToSection(item.id); }}
+                            className="text-3xl font-black text-white uppercase tracking-tighter hover:text-[#ff0000] transition-colors relative group cursor-pointer"
+                          >
+                            {item.label}
+                            <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-red-500 to-purple-500 transition-all duration-300 group-hover:w-full" />
+                          </button>
+                        )}
                       </motion.div>
                     ))}
                     <motion.button 
@@ -804,6 +1071,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* --- VIDEO SHOWCASE SECTION --- */}
+        <VideoShowcase onCtaClick={() => openLeadPopup()} />
 
         {/* --- PROGRAMS SECTION --- */}
         <section
@@ -1557,7 +1827,13 @@ export default function Home() {
       </motion.button>
       <CourseDetailModal
         isOpen={isCourseDetailOpen}
-        onClose={() => setIsCourseDetailOpen(false)}
+        onClose={() => {
+          setIsCourseDetailOpen(false);
+          const currentPath = window.location.pathname;
+          if (currentPath !== '/') {
+            window.history.pushState(null, '', '/');
+          }
+        }}
         course={selectedCourseData}
         variants={courseVariants}
         onVariantChange={(variant: any) => setSelectedCourseData(variant)}
