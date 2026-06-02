@@ -159,12 +159,14 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
               </label>
               <div className="relative">
                 <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                <select name="course" defaultValue="Animation" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
+                <select name="course" required defaultValue="" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
+                  <option value="" disabled className="bg-black">Select Course</option>
                   <option className="bg-black" value="Animation">Animation</option>
                   <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
                   <option className="bg-black" value="Gaming">Gaming</option>
                   <option className="bg-black" value="Graphic Design">Graphic Design</option>
                   <option className="bg-black" value="Motion Graphics">Motion Graphics</option>
+                  <option className="bg-black" value="3D Maya Course">3D Maya Course</option>
                   <option className="bg-black" value="Video Editing">Video Editing</option>
                   <option className="bg-black" value="Unreal Engine">Unreal Engine</option>
                   <option className="bg-black" value="Blender Mastery">Blender Mastery</option>

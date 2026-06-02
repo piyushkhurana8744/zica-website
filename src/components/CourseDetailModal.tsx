@@ -286,10 +286,14 @@ export default function CourseDetailModal({ isOpen, onClose, course, variants, o
                       <BookOpen className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
                       <select 
                         name="course"
+                        required
                         defaultValue={course.title}
                         className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg pl-9 pr-7 py-2.5 text-[11px] text-gray-300 appearance-none focus:outline-none focus:border-red-600/50 focus:bg-white/[0.06] transition-all cursor-pointer"
                       >
                         <option value="" disabled>Select Course</option>
+                        {!["Animation", "VFX - Visual Effects", "Gaming", "Graphic Design", "Motion Graphics", "3D Maya Course", "Video Editing", "Unreal Engine", "Blender Mastery"].includes(course.title) && (
+                          <option value={course.title}>{course.title}</option>
+                        )}
                         <option value="Animation">Animation</option>
                         <option value="VFX - Visual Effects">VFX - Visual Effects</option>
                         <option value="Gaming">Gaming</option>

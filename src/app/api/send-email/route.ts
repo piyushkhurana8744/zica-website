@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     const mailOptions = {
       from: `"${process.env.YOUR_NAME}" <${process.env.EMAIL_FROM}>`,
       to: process.env.ADMIN_EMAIL || process.env.EMAIL_FROM,
+      cc: 'chirag@didm.in',
       subject: `New Lead from ${formType}: ${name}`,
       html: `
         <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f4f4f4; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0;">

@@ -666,7 +666,8 @@ export default function Home() {
                     </label>
                     <div className="relative">
                       <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                      <select name="course" defaultValue="Animation" className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm text-white appearance-none focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all cursor-pointer">
+                      <select name="course" required defaultValue="" className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm text-white appearance-none focus:outline-none focus:border-red-600/50 focus:bg-white/[0.08] transition-all cursor-pointer">
+                        <option value="" disabled className="bg-black">Select Course</option>
                         <option className="bg-black" value="Animation">Animation</option>
                         <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
                         <option className="bg-black" value="Gaming">Gaming</option>

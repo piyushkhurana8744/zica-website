@@ -190,6 +190,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                         <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
                         <select 
                           name="course"
+                          required
                           defaultValue=""
                           className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all text-gray-300 appearance-none cursor-pointer"
                         >
