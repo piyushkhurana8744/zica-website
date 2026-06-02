@@ -106,7 +106,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
           <h2 className="text-4xl font-black text-white text-center uppercase italic text-glow">
             Enquiry Now
           </h2>
-          <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, "Footer Enquiry Form")}>
+          <form className="space-y-5" onSubmit={(e) => handleFormSubmit(e, "Footer Enquiry Form")}>
             <div className="space-y-2 group/input">
               <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                 Full Name
@@ -118,7 +118,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
                   type="text"
                   required
                   placeholder="Enter name"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-3 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                 />
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
                   pattern="[0-9]{10}"
                   title="Please enter a 10-digit mobile number"
                   placeholder="Enter mobile number"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-3 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                 />
               </div>
             </div>
@@ -150,7 +150,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
                   type="email"
                   required
                   placeholder="Enter email address"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-4 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-6 py-3 text-white focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
               </label>
               <div className="relative">
                 <BookOpen className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-700 group-focus-within/input:text-red-600 transition-colors" />
-                <select name="course" required defaultValue="" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-4 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
+                <select name="course" required defaultValue="" className="w-full bg-white/5 border border-white/10 rounded-xl pl-14 pr-10 py-3 text-white focus:outline-none focus:border-red-600 transition-all appearance-none cursor-pointer">
                   <option value="" disabled className="bg-black">Select Course</option>
                   <option className="bg-black" value="Animation">Animation</option>
                   <option className="bg-black" value="VFX - Visual Effects">VFX - Visual Effects</option>
@@ -180,7 +180,7 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={isSubmitting}
-              className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
+              className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3.5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
             >
               {isSubmitting ? "Sending..." : "Apply Now"}
             </motion.button>

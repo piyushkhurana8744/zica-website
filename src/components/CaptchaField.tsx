@@ -39,8 +39,8 @@ export default function CaptchaField({ className = "" }: CaptchaFieldProps) {
   }, []);
 
   return (
-    <div className={`space-y-2 ${className}`}>
-      <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 flex items-center gap-1.5">
+    <div className={`space-y-1.5 ${className}`}>
+      <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 flex items-center gap-1">
         <ShieldCheck className="w-3.5 h-3.5 text-red-500" />
         Anti-Bot Verification
       </label>
@@ -50,43 +50,43 @@ export default function CaptchaField({ className = "" }: CaptchaFieldProps) {
       <input type="hidden" name="captchaNum2" value={num2} />
       <input type="hidden" name="captchaOp" value={op} />
 
-      <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* Captcha Expression Box */}
-        <div className="relative flex items-center justify-between bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3.5 select-none w-full sm:w-[150px] overflow-hidden group">
+        <div className="relative flex items-center justify-between bg-white/[0.03] border border-white/10 rounded-xl px-3.5 py-2.5 select-none w-[130px] overflow-hidden group shrink-0">
           {/* Captcha background noise lines */}
           <div 
-            className="absolute inset-0 opacity-[0.15] pointer-events-none"
+            className="absolute inset-0 opacity-[0.12] pointer-events-none"
             style={{
               backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, #ff0000 10px, #ff0000 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, #8b5cf6 10px, #8b5cf6 11px)`
             }}
           />
           
           <span 
-            className="text-lg font-black text-white italic tracking-widest relative z-10 filter drop-shadow-[0_2px_4px_rgba(255,0,0,0.5)] transform skew-x-6 select-none"
+            className="text-base font-black text-white italic tracking-wider relative z-10 filter drop-shadow-[0_2px_4px_rgba(255,0,0,0.5)] transform skew-x-6 select-none"
             style={{ fontFamily: "monospace" }}
           >
-            {num1} {op} {num2}
+            {num1}{op}{num2}
           </span>
 
           <button
             type="button"
             onClick={generateChallenge}
-            className="text-gray-500 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-all duration-300 relative z-10 cursor-pointer active:scale-95 group-hover:rotate-45"
+            className="text-gray-500 hover:text-white p-0.5 rounded hover:bg-white/5 transition-all duration-300 relative z-10 cursor-pointer active:scale-95 group-hover:rotate-45"
             title="Refresh Captcha"
           >
-            <RotateCw className="w-4 h-4" />
+            <RotateCw className="w-3.5 h-3.5" />
           </button>
         </div>
 
         {/* Input answer field */}
-        <div className="relative w-full">
+        <div className="relative w-[115px] shrink-0">
           <input
             name="captchaAnswer"
             type="number"
             required
             autoComplete="off"
-            placeholder="Solve the puzzle"
-            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
+            placeholder="Answer"
+            className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2.5 text-xs focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-600 text-white"
           />
         </div>
       </div>

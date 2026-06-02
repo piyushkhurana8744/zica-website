@@ -155,7 +155,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                   </div>
                 )}
 
-                <form className="space-y-5" onSubmit={(e) => onSubmit(e, "Popup Enquiry Form")}>
+                <form className="space-y-4" onSubmit={(e) => onSubmit(e, "Popup Enquiry Form")}>
                   <div className="space-y-1.5 group/input">
                     <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Full Name</label>
                     <div className="relative">
@@ -165,12 +165,12 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                         type="text" 
                         required
                         placeholder="Your Name" 
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
+                        className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-12 pr-6 py-3 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5 group/input">
                       <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-black ml-1 group-focus-within/input:text-red-600 transition-colors">Phone</label>
                       <div className="relative">
@@ -181,7 +181,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                           required
                           pattern="[0-9]{10}"
                           placeholder="Phone Number" 
-                          className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
+                          className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-12 pr-6 py-3 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
                         />
                       </div>
                     </div>
@@ -193,7 +193,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                           name="course"
                           required
                           defaultValue=""
-                          className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl pl-12 pr-10 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all text-gray-300 appearance-none cursor-pointer"
+                          className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl pl-12 pr-10 py-3 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all text-gray-300 appearance-none cursor-pointer"
                         >
                           <option value="" disabled>Select Course</option>
                           <option value="Animation">Animation</option>
@@ -220,7 +220,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                         type="email" 
                         required
                         placeholder="Your email address" 
-                        className="w-full bg-white/[0.03] border border-white/10 rounded-2xl pl-12 pr-6 py-4 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
+                        className="w-full bg-white/[0.03] border border-white/10 rounded-xl pl-12 pr-6 py-3 text-sm focus:border-red-600/50 focus:bg-white/[0.06] outline-none transition-all placeholder:text-gray-700 text-white"
                       />
                     </div>
                   </div>
@@ -230,7 +230,7 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={isSubmitting}
-                    className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-5 rounded-2xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
+                    className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-3.5 rounded-xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
                   >
                     {isSubmitting ? "Processing..." : (submitText || "Apply Now")}
                   </motion.button>
