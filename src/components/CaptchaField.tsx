@@ -42,7 +42,7 @@ export default function CaptchaField({ className = "" }: CaptchaFieldProps) {
     <div className={`space-y-1.5 ${className}`}>
       <label className="text-[9px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 flex items-center gap-1">
         <ShieldCheck className="w-3 h-3 text-red-500" />
-        Anti-Bot Verification
+        Verification
       </label>
 
       {/* Hidden inputs to send to the server */}
@@ -52,7 +52,7 @@ export default function CaptchaField({ className = "" }: CaptchaFieldProps) {
 
       <div className="flex items-center gap-2">
         {/* Captcha Expression Box */}
-        <div className="relative flex items-center justify-between bg-white/[0.03] border border-white/10 rounded-xl px-3 h-[42px] select-none w-[120px] overflow-hidden group shrink-0">
+        <div className="relative flex items-center justify-between bg-white/[0.03] border border-white/10 rounded-xl px-3 h-[34px] select-none w-[120px] overflow-hidden group shrink-0">
           {/* Captcha background noise lines */}
           <div 
             className="absolute inset-0 opacity-[0.12] pointer-events-none"
@@ -79,7 +79,7 @@ export default function CaptchaField({ className = "" }: CaptchaFieldProps) {
         </div>
 
         {/* Input answer field */}
-        <div className="relative w-[120px] shrink-0 h-[42px]">
+        <div className="relative w-[120px] shrink-0 h-[34px]">
           <input
             name="captchaAnswer"
             type="number"

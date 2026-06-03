@@ -5,6 +5,18 @@ export async function POST(req: Request) {
   try {
     const { name, email, phone, course, formType, captchaNum1, captchaNum2, captchaOp, captchaAnswer } = await req.json();
 
+    // Verify Name
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!name || !nameRegex.test(name.trim())) {
+      return NextResponse.json({ success: false, error: 'Please enter a valid name using letters only.' }, { status: 400 });
+    }
+
+    // Verify Email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
+      return NextResponse.json({ success: false, error: 'Please enter a valid email address.' }, { status: 400 });
+    }
+
     // Verify Captcha
     if (captchaNum1 === undefined || captchaNum2 === undefined || captchaOp === undefined || captchaAnswer === undefined) {
       return NextResponse.json({ success: false, error: 'Verification challenge parameters are missing.' }, { status: 400 });

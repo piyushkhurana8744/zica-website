@@ -147,6 +147,25 @@ export default function Home() {
     setIsSubmitting(true);
     
     const formData = new FormData(e.currentTarget);
+    const fullName = formData.get('fullName') as string;
+    const email = formData.get('email') as string;
+
+    // Validate Name (letters and spaces only)
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!fullName || !nameRegex.test(fullName.trim())) {
+      alert("Please enter a valid name using letters only.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate Email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      setIsSubmitting(false);
+      return;
+    }
+
     const num1 = Number(formData.get('captchaNum1'));
     const num2 = Number(formData.get('captchaNum2'));
     const op = formData.get('captchaOp');
@@ -900,7 +919,7 @@ export default function Home() {
                 <h2 className="text-2xl font-black text-center mb-8 tracking-tight text-white uppercase italic">
                   Download Brochure
                 </h2>
-                <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, "Hero Brochure Form")}>
+                <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, "Download Brochure Form")}>
                   <div className="space-y-1.5 group/input">
                     <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within/input:text-red-600 transition-colors">
                       Full Name
