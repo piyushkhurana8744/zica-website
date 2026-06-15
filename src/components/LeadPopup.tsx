@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, Users, Phone, BookOpen, ChevronDown, Mail, MessageCircle } from "lucide-react";
+import Link from "next/link";
 import { TRUSTED_AVATARS, RECRUITERS } from "@/app/constants";
-import CaptchaField from "./CaptchaField";
+import TurnstileField from "./TurnstileField";
 
 interface LeadPopupProps {
   isOpen: boolean;
@@ -14,9 +15,16 @@ interface LeadPopupProps {
   isSubmitting: boolean;
   submitText?: string;
   minimal?: boolean;
+  captchaKey: number;
 }
 
-export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, submitText, minimal }: LeadPopupProps) {
+export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, submitText, minimal, captchaKey }: LeadPopupProps) {
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    setIsVerified(false);
+  }, [captchaKey]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -225,11 +233,35 @@ export default function LeadPopup({ isOpen, onClose, onSubmit, isSubmitting, sub
                     </div>
                   </div>
 
-                  <CaptchaField />
+                  <TurnstileField 
+                    key={captchaKey}
+                    onVerify={() => setIsVerified(true)}
+                    onExpire={() => setIsVerified(false)}
+                    onError={() => setIsVerified(false)}
+                  />
+                  <div className="flex items-start gap-2.5 mt-4 select-none">
+                    <input
+                      id="agreeTermsPopup"
+                      name="agreeTerms"
+                      type="checkbox"
+                      required
+                      className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-white/10 bg-white/5 text-red-600 focus:ring-red-500/50 accent-red-600 cursor-pointer"
+                    />
+                    <label htmlFor="agreeTermsPopup" className="text-[10px] text-gray-500 font-bold leading-normal cursor-pointer hover:text-gray-400 transition-colors">
+                      I agree to the Zica{" "}
+                      <Link href="/terms-and-conditions" target="_blank" className="text-red-500 hover:underline">
+                        Terms & Conditions
+                      </Link>{" "}
+                      and{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-red-500 hover:underline">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !isVerified}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black uppercase tracking-[0.2em] py-3.5 rounded-xl text-sm shadow-[0_10px_40px_rgba(255,0,0,0.25)] transition-all btn-glow mt-4 disabled:opacity-50"
                   >
                     {isSubmitting ? "Processing..." : (submitText || "Apply Now")}

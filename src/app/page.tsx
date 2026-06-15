@@ -32,7 +32,7 @@ import {
 
 
 import { COURSES, RECRUITERS, TRUSTED_AVATARS, ZICA_WAY_IMAGES, HERO_SLIDES, COURSE_DETAILS, TESTIMONIALS } from "./constants";
-import CaptchaField from "@/components/CaptchaField";
+import TurnstileField from "@/components/TurnstileField";
 
 const LeadPopup = dynamic(() => import("@/components/LeadPopup"), {
   ssr: false,
@@ -98,6 +98,8 @@ export default function Home() {
   const [popupSubmitText, setPopupSubmitText] = useState("Enquire Now");
   const [isPopupMinimal, setIsPopupMinimal] = useState(false);
   const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
+  const [captchaKey, setCaptchaKey] = useState(0);
+  const [isBrochureVerified, setIsBrochureVerified] = useState(false);
 
   const openLeadPopup = (text: string = "Apply Now", minimal: boolean = false) => {
     setPopupSubmitText(text);
@@ -149,11 +151,20 @@ export default function Home() {
     const formData = new FormData(e.currentTarget);
     const fullName = formData.get('fullName') as string;
     const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
 
     // Validate Name (letters and spaces only)
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!fullName || !nameRegex.test(fullName.trim())) {
       alert("Please enter a valid name using letters only.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate Phone (Exactly 10 digits, numbers only)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phone || !phoneRegex.test(phone.trim())) {
+      alert("Please enter a valid 10-digit mobile number.");
       setIsSubmitting(false);
       return;
     }
@@ -166,32 +177,20 @@ export default function Home() {
       return;
     }
 
-    const num1 = Number(formData.get('captchaNum1'));
-    const num2 = Number(formData.get('captchaNum2'));
-    const op = formData.get('captchaOp');
-    const answer = Number(formData.get('captchaAnswer'));
-
-    let expected = 0;
-    if (op === '+') expected = num1 + num2;
-    else if (op === '-') expected = num1 - num2;
-    else if (op === '*') expected = num1 * num2;
-
-    if (answer !== expected) {
-      alert("Verification answer is incorrect. Please solve the math puzzle again.");
+    const turnstileToken = formData.get('turnstileToken') as string;
+    if (!turnstileToken) {
+      alert("Please verify the Cloudflare Turnstile CAPTCHA first.");
       setIsSubmitting(false);
       return;
     }
 
     const data = {
-      name: formData.get('fullName'),
-      email: formData.get('email'),
-      phone: formData.get('phone'),
+      name: fullName,
+      email: email,
+      phone: phone,
       course: formData.get('course'),
       formType: formType,
-      captchaNum1: num1,
-      captchaNum2: num2,
-      captchaOp: op,
-      captchaAnswer: answer
+      turnstileToken: turnstileToken,
     };
 
     try {
@@ -217,10 +216,14 @@ export default function Home() {
         if (formType === 'Popup') setIsPopupOpen(false);
       } else {
         alert(`Error: ${result.error || "Something went wrong"}`);
+        setCaptchaKey(prev => prev + 1);
+        setIsBrochureVerified(false);
       }
     } catch (err) {
       console.error(err);
       alert("Failed to connect to the server. Please check your connection.");
+      setCaptchaKey(prev => prev + 1);
+      setIsBrochureVerified(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -988,9 +991,34 @@ export default function Home() {
                       <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                     </div>
                   </div>
-                  <CaptchaField />
+                  <TurnstileField 
+                    key={captchaKey} 
+                    onVerify={() => setIsBrochureVerified(true)} 
+                    onExpire={() => setIsBrochureVerified(false)} 
+                    onError={() => setIsBrochureVerified(false)} 
+                    className="mt-4" 
+                  />
+                  <div className="flex items-start gap-2.5 mt-4 select-none">
+                    <input
+                      id="agreeTermsBrochure"
+                      name="agreeTerms"
+                      type="checkbox"
+                      required
+                      className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-white/10 bg-white/5 text-red-600 focus:ring-red-500/50 accent-red-600 cursor-pointer"
+                    />
+                    <label htmlFor="agreeTermsBrochure" className="text-[10px] text-gray-500 font-bold leading-normal cursor-pointer hover:text-gray-400 transition-colors">
+                      I agree to the Zica{" "}
+                      <Link href="/terms-and-conditions" target="_blank" className="text-red-500 hover:underline">
+                        Terms & Conditions
+                      </Link>{" "}
+                      and{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-red-500 hover:underline">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
                   <button 
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !isBrochureVerified}
                     className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3.5 rounded-xl transition-all mt-4 text-sm uppercase tracking-widest active:scale-[0.98] shadow-lg shadow-red-600/30 disabled:opacity-50"
                   >
                     {isSubmitting ? "Sending..." : "Download"}
@@ -1646,6 +1674,7 @@ export default function Home() {
         <FAQSection 
           handleFormSubmit={handleFormSubmit}
           isSubmitting={isSubmitting}
+          captchaKey={captchaKey}
         />
 
         {/* --- FOOTER --- */}
@@ -1880,6 +1909,7 @@ export default function Home() {
         onVariantChange={(variant: any) => setSelectedCourseData(variant)}
         onSubmit={handleFormSubmit}
         isSubmitting={isSubmitting}
+        captchaKey={captchaKey}
       />
       <LeadPopup
         isOpen={isPopupOpen}
@@ -1888,6 +1918,7 @@ export default function Home() {
         isSubmitting={isSubmitting}
         submitText={popupSubmitText}
         minimal={isPopupMinimal}
+        captchaKey={captchaKey}
       />
 
       <TestimonialModal

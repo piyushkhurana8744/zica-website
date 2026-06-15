@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Phone, Mail, BookOpen, ChevronDown } from "lucide-react";
-import CaptchaField from "./CaptchaField";
+import Link from "next/link";
+import TurnstileField from "./TurnstileField";
 
 interface FAQSectionProps {
   handleFormSubmit: (e: React.FormEvent<HTMLFormElement>, formType: string) => Promise<void>;
   isSubmitting: boolean;
+  captchaKey: number;
 }
 
 const FAQS = [
@@ -33,8 +35,13 @@ const FAQS = [
   },
 ];
 
-export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectionProps) {
+export default function FAQSection({ handleFormSubmit, isSubmitting, captchaKey }: FAQSectionProps) {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(2);
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    setIsVerified(false);
+  }, [captchaKey]);
 
   return (
     <section id="faqs" className="relative z-10 w-full px-[clamp(1.5rem,5vw,4rem)] py-16 lg:py-20 bg-[#030008]">
@@ -175,11 +182,35 @@ export default function FAQSection({ handleFormSubmit, isSubmitting }: FAQSectio
                 <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
               </div>
             </div>
-            <CaptchaField />
+             <TurnstileField 
+              key={captchaKey}
+              onVerify={() => setIsVerified(true)}
+              onExpire={() => setIsVerified(false)}
+              onError={() => setIsVerified(false)}
+            />
+            <div className="flex items-start gap-2.5 mt-2 select-none">
+              <input
+                id="agreeTermsFAQ"
+                name="agreeTerms"
+                type="checkbox"
+                required
+                className="mt-0.5 h-3.5 w-3.5 shrink-0 rounded border-white/10 bg-white/5 text-red-600 focus:ring-red-500/50 accent-red-600 cursor-pointer"
+              />
+              <label htmlFor="agreeTermsFAQ" className="text-[10px] text-gray-500 font-bold leading-normal cursor-pointer hover:text-gray-400 transition-colors">
+                I agree to the Zica{" "}
+                <Link href="/terms-and-conditions" target="_blank" className="text-red-500 hover:underline">
+                  Terms & Conditions
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy-policy" target="_blank" className="text-red-500 hover:underline">
+                  Privacy Policy
+                </Link>
+              </label>
+            </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isVerified}
               className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3.5 rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-red-600/20 active:scale-[0.98] btn-glow disabled:opacity-50"
             >
               {isSubmitting ? "Sending..." : "Apply Now"}

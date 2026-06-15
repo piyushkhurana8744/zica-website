@@ -1,14 +1,21 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, course, formType, captchaNum1, captchaNum2, captchaOp, captchaAnswer } = await req.json();
+    const { name, email, phone, course, formType, turnstileToken } = await req.json();
 
     // Verify Name
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!name || !nameRegex.test(name.trim())) {
       return NextResponse.json({ success: false, error: 'Please enter a valid name using letters only.' }, { status: 400 });
+    }
+
+    // Verify Phone (Exactly 10 digits)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phone || !phoneRegex.test(phone.trim())) {
+      return NextResponse.json({ success: false, error: 'Please enter a valid 10-digit phone number.' }, { status: 400 });
     }
 
     // Verify Email
@@ -17,26 +24,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: 'Please enter a valid email address.' }, { status: 400 });
     }
 
-    // Verify Captcha
-    if (captchaNum1 === undefined || captchaNum2 === undefined || captchaOp === undefined || captchaAnswer === undefined) {
-      return NextResponse.json({ success: false, error: 'Verification challenge parameters are missing.' }, { status: 400 });
+    // Verify Turnstile Token
+    if (!turnstileToken) {
+      return NextResponse.json({ success: false, error: 'CAPTCHA token is missing. Please solve the challenge.' }, { status: 400 });
     }
 
-    let expected = 0;
-    const n1 = Number(captchaNum1);
-    const n2 = Number(captchaNum2);
-    if (captchaOp === '+') {
-      expected = n1 + n2;
-    } else if (captchaOp === '-') {
-      expected = n1 - n2;
-    } else if (captchaOp === '*') {
-      expected = n1 * n2;
-    } else {
-      return NextResponse.json({ success: false, error: 'Invalid verification operator.' }, { status: 400 });
-    }
-
-    if (Number(captchaAnswer) !== expected) {
-      return NextResponse.json({ success: false, error: 'Incorrect verification answer. Please solve the math puzzle again.' }, { status: 400 });
+    const ip = req.headers.get('x-forwarded-for') || undefined;
+    const isCaptchaValid = await verifyTurnstileToken(turnstileToken, ip);
+    if (!isCaptchaValid) {
+      return NextResponse.json({ success: false, error: 'CAPTCHA verification failed. Please try again.' }, { status: 400 });
     }
 
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {

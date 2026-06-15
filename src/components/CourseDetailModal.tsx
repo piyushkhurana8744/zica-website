@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle2, Clock, BookOpen, Briefcase, GraduationCap, Users, Phone, Mail, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import TurnstileField from "./TurnstileField";
 
 interface Module {
   title: string;
@@ -30,9 +32,16 @@ interface CourseDetailModalProps {
   onVariantChange?: (variant: CourseDetails) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>, formType: string) => Promise<void>;
   isSubmitting: boolean;
+  captchaKey: number;
 }
 
-export default function CourseDetailModal({ isOpen, onClose, course, variants, onVariantChange, onSubmit, isSubmitting }: CourseDetailModalProps) {
+export default function CourseDetailModal({ isOpen, onClose, course, variants, onVariantChange, onSubmit, isSubmitting, captchaKey }: CourseDetailModalProps) {
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    setIsVerified(false);
+  }, [captchaKey]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -307,10 +316,38 @@ export default function CourseDetailModal({ isOpen, onClose, course, variants, o
                       <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500 pointer-events-none" />
                     </div>
                   </div>
+                  
+                  <TurnstileField 
+                    key={captchaKey}
+                    onVerify={() => setIsVerified(true)}
+                    onExpire={() => setIsVerified(false)}
+                    onError={() => setIsVerified(false)}
+                    className="mt-3"
+                  />
+
+                  <div className="flex items-start gap-2 mt-3 select-none">
+                    <input
+                      id="agreeTermsCourseDetail"
+                      name="agreeTerms"
+                      type="checkbox"
+                      required
+                      className="mt-0.5 h-3 w-3 shrink-0 rounded border-white/10 bg-white/5 text-red-600 focus:ring-red-500/50 accent-red-600 cursor-pointer"
+                    />
+                    <label htmlFor="agreeTermsCourseDetail" className="text-[9px] text-gray-500 font-bold leading-tight cursor-pointer hover:text-gray-400 transition-colors">
+                      I agree to the Zica{" "}
+                      <Link href="/terms-and-conditions" target="_blank" className="text-red-500 hover:underline">
+                        Terms & Conditions
+                      </Link>{" "}
+                      and{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-red-500 hover:underline">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
 
                   <button 
-                    disabled={isSubmitting}
-                    className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3 rounded-lg transition-all mt-1 text-[10px] uppercase tracking-[0.15em] shadow-lg shadow-red-600/20 active:scale-[0.98] disabled:opacity-50"
+                    disabled={isSubmitting || !isVerified}
+                    className="w-full bg-[#ff0000] hover:bg-red-700 text-white font-black py-3 rounded-lg transition-all mt-3 text-[10px] uppercase tracking-[0.15em] shadow-lg shadow-red-600/20 active:scale-[0.98] disabled:opacity-50"
                   >
                     {isSubmitting ? "Sending..." : "Apply Now"}
                   </button>
