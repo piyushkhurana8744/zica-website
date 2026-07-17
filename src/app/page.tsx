@@ -1795,7 +1795,7 @@ export default function Home() {
                       <Mail className="w-5 h-5" />
                     </div>
                     <span className="text-sm font-bold tracking-wider">
-                       info@zicapitampura.com
+                       ads.zicapitampura@gmail.com
                     </span>
                   </div>
                   <div className="flex items-start gap-4 text-gray-400 hover:text-white transition-colors group">

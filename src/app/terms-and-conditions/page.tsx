@@ -313,10 +313,10 @@ export default function TermsAndConditions() {
                 </div>
               </div>
               <a
-                href="mailto:info@zicapitampura.com"
+                href="mailto:ads.zicapitampura@gmail.com"
                 className="w-full md:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-bold text-sm uppercase tracking-widest px-6 py-3.5 rounded-xl transition-all shadow-lg shadow-red-600/20 active:scale-95 btn-glow"
               >
-                info@zicapitampura.com
+                ads.zicapitampura@gmail.com
               </a>
             </div>
           </section>
