@@ -1891,9 +1891,7 @@ export default function Home() {
           <span className="w-1.5 h-1.5 bg-white rounded-full" />
         </span>
 
-        {/* Tooltip label */}
-        <span className="absolute right-full mr-3 bg-[#0a0a0a] border border-white/10 text-white px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap opacity-100 transition-all duration-300 pointer-events-none shadow-2xl">
-          📞 Call Me        </span>
+
       </motion.button>
       <CourseDetailModal
         isOpen={isCourseDetailOpen}
